@@ -1,0 +1,96 @@
+@import "./vars";
+
+.custom-select {
+  position: relative;
+  width: 200px;
+  border-radius: 10px;
+  z-index: 4;
+  .select-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $btn-bg;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px $input-bg;
+    }
+    .arrow-down {
+      margin-left: auto;
+      border: solid black;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+      transform: rotate(45deg);
+    }
+  }
+
+  .options {
+    border-radius: 10px;
+    margin-top: 10px;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: $btn-bg;
+    color: white;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    animation: select-animation-custom 0.2s ease-in;
+
+    li {
+      margin: 6px;
+      padding: 6px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      &:hover {
+        background-color: white;
+        color: $btn-bg;
+      }
+    }
+    li.selected {
+      background-color: white;
+      color: $btn-bg;
+    }
+
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    &::-webkit-scrollbar-track {
+      box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+      background-color: white;
+    }
+
+    &::-webkit-scrollbar {
+      width: 0.8em;
+      background-color: #ff2727;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+      background-color: mix($btn-bg, black, 60%);
+      border-radius: 3px;
+      padding: 10px;
+      &:hover {
+        background-color: mix($btn-bg, black, 20%);
+      }
+    }
+   
+    @keyframes select-animation-custom {
+      from {
+        opacity: 0;
+        height: 0;
+      }
+      to {
+        opacity: 1;
+        height: max-content;
+        
+      }
+    }
+  }
+}

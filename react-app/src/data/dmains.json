@@ -1,0 +1,67 @@
+[
+  { "label": "All", "value": "All" },
+  {
+    "label": "IT",
+    "value": "Information Technology"
+  },
+  {
+    "label": "Finance",
+    "value": "Finance"
+  },
+  {
+    "label": "Healthcare",
+    "value": "Healthcare"
+  },
+  {
+    "label": "Marketing",
+    "value": "Marketing"
+  },
+  {
+    "label": "Education",
+    "value": "Education"
+  },
+  {
+    "label": "Sales",
+    "value": "Sales"
+  },
+  {
+    "label": "Engineering",
+    "value": "Engineering"
+  },
+  {
+    "label": "Hospitality",
+    "value": "Hospitality"
+  },
+  {
+    "label": "Media",
+    "value": "Media"
+  },
+  {
+    "label": "Art",
+    "value": "Art"
+  },
+  {
+    "label": "Legal",
+    "value": "Legal"
+  },
+  {
+    "label": "Consulting",
+    "value": "Consulting"
+  },
+  {
+    "label": "Retail",
+    "value": "Retail"
+  },
+  {
+    "label": "Human Resources",
+    "value": "Human Resources"
+  },
+  {
+    "label": "Chemistry",
+    "value": "Chemistry"
+  },
+  {
+    "label": "Development",
+    "value": "Development"
+  }
+]

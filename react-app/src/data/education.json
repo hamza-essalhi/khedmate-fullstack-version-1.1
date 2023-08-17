@@ -1,0 +1,43 @@
+[
+  { "label": "All", "value": "All" },
+  {
+    "label": "Uneducated",
+    "value": "Uneducated"
+  },
+  {
+    "label": "College",
+    "value": "College"
+  },
+  {
+    "label": "Baccalaureate",
+    "value": "Baccalaureate"
+  },
+  {
+    "label": "Bac +1",
+    "value": "Bac +1"
+  },
+  {
+    "label": "Bac +2",
+    "value": "Bac +2"
+  },
+  {
+    "label": "Bac +3",
+    "value": "Bac +3"
+  },
+  {
+    "label": "Bac +4",
+    "value": "Bac +4"
+  },
+  {
+    "label": "Bac +5",
+    "value": "Bac +5"
+  },
+  {
+    "label": "Bac +6",
+    "value": "Bac +6"
+  },
+  {
+    "label": "Bac +9",
+    "value": "Bac +9"
+  }
+]

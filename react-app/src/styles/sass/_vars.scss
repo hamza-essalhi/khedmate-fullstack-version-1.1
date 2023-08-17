@@ -1,0 +1,46 @@
+// colors variables
+
+$bg: #776d6d2f;
+$btn-bg: #fc6e5e;
+$input-bg: #fff1ef;
+$error: #f74835;
+$success: #00ff85;
+$info: #00f7ffde;
+
+// sass font
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sigmar&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap");
+// sass  initialisation
+
+* {
+  border: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Noto Sans", sans-serif;
+  text-decoration: none;
+  a {
+    color: black;
+  }
+}
+body {
+    &::-webkit-scrollbar-track
+    {
+        box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+        background-color: #F5F5F5;
+    }
+    
+    &::-webkit-scrollbar
+    {
+        width: 0.8em;
+        background-color: #F5F5F5;
+    }
+    
+    &::-webkit-scrollbar-thumb
+    {
+        box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+        background-color: $btn-bg;
+        border-radius: 3px;
+        padding: 10px;
+    }
+}

@@ -1,0 +1,122 @@
+@import "vars";
+@mixin flex($col: false, $v-center: false, $h-center: false) {
+  display: flex;
+  @if ($col) {
+    flex-direction: column;
+  }
+  @if $v-center {
+    align-items: center;
+  }
+  @if $h-center {
+    justify-content: center;
+  }
+}
+
+@mixin hover-animation-li() {
+  border-bottom: solid 1px transparent;
+  transition: border-bottom 0.4s ease-in-out;
+  &:hover {
+    transform: scale(1.03);
+    a {
+      color: $btn-bg;
+      padding-bottom: 4px;
+    }
+  }
+  a {
+    &::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 2px;
+      background: $btn-bg;
+      transition: width 0.3s;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+}
+
+@mixin shake() {
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+  @keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-1px);
+    }
+    40% {
+      transform: translateX(1px);
+    }
+    60% {
+      transform: translateX(-1px);
+    }
+    80% {
+      transform: translateX(1px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+
+@mixin btn($bg-color, $color, $w, $h) {
+    width: $w;
+    height: $h;
+    background-color: $bg-color;
+    color: $color;
+    border-radius: 10px;
+    border: none;
+    $shade-amount: 10%;
+    $hover-color: mix(black, $bg-color, $shade-amount);
+    @include shake;
+    transition: .3s;
+    &:hover {
+      background-color: $hover-color;
+      color: if(lightness($hover-color) > 50, white, black);
+    }
+    &:active{
+      @include shake()
+    }
+    
+  }
+
+  @mixin btn-nbg($color) {
+
+    color: $color;
+    border-radius: 10px;
+    border: none;
+    $shade-amount: 10%;
+    $hover-color: mix(black, $color, $shade-amount);
+    @include shake;
+    transition: .3s;
+    &:hover {
+      color: $hover-color;
+      
+    }
+    
+  }
+
+
+
+@mixin input(){
+    width: 90%;
+    background-color: $input-bg;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+    border: 2px transparent solid;
+    outline: none;
+    transition: .3s;
+    &:hover,&:active,&:focus{
+      outline: none;
+      border: none;
+      border: 2px $btn-bg solid;
+    }
+  }
+  
+
+  
