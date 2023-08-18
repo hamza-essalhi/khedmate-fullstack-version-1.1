@@ -344,7 +344,7 @@ body {
   width: 60%;
   justify-content: space-evenly;
 }
-.main-nav-bar .right ul li a {
+.main-nav-bar .right ul li a, .main-nav-bar .right ul li span {
   width: 30px;
   height: 30px;
   display: flex;
@@ -2338,6 +2338,22 @@ body {
 .auth .right form {
   width: 100%;
 }
+.auth .right form .choice-lable {
+  margin: 1em 0.5em;
+}
+.auth .right form .choice-lable span:nth-child(1) {
+  color: rgb(4, 4, 121);
+  font-weight: bolder;
+}
+.auth .right form .choice-lable span:nth-child(2) {
+  color: rgb(180, 19, 19);
+  font-weight: bolder;
+}
+.auth .right form .password-error {
+  margin: 1em 1.5em;
+  color: #f74835;
+  text-shadow: -1px 4px 16px rgba(238, 26, 26, 0.36);
+}
 .auth .right form a {
   padding: 5px;
   margin: 0.5em;
@@ -2379,7 +2395,7 @@ body {
   color: #fc6e5e;
   font-weight: bold;
 }
-.auth .right form .error {
+.auth .right form .error, .auth .right form .error-input-password {
   width: 100%;
   display: flex;
   align-items: center;
@@ -2393,21 +2409,23 @@ body {
   transition: 0.3s;
 }
 .auth .right form .error:hover, .auth .right form .error:active,
-.auth .right form .error :focus {
+.auth .right form .error :focus, .auth .right form .error-input-password:hover, .auth .right form .error-input-password:active,
+.auth .right form .error-input-password :focus {
   border-color: red;
   outline: none;
 }
 .auth .right form .error:hover label, .auth .right form .error:active label,
-.auth .right form .error :focus label {
+.auth .right form .error :focus label, .auth .right form .error-input-password:hover label, .auth .right form .error-input-password:active label,
+.auth .right form .error-input-password :focus label {
   color: #00ff85;
 }
-.auth .right form .error input {
+.auth .right form .error input, .auth .right form .error-input-password input {
   width: 90%;
   border: none;
   margin: 0;
   color: red;
 }
-.auth .right form .error .password-icon {
+.auth .right form .error .password-icon, .auth .right form .error-input-password .password-icon {
   margin: 0 0.3em;
   font-size: 22px;
   color: #fc6e5e;
@@ -2478,6 +2496,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.auth .right form .loading img,
+.auth .right form .done img {
+  width: 50px;
+  height: 50px;
+}
+.auth .right form .errorState {
+  display: none;
 }
 .auth .right form .btn {
   margin: 2em;

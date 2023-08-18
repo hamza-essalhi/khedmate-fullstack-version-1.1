@@ -1,29 +1,41 @@
 import { useEffect, useRef, useState } from "react";
-
+import loadingImg from '../../images/Spin-0.5s-200px.gif'
 import { motion, useAnimation, useInView } from "framer-motion";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Select from "../components/Select";
+import { useDispatch, useSelector } from "react-redux";
+import { registerAsync, restSlice } from "../../toolkit/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   document.title = "Sign Up";
+  const dispatch = useDispatch()
+  const loading = useSelector((state) => state.auth.loading);
+  const error = useSelector((state) => state.auth.error);
+  const isCreated = useSelector((state) => state.auth.isCreated);
   const ref = useRef(null);
+  const navigate = useNavigate()
+  const [isWeakPassword, setIsWeakPassword] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [showRpassword, setShowRpassword] = useState(false);
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [isPasswordsMatch, setPasswordsMatch] = useState(false);
   const [phoneMatch, setPhoneMatch] = useState(true);
   const [emailMatch, setEmailMatch] = useState(true);
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [formError, setFormError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('This user already exists. Please try using a different email or log in.')
   const [formData, setFormData] = useState({
-    first_name:'',
-    last_name:'',
-    worker:'',
-    phone:'',
+    firstName: '',
+    lastName: '',
+    research: '',
+    phone: '',
     email: "",
     password: "",
-    rpassword:''
+    rpassword: ''
   });
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
@@ -35,45 +47,56 @@ const SignUp = () => {
     if (target) {
       animate.start("end");
     }
-  }, [target, animate]);
+    if (isCreated) {
+      dispatch(restSlice())
+      navigate(`/login`);
+    }
+  }, [target, animate, isCreated, navigate, dispatch]);
 
+
+ const  capitalizeFirstLetter=(str) =>{
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    if (name === 'firstName' || name === 'lastName') {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: capitalizeFirstLetter(value),
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
     setPassword1(formData.password)
-    setPassword2(formData.password2)
+    setPassword2(formData.rpassword)
     setEmail(formData.email)
     setPhone(formData.phone)
   };
   const handlePassword = (e) => {
-    const input =document.querySelector('#password-input')
+    const input = document.querySelector('#password-input')
     setShowPassword(!showPassword);
-   input.type=!showPassword ? 'text' : 'password';
+    input.type = !showPassword ? 'text' : 'password';
   };
   const handleRpassword = () => {
-    const input =document.querySelector('#rpassword-input')
+    const input = document.querySelector('#rpassword-input')
     setShowRpassword(!showRpassword);
-   input.type=!showRpassword ? 'text' : 'password';
+    input.type = !showRpassword ? 'text' : 'password';
   };
-  const handleSelectChangeWorker = (value) => {
-    if (value === 'true'){
-      value=true
+  const handleSelectResearch = (value) => {
+    if (value === 'Human Researcher') {
+      value = true
     }
-    else{
-      value=false
+    else {
+      value = false
     }
-    setFormData({
-      ...formData,
-      worker: value
-    });
+    formData.research = value
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData)
-  };
+
+  
 
   useEffect(() => {
     const forbiddenDomains = [
@@ -112,12 +135,12 @@ const SignUp = () => {
       "vip.foxmail.com",
       "vip.tom.com",
     ];
-    
+
     const forbiddenDomain = forbiddenDomains.find((domain) => email.endsWith("@" + domain))
-    if (isNaN(phone)){
+    if (isNaN(phone) && phone !== '') {
       setPhoneMatch(true)
     }
-    else{
+    else {
       setPhoneMatch(false)
     }
     if (password1 !== password2) {
@@ -130,13 +153,51 @@ const SignUp = () => {
     } else {
       setEmailMatch(true)
     }
+
+    const lowercaseRegex = /[a-z]/; // Regular expression for lowercase letters
+    const uppercaseRegex = /[A-Z]/; // Regular expression for uppercase letters
+    const digitRegex = /\d/; // Regular expression for digits
+
+    if (password1.length < 8 && password1 !== '') {
+      setIsWeakPassword(true);
+      setPasswordErrorMessage('Your password is weak (less than 8 characters)');
+    } else if (!lowercaseRegex.test(password1) && password1 !== '') {
+      setIsWeakPassword(true);
+      setPasswordErrorMessage('Your password is weak (missing lowercase letters)');
+    } else if (!uppercaseRegex.test(password1) && password1 !== '') {
+      setIsWeakPassword(true);
+      setPasswordErrorMessage('Your password is weak (missing uppercase letters)');
+    } else if (!digitRegex.test(password1) && password1 !== '') {
+      setIsWeakPassword(true);
+      setPasswordErrorMessage('Your password is weak (missing digits)');
+    } else {
+      setIsWeakPassword(false);
+      setPasswordErrorMessage(''); // Password is strong, reset error message
+    }
+
     setPassword1(formData.password)
     setPassword2(formData.rpassword)
     setEmail(formData.email)
     setPhone(formData.phone)
 
-  }, [password1, password2,phone,email,formData.password,formData.rpassword,formData.email,formData.phone]);
-  
+  }, [password1, password2, phone, email, formData.password, formData.rpassword, formData.email, formData.phone]);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.firstName && formData.lastName && formData.research && formData.email && formData.phone && isPasswordsMatch && !emailMatch && !phoneMatch && !isWeakPassword) {
+      try {
+        dispatch(registerAsync(formData));
+        setErrorMessage('This user already exists. Please try using a different email or log in.')
+      } catch (e) {
+      }
+    } else {
+      setFormError(true)
+      setErrorMessage("Please complete all fields.");
+    }
+  };
+
   return (
     <motion.div
       className="auth"
@@ -276,16 +337,54 @@ const SignUp = () => {
             }}
           >
             <label htmlFor="">First Name</label>
-            <input type="text" name="first_name" placeholder="first name..." onChange={handleChange} />
+            <input type="text" name="firstName" placeholder="first name..." onChange={handleChange} />
             <label htmlFor="">Last Name</label>
-            <input type="text" name="last_name" placeholder="last name..." onChange={handleChange}  />
+            <input type="text" name="lastName" placeholder="last name..." onChange={handleChange} />
             <label htmlFor="">Email</label>
-            <input type="email" name="email" className={emailMatch ? 'input-error' : ''}  placeholder="name@domain.com" onChange={handleChange}/>
+            <input type="email" name="email" className={emailMatch ? 'input-error' : ''} placeholder="name@domain.com" onChange={handleChange} />
+            {emailMatch&&<motion.h5
+                variants={{
+                  start: {
+                    x: -10,
+                  },
+                  end: {
+                    x: 0,
+                  },
+                }}
+                initial="start"
+                animate={animate}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1,
+                }}
+                className="password-error"
+              >
+                Pleas Enter A Valide Email
+              </motion.h5>}
             <label htmlFor="">Phone</label>
-            <input type="tel" name="phone" className={phoneMatch ? 'input-error' : ''}  placeholder="0666666666" onChange={handleChange} />
+            <input type="tel" name="phone" className={phoneMatch ? 'input-error' : ''} placeholder="0666666666" onChange={handleChange} />
+            {phoneMatch&&<motion.h5
+                variants={{
+                  start: {
+                    x: -10,
+                  },
+                  end: {
+                    x: 0,
+                  },
+                }}
+                initial="start"
+                animate={animate}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1,
+                }}
+                className="password-error"
+              >
+                Pleas Enter A Valide Phone Number
+              </motion.h5>}
             <label htmlFor="">Password</label>
-            <div className={!passwordsMatch ? 'error' : 'input-group'} >
-              <input type="password" name="password" id="password-input"  placeholder="Password" onChange={handleChange}/>
+            <div className={isPasswordsMatch ? 'input-group' : 'error-input-password'} >
+              <input type="password" name="password" id="password-input" placeholder="Password" onChange={handleChange} />
               {showPassword ? (
                 <AiOutlineEyeInvisible
                   className="password-icon"
@@ -299,8 +398,8 @@ const SignUp = () => {
               )}
             </div>
             <label htmlFor="">Reapeat Password</label>
-            <div className={!passwordsMatch ? 'error' : 'input-group'}>
-              <input type="password" name="rpassword" id="rpassword-input"  placeholder="Repeat Password"/>
+            <div className={isPasswordsMatch ? 'input-group' : 'error-input-password'}>
+              <input type="password" name="rpassword" id="rpassword-input" placeholder="Repeat Password" onChange={handleChange} />
               {showRpassword ? (
                 <AiOutlineEyeInvisible
                   className="password-icon"
@@ -313,23 +412,91 @@ const SignUp = () => {
                 ></AiOutlineEye>
               )}
             </div>
-            <label htmlFor="">Worker ?</label>
+            {!isPasswordsMatch && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate={animate}
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              Passwords not match !
+            </motion.h5>}
+            {isWeakPassword && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate={animate}
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              {passwordErrorMessage}
+            </motion.h5>}
+
+            <label htmlFor="" className="choice-lable">Are you <span>searching for a job</span>, or are you a <span>human researcher</span>?</label>
+
             <Select
-            
-                options={
-                  [
-                    {"label": "True" , "value": "true"},
-                    {"label": "False" , "value": "false"}
-                  ]
-                }
-                defaultValue="Select"
-                onChange={handleSelectChangeWorker}
-              />
+
+              options={
+                [
+                  { "label": "Human Researcher", "value": "Human Researcher" },
+                  { "label": "Searching For Job", "value": "Searching For Job" }
+                ]
+              }
+              defaultValue="Select"
+              onChange={handleSelectResearch}
+            />
+
+            <div className={(error || formError) ? 'active' : 'errorState'}>
+              <motion.h3
+                variants={{
+                  start: {
+                    x: -100,
+                  },
+                  end: {
+                    x: 0,
+                  },
+                }}
+                initial="start"
+                animate={animate}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1,
+                }}
+              >
+                {errorMessage}
+              </motion.h3>
+            </div>
 
             <div className="btn">
               <button onClick={handleSubmit}>Sign Up</button>
             </div>
-            
+
+
+            {loading && (
+              <div className="loading">
+                <img src={loadingImg} alt="" />
+              </div>
+            )}
+
             <a href="login">
               You have account? <span>Login</span>
             </a>

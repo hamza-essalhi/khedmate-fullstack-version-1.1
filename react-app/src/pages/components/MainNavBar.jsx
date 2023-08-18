@@ -18,11 +18,14 @@ import { FaUserAlt } from "react-icons/fa";
 //utls
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch} from "react-redux";
-import { logout,reset } from "../../toolkit/auth/authSlice";
+import { useDispatch, useSelector} from "react-redux";
+import { logoutAsync } from "../../toolkit/auth/authSlice";
 
 
 const MainNavBar = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const ref = useRef(null);
@@ -30,9 +33,8 @@ const MainNavBar = () => {
   const animate = useAnimation();
   const dispatch=useDispatch()
   const navigate=useNavigate()
-  const {user,userDecoded}=true
 
-  const link = null
+
 
   
   const transition = {
@@ -56,8 +58,7 @@ const MainNavBar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const logoutFunc=()=>{
-    dispatch(logout())
-    dispatch(reset())
+    dispatch(logoutAsync())
     navigate('/login')
   }
 
@@ -110,8 +111,8 @@ const MainNavBar = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          {user && (<li>
-            <Link to={link}>Profile</Link>
+          {isAuthenticated&& (<li>
+            <Link to={`/user/${user._id}`}>Profile</Link>
           </li>)}
           <li>
             <Link to='about-us'>About Us</Link>
@@ -133,22 +134,22 @@ const MainNavBar = () => {
               <IoMdNotifications></IoMdNotifications>
             </Link>
           </li>
-          {user ?<li className="user-side">
+          {isAuthenticated ?<li className="user-side">
             <img src={userImage} onClick={userMenuHandler} alt="" id="user-button" />
           </li>
           :
           <li className="user-side" onClick={userMenuHandler}>
-            <Link to="/">
+            <span>
             <FaUserAlt   id="user-button"></FaUserAlt>
-            </Link>
+            </span>
           
           </li>}
         </ul>
       </div>
       {
-        user? (
+        isAuthenticated? (
           <div className={userMenuOpen ? "user-menu-active" : "user-menu"} >
-        <Link to={`/user/${userDecoded?.user_str_id}`}>
+        <Link to={`/user/${user._id}`}>
           <FaUserAlt className="user-menu-icon"></FaUserAlt>
           Profile
         </Link>

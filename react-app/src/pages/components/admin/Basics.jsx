@@ -4,15 +4,14 @@ import userImage from "../../../images/user.jpg";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Basics = ({ delay,userData}) => {
-  const {user}=true
+const Basics = ({ delay,user}) => {
   const [phoneMatch, setPhoneMatch] = useState(true);
   const newDelay = delay;
   const [phone, setPhone] = useState("");
   const [uploadForm, setUploadForm] = useState(false);
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     phone: "",
     address: "",
     profile_img: "",
@@ -54,16 +53,16 @@ const Basics = ({ delay,userData}) => {
   };
   useEffect(() => {
     // If user data is available, update the form data state
-    if (userData ) {
+    if (user ) {
       setFormData({
-        first_name: userData.first_name || "",
-        last_name: userData.last_name || "",
-        phone: userData.phone || "",
-        address: userData.address || "",
-        profile_img: userData.profile_img || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        profile_img: user.profile_img || "",
       });
     }
-  }, [userData]);
+  }, [user]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -76,29 +75,12 @@ const Basics = ({ delay,userData}) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.access}`, // Assuming "user.access" is the JWT access token
-      }
-    };
-    axios
-      .put("http://localhost:8000/api/user",config,formData)
-      .then((response) => {
-        const userResponse = response.data;
-        console.log(userResponse)
-
-        
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+   
   };
   const handelUploadFrom = () => {
     setUploadForm(!uploadForm);
   };
  
-console.log(user)
 
   return (
     <motion.div
@@ -152,16 +134,16 @@ console.log(user)
             }}
           >
             <label htmlFor="">First Name</label>
-            <input type="text" name="first_name" defaultValue={userData?.first_name}    onChange={handleChange} />
+            <input type="text" name="firstName" defaultValue={user?.firstName}    onChange={handleChange} />
             <label htmlFor="">Last Name</label>
-            <input type="text" name="last_name" defaultValue={userData?.last_name} placeholder="edwrd..." onChange={handleChange} />
+            <input type="text" name="lastName" defaultValue={user?.lastName} placeholder="edwrd..." onChange={handleChange} />
             <label htmlFor="">Phone</label>
 
             <input
               type="tel"
               name="phone"
               className={phoneMatch ? "input-error" : ""}
-              defaultValue={userData?.phone}
+              defaultValue={user?.phone}
               onChange={handleChange}
               placeholder="066666.."
             />
@@ -172,7 +154,7 @@ console.log(user)
               cols="30"
               rows="10"
               placeholder="106, rue Taha Houcine -ex Galilee, Grand Casablanca"
-              defaultValue={userData?.address}
+              defaultValue={user?.address}
               onChange={handleChange}
             ></textarea>
             <div className="btn">

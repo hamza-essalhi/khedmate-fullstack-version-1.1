@@ -1,20 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-
 import { motion, useAnimation, useInView } from "framer-motion";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-
 import { useNavigate } from "react-router-dom";
 import loadingImg from '../../images/Spin-0.5s-200px.gif'
-import doneImg from '../../images/system-solid-31-check.gif'
+import { loginAsync } from "../../toolkit/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
   document.title = "Login";
-  const user=true
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const loading = useSelector((state) => state.auth.loading);
+  const error = useSelector((state) => state.auth.error);
+  const user = useSelector((state) => state.auth.user);
   const ref = useRef(null);
   const navigate=useNavigate()
-  const {error,loading,successed}=true
-  const [setEmail] = useState("");
-  const [setPassword] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
@@ -28,7 +30,10 @@ const Login = () => {
     if (target) {
       animate.start("end");
     }
-  }, [target, animate]);
+    if (isAuthenticated && user) {
+      navigate(`/user/${user.user._id}`);
+    }
+  }, [target, animate,isAuthenticated,user,navigate]);
   const handlePassword = (e) => {
     const input =document.querySelector('#password-input')
     setShowPassword(!showPassword);
@@ -36,15 +41,12 @@ const Login = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const data = {
-    //   email: email,
-    //   password: password,
-    // };
+    const data = {
+      email: email,
+      password: password,
+    };
+    dispatch(loginAsync(data))
     
-    
-    if(user){
-      navigate('/')
-    }
   };
   return (
     <motion.div
@@ -230,13 +232,7 @@ const Login = () => {
               <img src={loadingImg} alt="" />
             </div>
             )}
-            {successed &&(
-              <div className="loading">
-              <img src={doneImg} alt="" />
-            </div>
-            )}
-            
-            
+           
             <a href="/">Rest you Password</a>
             <a href="sign-up">
               You don't have account? <span>Sign Up</span>

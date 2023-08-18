@@ -12,7 +12,7 @@ import Resume from "../components/admin/Resume";
 import AddJob from "../components/admin/AddJob";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import {useSelector } from "react-redux";
 const User = () => {
   const { id } = useParams();
   const [basics, setBasics] = useState(true);
@@ -28,7 +28,7 @@ const User = () => {
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
-  const {user}=true
+  const user = useSelector((state) => state.auth.user);
   const transition = {
     duration: 0.5,
     delay: delay,
@@ -38,26 +38,8 @@ const User = () => {
       animate.start("end");
     }
   }, [target, animate]);
-  useEffect(() => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user}`, // Assuming "user" is the JWT access token
-      }
-    };
-    axios
-      .get("http://localhost:8000/api/user",config)
-      .then((response) => {
-        const userResponse = response.data;
-        console.log(userResponse)
-        setUser(userResponse);
-        setEmployee(userData.is_employee)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id,userData.is_employee,user]);
-  document.title = userData.first_name+userData.last_name;
+
+  document.title = `${user.user.firstName} ${user.user.lastName}`;
  
 
   const handleProfileMenu = (target) => {
@@ -513,17 +495,17 @@ const User = () => {
 
       {employee ? (
         <>
-          {basics && <Basics delay={propsDelay} userData={userData} />}
-          {auth && <Auth delay={propsDelay} userData={userData}/>}
-          {education && <Education delay={propsDelay} userData={userData}/>}
-          {experience && <Experience delay={propsDelay} userData={userData}/>}
-          {resume && <Resume delay={propsDelay} userData={userData}/>}
+          {basics && <Basics delay={propsDelay} user={user.user} />}
+          {auth && <Auth delay={propsDelay} user={user.user}/>}
+          {education && <Education delay={propsDelay} user={user.user}/>}
+          {experience && <Experience delay={propsDelay} user={user.user}/>}
+          {resume && <Resume delay={propsDelay} user={user.user}/>}
         </>
       ) : (
         <>
-          {basics && <Basics delay={propsDelay} userData={userData}/>}
-          {auth && <Auth delay={propsDelay} userData={userData}/>}
-          {job && <AddJob delay={propsDelay} userData={userData}/>}
+          {basics && <Basics delay={propsDelay} user={user.user} />}
+          {auth && <Auth delay={propsDelay} user={user.user}/>}
+          {job && <AddJob delay={propsDelay} user={user.user}/>}
         </>
       )}
     </motion.div>
