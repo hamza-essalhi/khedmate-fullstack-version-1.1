@@ -112,7 +112,7 @@ const MainNavBar = () => {
             <Link to="/">Home</Link>
           </li>
           {isAuthenticated&& (<li>
-            <Link to={`/user/${user._id}`}>Profile</Link>
+            <Link to={`/user/${user.user._id}`}>Profile</Link>
           </li>)}
           <li>
             <Link to='about-us'>About Us</Link>
@@ -149,7 +149,7 @@ const MainNavBar = () => {
       {
         isAuthenticated? (
           <div className={userMenuOpen ? "user-menu-active" : "user-menu"} >
-        <Link to={`/user/${user._id}`}>
+        <Link to={`/user/${user.user._id}`}>
           <FaUserAlt className="user-menu-icon"></FaUserAlt>
           Profile
         </Link>

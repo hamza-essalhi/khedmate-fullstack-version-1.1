@@ -10,9 +10,11 @@ import Education from "../components/admin/Education";
 import Experience from "../components/admin/Experience";
 import Resume from "../components/admin/Resume";
 import AddJob from "../components/admin/AddJob";
-import axios from "axios";
+import jobs from "../../../src/data/jobs1.json"
 import { useParams } from "react-router-dom";
 import {useSelector } from "react-redux";
+import { ReaserchTable } from "../components/admin/ReaserchTable";
+import { Table } from "../components/admin/Table";
 const User = () => {
   const { id } = useParams();
   const [basics, setBasics] = useState(true);
@@ -508,6 +510,9 @@ const User = () => {
           {job && <AddJob delay={propsDelay} user={user.user}/>}
         </>
       )}
+      {
+        user.user.research ? <ReaserchTable data={jobs}/>:<Table data={jobs}/>
+      }
     </motion.div>
   );
 };

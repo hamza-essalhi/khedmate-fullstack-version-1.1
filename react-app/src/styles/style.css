@@ -2900,6 +2900,182 @@ body {
     transform: translateX(0);
   }
 }
+.user .pagination {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  margin-top: 3em;
+}
+.user .pagination ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.user .pagination ul li {
+  margin: 4px;
+}
+.user .pagination ul li button {
+  width: auto;
+  height: auto;
+  background-color: #fc6e5e;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+  transition: 0.3s;
+  padding: 15px;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.user .pagination ul li button:hover {
+  background-color: #e36355;
+  color: white;
+}
+.user .pagination ul li button:active {
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.user .pagination ul .active button {
+  width: auto;
+  height: auto;
+  background-color: #00ff85;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+  transition: 0.3s;
+  padding: 15px;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.user .pagination ul .active button:hover {
+  background-color: #00e678;
+  color: black;
+}
+.user .pagination ul .active button:active {
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.user .table {
+  background-color: white;
+  margin: 1em;
+  padding: 1em;
+  border-radius: 10px;
+}
+.user .table h1 {
+  text-align: center;
+  margin: 1em 1em;
+}
+.user .table table {
+  width: 100%;
+}
+.user .table table thead tr, .user .table table thead th {
+  text-align: start;
+  background-color: #fff1ef;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 3em;
+}
+.user .table table tbody tr, .user .table table tbody td {
+  padding: 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.user .table table tbody tr:hover, .user .table table tbody td:hover {
+  background-color: rgba(119, 109, 109, 0.1843137255);
+}
+.user .table table tbody tr td:last-child {
+  text-align: center;
+}
+.user .table table tbody tr:nth-child(even) {
+  background-color: #fff1ef;
+}
+.user .table table tbody .delete-icon {
+  color: #fc6e5e;
+  transition: 0.3s;
+  font-weight: bolder;
+}
+.user .table table tbody .delete-icon:hover {
+  color: white;
+}
 
 .chat-container {
   display: flex;

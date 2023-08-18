@@ -1,7 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react';
+import TabelRow from './TabelRow';
+import Pagination from '../Home/Pagination';
 
-export const ReaserchTable = () => {
+export const ReaserchTable = ({ data }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+const jobsPerPage=10
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = data.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(data.length / jobsPerPage);
+
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div>ReaserchTable</div>
-  )
-}
+    <div className="table">
+      <h1>Applications</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>date</th>
+            <th>status</th>
+            <th>action</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {currentJobs.map((job, i) => (
+            <TabelRow key={i} job={job} />
+          ))}
+        </tbody>
+      </table>
+      <div className='pagination'>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handleClick={handleClick}
+      />
+      </div>
+    </div>
+  );
+};
