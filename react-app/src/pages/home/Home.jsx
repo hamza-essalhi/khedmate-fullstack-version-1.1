@@ -1,7 +1,5 @@
 import Select from "../components/Select";
 import { useEffect, useRef, useState } from "react";
-// import usersData from "../../users.json";
-// import job from "../../jobs1.json";
 import cities from "../../data/cities.json";
 import domain from "../../data/dmains.json";
 import education from "../../data/education.json";
@@ -11,18 +9,23 @@ import {
   IoIosArrowDropdownCircle,
   IoIosArrowDropupCircle,
 } from "react-icons/io";
-import axios from "axios";
 import { motion, useAnimation, useInView } from "framer-motion";
+
+//rer api 
+
+import api from '../../toolkit/auth/config'
+
 
 const Home = () => {
   document.title = 'Home';
-  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [jobsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchLenght, setSearchLenght] = useState(0);
   const [filteredJobs, setFilteredJobs] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [selectedCities, setSelectedCities] = useState("");
   const [selectedDomains, setSelectedDomains] = useState("");
   const [selectedEducation, setSelectedEducation] = useState("");
@@ -31,6 +34,10 @@ const Home = () => {
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
+ 
+ 
+
+
   const transition = {
     duration: 0.5,
     delay: 0.1,
@@ -41,21 +48,34 @@ const Home = () => {
     }
   }, [target, animate]);
 
-  
+
   const handleSelectChangeCities = (value) => {
+    if(value==='All'){
+      value=''
+    }
     setSelectedCities(value);
   };
 
   const handleSelectChangeDomain = (value) => {
+    if(value==='All'){
+      value=''
+    }
     setSelectedDomains(value);
-    
+
   };
   const handleSelectChangeEducation = (value) => {
+    if(value==='All'){
+      value=''
+    }
     setSelectedEducation(value);
-  
+
   };
 
   // scroll button
+
+  
+
+  // console.log(data)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,40 +99,63 @@ const Home = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
+ 
+  
   // fetch data
   useEffect(() => {
     const fetchFilteredJobs = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/jobs/", {
-          params: {
-            sort:selectedOption,
-            city: selectedCities,
-            domain: selectedDomains,
-            education: selectedEducation,
-          },
-        });
-  
-        const filteredJobs = response.data.slice(0, 200);
-        setJobs(filteredJobs);
+      setError(false)
+      setLoading(false)
+    const headers = {
+      'Authorization': `Bearer `,
+      // other headers if needed
+    };
+      console.log(headers)
+      try
+       {
+       const  params= {
+          search:searchQuery,
+          city: selectedCities,
+          domain: selectedDomains,
+          education: selectedEducation,
+          time:selectedTime
+        }
+        if(1>10 ){
+          const response = await api.get("jobs",{headers},{params});
+          const filteredJobs = response.data.jobs.slice(0, 200);
+        setFilteredJobs(filteredJobs);
+        setLoading(false)
+        }
+        else{
+          setLoading(true)
+          const response = await api.get("jobs",{params});
+          const filteredJobs = response.data.jobs.slice(0, 200);
+        setFilteredJobs(filteredJobs);
+        setLoading(false)
+        }
+
+        
       } catch (error) {
-        console.log(error);
+        setLoading(false)
+        setError(true)
       }
     };
-    
-    fetchFilteredJobs();
-  }, [selectedCities, selectedDomains, selectedEducation,selectedOption]);
 
-  
+    fetchFilteredJobs();
+
+    
+  }, [selectedCities, selectedDomains, selectedEducation, selectedTime,searchQuery]);
+
+
   // merge jobs and users,when we use api we need relationship in db cascade users and jobs
 
-  const mergedData = jobs
+  const mergedData = filteredJobs
 
   // Pagination load 10 rows in one page stile needs some fixing
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = mergedData.slice(indexOfFirstJob, indexOfLastJob);
-  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
 
   // change page and data
   const handleClick = (pageNumber) => {
@@ -122,29 +165,16 @@ const Home = () => {
 
   // search in whit title and discriptioin
 
-  const handleSearchQueryChange = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-    let filteredJobs = mergedData.filter(
-      (job) =>
-        job.jobe_title.toLowerCase().includes(query) ||
-        job.job_description.toLowerCase().includes(query)
-    );
-  
- 
-  
-    setFilteredJobs(filteredJobs);
-  };
-  
+
   const options = [
     { label: "New", value: "New" },
     { label: "Old", value: "Old" },
   ];
-  
-  const handleSelectChange = (value) => {
-    setSelectedOption(value);
+
+  const handleSelectChangeTime= (value) => {
+    setSelectedTime(value);
   };
-  
+
 
 
   // if search query not empty push filteredJobs else push currentJobs
@@ -158,6 +188,7 @@ const Home = () => {
   }, [displayJobs.length]);
   return (
     <div className="home container">
+
       <div className="scroll-bottom">
         <button
           onClick={scrollToBottom}
@@ -188,14 +219,14 @@ const Home = () => {
         <h1>Filter</h1>
         <div className="row">
           <div className="sub-row">
-          <div className="col selected-sort" >
-            <h4>Sort by old or new</h4>
-                <Select
-                  options={options}
-                  defaultValue="Select"
-                  onChange={handleSelectChange}
-                />
-              </div>
+            <div className="col selected-sort date" >
+              <h4>Sort by old or new</h4>
+              <Select
+                options={options}
+                defaultValue="Select"
+                onChange={handleSelectChangeTime}
+              />
+            </div>
             <div className="col">
               <h4>Cities</h4>
               <Select
@@ -227,7 +258,7 @@ const Home = () => {
                   type="text"
                   placeholder="Search..."
                   value={searchQuery}
-                  onChange={handleSearchQueryChange}
+                  onChange={(e)=>setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
@@ -263,9 +294,9 @@ const Home = () => {
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={handleSearchQueryChange}
+                onChange={(e)=>setSearchQuery(e.target.value)}
               />
-              
+
             </div>
           </div>
           <div className="col job-result">
@@ -276,10 +307,10 @@ const Home = () => {
             )}
           </div>
         </div>
-        {displayJobs.map((job) => {
-          return <Job key={job.id} job={job} />;
+        {loading ? "We are loding your data" : error ? 'Error' : currentJobs?.map((job,i) => {
+          return <Job key={i} job={job} />;
         })}
-        {searchQuery === "" ? (
+        
           <div className="row pagination">
             <Pagination
               currentPage={currentPage}
@@ -287,9 +318,7 @@ const Home = () => {
               handleClick={handleClick}
             />
           </div>
-        ) : (
-          <></>
-        )}
+       
       </motion.div>
       <div
         className="scroll-top"
@@ -299,6 +328,7 @@ const Home = () => {
           <IoIosArrowDropupCircle className="scroll-icon"></IoIosArrowDropupCircle>
         </button>
       </div>
+
     </div>
   );
 };

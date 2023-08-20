@@ -4,10 +4,11 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { motion, useAnimation, useInView } from "framer-motion";
+import {useSelector } from "react-redux";
 
 const JobPost = () => {
   const { id } = useParams();
-  const [user, setUser] = useState([]);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [job, setJob] = useState([]);
   const [like, setLike] = useState(false);
   const [formattedDate, setFormattedDate] = useState('');
@@ -26,27 +27,17 @@ const JobPost = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/job/${id}`)
+      .get(`http://localhost:9000/api/jobs/${id}`)
       .then((response) => {
-        const jobPosts = response.data;
+        const jobPosts = response.data.job;
         setJob(jobPosts);
       })
       .catch((error) => {
         console.log(error);
       });
       
-    axios
-      .get(`http://localhost:8000/api/user/${job.user}`)
-      .then((response) => {
-        const users = response.data;
-       
-        setUser(users);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
     
-  }, [job.id,job.user,id]);
+  }, [id]);
   useEffect(() => {
     try {
       const likedJobs = JSON.parse(localStorage.getItem("likedJobs")) || [];
@@ -71,13 +62,13 @@ const JobPost = () => {
   };
 
   useEffect(() => {
-    const timestampStr = job.created_date;
+    const timestampStr = job.createdAt;
 
     const timestamp = new Date(timestampStr);
     const formattedDate = `${timestamp.getFullYear()}-${String(timestamp.getMonth() + 1).padStart(2, '0')}-${String(timestamp.getDate()).padStart(2, '0')} ${String(timestamp.getHours()).padStart(2, '0')}:${String(timestamp.getMinutes()).padStart(2, '0')}:${String(timestamp.getSeconds()).padStart(2, '0')}`;
     setFormattedDate(formattedDate);
-  }, [job.created_date]);
-  document.title = job.jobe_title;
+  }, [job.createdAt]);
+  document.title = job.title;
   return (
     <motion.div
       className="job-post"
@@ -139,10 +130,10 @@ const JobPost = () => {
             delay: 0.6,
           }}
         >
-          <h3>{job.jobe_title}</h3>
+          <h3>{job.title}</h3>
           <div className="sub-row">
             <span>
-              Post By: {user.first_name} {user.last_name}
+              Post By: {job.ownerFirstName} {job.ownerLastName}
             </span>
             <span>City: {job.city}</span>
             <span>Published on: {formattedDate}</span>
@@ -202,19 +193,19 @@ const JobPost = () => {
         <span>{job.job_description}</span>
         <div className="sub-row">
           <span>Domain: {job.domain}</span>
-          <span>Years of experience: {job.years_of_experience}</span>
-          <span>Mounths of experience: {job.mounths_of_experience}</span>
-        </div>
-        <div className="sub-row">
-        <span>Job type: {job.job_type}</span>
-          <span>Company: {job.company}</span>
-          <span>Education level: {job.education}</span>
-        </div>
-        <div className="sub-row">
-          <span>Salaire: {job.salaire} DH</span>
+          <span>Experience: {job.experience}</span>
           
         </div>
-        <Link>Apply Now</Link>
+        <div className="sub-row">
+        <span>Job type: {job.type}</span>
+          <span>Company: {job.company}</span>
+          <span>Education level: {job.educationLevel}</span>
+        </div>
+        <div className="sub-row">
+          <span>salary: {job.salary} DH</span>
+          
+        </div>
+        {isAuthenticated?<Link>Apply Now</Link>:<span>Please login to Applay</span>}
       </motion.div>
 
       <motion.div
@@ -238,7 +229,7 @@ const JobPost = () => {
       >
         <h3>keywords:</h3>
         <div className="col-key-words">
-          {job.key_words?.map((keyword, index) => (
+          {job.keywords?.map((keyword, index) => (
             <span key={index}>{keyword}</span>
           ))}
         </div>

@@ -3,58 +3,35 @@ import userImage from "../../../images/user.jpg";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { motion, useAnimation, useInView } from "framer-motion";
-import axios from "axios";
+
 
 const Job = (props) => {
   const job = props.job;
   const [like, setLike] = useState(false);
-  const [user,setUser]=useState([])
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
+  const [formatteDate,setFormattedDate]=useState('')
   const transition = {
     duration: 0.5,
     delay: 0.1,
   };
-
   useEffect(() => {
+    const timestampStr = job.createdAt;
 
-    axios
-      .get(`http://localhost:8000/api/user/${job.user}`)
-      .then((response) => {
-        const userData = response.data;
-        setUser(userData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [job.user]);
+    const timestamp = new Date(timestampStr);
+    const formattedDate = `${timestamp.getFullYear()}-${String(timestamp.getMonth() + 1).padStart(2, '0')}-${String(timestamp.getDate()).padStart(2, '0')} ${String(timestamp.getHours()).padStart(2, '0')}:${String(timestamp.getMinutes()).padStart(2, '0')}:${String(timestamp.getSeconds()).padStart(2, '0')}`;
+    setFormattedDate(formattedDate);
+  }, [job.createdAt]);
+
   useEffect(() => {
     if (target) {
       animate.start("end");
     }
   }, [target,animate]);
-  useEffect(() => {
-    try {
-      const likedJobs = JSON.parse(localStorage.getItem("likedJobs")) || [];
-      const liked = likedJobs.filter((job) => job.id === parseInt(job.id));
-      setLike(liked[0].liked);
-    } catch {
-      setLike(false);
-    }
-  }, [job?.id]);
+
   const handleLike = () => {
-    setLike(!like);
-    const likedJobs = JSON.parse(localStorage.getItem("likedJobs")) || [];
-    const index = likedJobs.findIndex((j) => j.id === job?.id);
-
-    if (index !== -1) {
-      likedJobs[index].liked = !likedJobs[index].liked;
-    } else {
-      likedJobs.push({ id: job?.id, liked: like });
-    }
-
-    localStorage.setItem("likedJobs", JSON.stringify(likedJobs));
+    
   };
 
   return (
@@ -99,9 +76,9 @@ const Job = (props) => {
         >
           <img src={userImage} alt="" />
           <div className="sub-col">
-            <h3>{job?.jobe_title}</h3>
+            <h3>{job?.title}</h3>
             <span>
-              Post by {user.first_name} {user.last_name}
+              Post by {job.ownerFirstName} {job.ownerLastName}
             </span>
             <span>{job?.city}</span>
           </div>
@@ -125,7 +102,7 @@ const Job = (props) => {
             delay: 0.6,
           }}
         >
-          <span>{job?.date}</span>
+          <span>{formatteDate}</span>
         </motion.div>
         <motion.div
           className="col like"
@@ -157,6 +134,8 @@ const Job = (props) => {
               onClick={handleLike}
             ></AiFillHeart>
           )}
+
+          <span>{job.likes}</span>
         </motion.div>
       </div>
       <motion.div
@@ -178,9 +157,9 @@ const Job = (props) => {
           delay: 0.9,
         }}
       >
-        <span>{job?.job_description.slice(0, 200)}...</span>
+        <span>{job?.title.slice(0, 200)}...</span>
 
-        <Link to={"job/" + job?.id}>Apply Now</Link>
+        <Link to={"job/" + job?._id}>Apply Now</Link>
       </motion.div>
 
       <motion.div
@@ -204,7 +183,7 @@ const Job = (props) => {
       >
         <h3>Keywords</h3>
         <div className="keywords-row">
-          {job?.key_words.map((keyword, index) => (
+          {job?.keywords.map((keyword, index) => (
             <span key={index}>{keyword}</span>
           ))}
         </div>

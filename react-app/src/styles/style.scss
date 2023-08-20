@@ -576,6 +576,49 @@ body {
       }
       .col {
         margin-top: 2em;
+        &.date{
+          .custom-select {
+            width: 250px !important;
+            .options {
+              
+              position: relative;
+              overflow: hidden;
+              top: auto;
+              margin-top: 1em;
+              animation: select-animation-s 0.2s ease-in;
+              box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+            
+              
+              li {
+                font-size: 14px;
+              }
+              @keyframes select-animation-s {
+                from {
+                  opacity: 0;
+                  height: 0;
+                }
+                to {
+                  opacity: 1;
+                  height: 80px;
+                }
+              }
+            }
+            .active {
+              animation: select-animation-revers-s 0.2s ease-in;
+  
+              @keyframes select-animation-revers-s {
+                from {
+                  opacity: 1;
+                  height: 80px;
+                }
+                to {
+                  opacity: 0;
+                  height: 0;
+                }
+              }
+            }
+          }
+        }
         h4 {
           margin: 1em;
         }
@@ -587,28 +630,6 @@ body {
             margin-top: 1em;
             animation: select-animation 0.2s ease-in;
             box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-            &::-webkit-scrollbar-track {
-              box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px;
-              background-color: white;
-            }
-
-            &::-webkit-scrollbar {
-              width: 0.8em;
-              background-color: #ff2727;
-            }
-
-            &::-webkit-scrollbar-thumb {
-              box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-              background-color: mix($btn-bg, black, 60%);
-              border-radius: 3px;
-              padding: 10px;
-              &:hover {
-                background-color: mix($btn-bg, black, 20%);
-              }
-            }
-            li {
-              font-size: 14px;
-            }
             @keyframes select-animation {
               from {
                 opacity: 0;
@@ -635,6 +656,8 @@ body {
             }
           }
         }
+        
+        
       }
     }
     .form {

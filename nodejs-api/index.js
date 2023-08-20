@@ -37,10 +37,10 @@ app.use(cookieParser());
 //Routes
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/employee", employeeRoute);
-app.use("/api/conversation", conversationRoute);
-app.use("/api/message", messageRoute);
-app.use("/api/job", jobRoute);
+app.use("/api/employees", employeeRoute);
+app.use("/api/conversations", conversationRoute);
+app.use("/api/messages", messageRoute);
+app.use("/api/jobs", jobRoute);
 app.use("/api/jobApplication", jobApplicationRoute);
 //Errors
 app.use(error);

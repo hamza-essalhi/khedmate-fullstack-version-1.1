@@ -9,10 +9,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: $btn-bg;
-    color: white;
+    background-color: $input-bg;
+    color: $btn-bg;
     padding: 15px;
     border-radius: 10px;
+    font-weight: bolder;
     cursor: pointer;
     &:focus {
       outline: none;
@@ -37,8 +38,8 @@
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    background-color: $btn-bg;
-    color: white;
+    background-color: $input-bg;
+    color: $btn-bg;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -50,19 +51,22 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 14px;
+      font-weight: bolder;
+      transition: .3s;
       &:hover {
-        background-color: white;
-        color: $btn-bg;
+        background-color: $btn-bg;
+        color: white;
+        
       }
     }
     li.selected {
-      background-color: white;
-      color: $btn-bg;
+      background-color: $btn-bg;
+      color: white;
     }
 
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     &::-webkit-scrollbar-track {
-      box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+      box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
       background-color: white;
     }
 
@@ -73,7 +77,7 @@
 
     &::-webkit-scrollbar-thumb {
       box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-      background-color: mix($btn-bg, black, 60%);
+      background-color:$btn-bg;
       border-radius: 3px;
       padding: 10px;
       &:hover {

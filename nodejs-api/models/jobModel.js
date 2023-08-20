@@ -28,6 +28,10 @@ const JobSchema = new Schema(
       type: [String],
       required: true,
     },
+    city:{
+      type: String,
+      required: true,
+    },
     type: {
       type: String,
       required: true,
@@ -47,10 +51,6 @@ const JobSchema = new Schema(
     keywords: {
       type: [String],
       require: false,
-    },
-    likes: {
-      type: Number,
-      default: 0,
     },
   },
   {

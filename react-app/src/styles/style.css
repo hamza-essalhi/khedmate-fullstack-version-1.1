@@ -95,10 +95,11 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #fc6e5e;
-  color: white;
+  background-color: #fff1ef;
+  color: #fc6e5e;
   padding: 15px;
   border-radius: 10px;
+  font-weight: bolder;
   cursor: pointer;
 }
 .custom-select .select-input:focus {
@@ -122,8 +123,8 @@ body::-webkit-scrollbar-thumb {
   width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  background-color: #fc6e5e;
-  color: white;
+  background-color: #fff1ef;
+  color: #fc6e5e;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -136,17 +137,19 @@ body::-webkit-scrollbar-thumb {
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: bolder;
+  transition: 0.3s;
 }
 .custom-select .options li:hover {
-  background-color: white;
-  color: #fc6e5e;
+  background-color: #fc6e5e;
+  color: white;
 }
 .custom-select .options li.selected {
-  background-color: white;
-  color: #fc6e5e;
+  background-color: #fc6e5e;
+  color: white;
 }
 .custom-select .options::-webkit-scrollbar-track {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
   background-color: white;
 }
 .custom-select .options::-webkit-scrollbar {
@@ -155,7 +158,7 @@ body::-webkit-scrollbar-thumb {
 }
 .custom-select .options::-webkit-scrollbar-thumb {
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  background-color: #974238;
+  background-color: #fc6e5e;
   border-radius: 3px;
   padding: 10px;
 }
@@ -1140,6 +1143,43 @@ body {
 .home .left .row .col {
   margin-top: 2em;
 }
+.home .left .row .col.date .custom-select {
+  width: 250px !important;
+}
+.home .left .row .col.date .custom-select .options {
+  position: relative;
+  overflow: hidden;
+  top: auto;
+  margin-top: 1em;
+  animation: select-animation-s 0.2s ease-in;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+.home .left .row .col.date .custom-select .options li {
+  font-size: 14px;
+}
+@keyframes select-animation-s {
+  from {
+    opacity: 0;
+    height: 0;
+  }
+  to {
+    opacity: 1;
+    height: 80px;
+  }
+}
+.home .left .row .col.date .custom-select .active {
+  animation: select-animation-revers-s 0.2s ease-in;
+}
+@keyframes select-animation-revers-s {
+  from {
+    opacity: 1;
+    height: 80px;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+  }
+}
 .home .left .row .col h4 {
   margin: 1em;
 }
@@ -1152,26 +1192,6 @@ body {
   margin-top: 1em;
   animation: select-animation 0.2s ease-in;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-}
-.home .left .row .col .custom-select .options::-webkit-scrollbar-track {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px;
-  background-color: white;
-}
-.home .left .row .col .custom-select .options::-webkit-scrollbar {
-  width: 0.8em;
-  background-color: #ff2727;
-}
-.home .left .row .col .custom-select .options::-webkit-scrollbar-thumb {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  background-color: #974238;
-  border-radius: 3px;
-  padding: 10px;
-}
-.home .left .row .col .custom-select .options::-webkit-scrollbar-thumb:hover {
-  background-color: #321613;
-}
-.home .left .row .col .custom-select .options li {
-  font-size: 14px;
 }
 @keyframes select-animation {
   from {
