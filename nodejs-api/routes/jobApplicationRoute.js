@@ -1,9 +1,12 @@
 import express from "express";
-import {getUser} from "../controllers/userController.js";
+import {getJobApplication,getAllJobsApplications,deleteJobApplication,createJobApplication} from "../controllers/jobApplicationController.js";
+import { tokenChecker } from "../middleware/jwt.js";
 
 const router = express.Router()
 
-
-router.get('/test',getUser)
+router.post('/create',tokenChecker,createJobApplication)
+router.get('/',tokenChecker,getAllJobsApplications)
+router.get('/:id',tokenChecker,getJobApplication)
+router.delete('/:id',tokenChecker,deleteJobApplication)
 
 export default router

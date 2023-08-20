@@ -134,8 +134,6 @@ const Job = (props) => {
               onClick={handleLike}
             ></AiFillHeart>
           )}
-
-          <span>{job.likes}</span>
         </motion.div>
       </div>
       <motion.div
