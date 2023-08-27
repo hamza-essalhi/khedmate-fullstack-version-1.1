@@ -4,7 +4,7 @@ import { tokenChecker } from "../middleware/jwt.js";
 
 const router = express.Router()
 
-router.post('/create',tokenChecker,createJobApplication)
+router.post('/create/:id',tokenChecker,createJobApplication)
 router.get('/',tokenChecker,getAllJobsApplications)
 router.get('/:id',tokenChecker,getJobApplication)
 router.delete('/:id',tokenChecker,deleteJobApplication)

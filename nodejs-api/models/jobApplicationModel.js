@@ -8,10 +8,16 @@ const JobApplicationSchema = new Schema(
       ref: "User",
       required: true,
     },
+    jobApplicationOwner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     jobId: {
       type: Schema.Types.ObjectId,
       ref: "Job",
       required: true,
+      unique: true,
     },
     applicationStatus: {
       type: String,
@@ -44,4 +50,4 @@ JobApplicationSchema.pre("updateOne", function (next) {
   next();
 });
 
-module.exports = mongoose.model("JobApplication", JobApplicationSchema);
+export default mongoose.model("JobApplication", JobApplicationSchema);
