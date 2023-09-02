@@ -176,6 +176,18 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
+.custom-select-1 {
+  z-index: 5 !important;
+}
+
+.custom-select-2 {
+  z-index: 6 !important;
+}
+
+.custom-select-3 {
+  z-index: 7 !important;
+}
+
 body {
   background-color: rgba(119, 109, 109, 0.1843137255);
 }
@@ -2920,6 +2932,162 @@ body {
     transform: translateX(0);
   }
 }
+.user .row.user-row-props .col form .password-error {
+  margin: 1em 1.5em;
+  color: #f74835;
+  text-shadow: -1px 4px 16px rgba(238, 26, 26, 0.36);
+}
+.user .row.user-row-props .col form a {
+  padding: 5px;
+  margin: 0.5em;
+  font-weight: bold;
+  color: #fc6e5e;
+}
+.user .row.user-row-props .col form a span {
+  color: #00ff85;
+}
+.user .row.user-row-props .col form .input-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px #fc6e5e solid;
+  border-radius: 10px;
+  margin: 0.5em;
+  padding: 0;
+  outline: none;
+  transition: 0.3s;
+}
+.user .row.user-row-props .col form .input-group:hover, .user .row.user-row-props .col form .input-group:active,
+.user .row.user-row-props .col form .input-group :focus {
+  border-color: rgba(0, 247, 255, 0.8705882353);
+  outline: none;
+}
+.user .row.user-row-props .col form .input-group:hover label, .user .row.user-row-props .col form .input-group:active label,
+.user .row.user-row-props .col form .input-group :focus label {
+  color: #00ff85;
+}
+.user .row.user-row-props .col form .input-group input {
+  width: 90%;
+  border: none;
+  margin: 0;
+}
+.user .row.user-row-props .col form .input-group .password-icon {
+  margin: 0 0.3em;
+  font-size: 22px;
+  color: #fc6e5e;
+  font-weight: bold;
+}
+.user .row.user-row-props .col form .error, .user .row.user-row-props .col form .error-input-password {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px red solid;
+  border-radius: 10px;
+  margin: 0.5em;
+  padding: 0;
+  outline: none;
+  box-shadow: rgba(223, 0, 0, 0.15) 0px 0px 20px 0px, rgba(223, 0, 0, 0.15) 1px 1px 20px 0px;
+  transition: 0.3s;
+}
+.user .row.user-row-props .col form .error:hover, .user .row.user-row-props .col form .error:active,
+.user .row.user-row-props .col form .error :focus, .user .row.user-row-props .col form .error-input-password:hover, .user .row.user-row-props .col form .error-input-password:active,
+.user .row.user-row-props .col form .error-input-password :focus {
+  border-color: red;
+  outline: none;
+}
+.user .row.user-row-props .col form .error:hover label, .user .row.user-row-props .col form .error:active label,
+.user .row.user-row-props .col form .error :focus label, .user .row.user-row-props .col form .error-input-password:hover label, .user .row.user-row-props .col form .error-input-password:active label,
+.user .row.user-row-props .col form .error-input-password :focus label {
+  color: #00ff85;
+}
+.user .row.user-row-props .col form .error input, .user .row.user-row-props .col form .error-input-password input {
+  width: 90%;
+  border: none;
+  margin: 0;
+  color: red;
+}
+.user .row.user-row-props .col form .error .password-icon, .user .row.user-row-props .col form .error-input-password .password-icon {
+  margin: 0 0.3em;
+  font-size: 22px;
+  color: #fc6e5e;
+  font-weight: bold;
+}
+.user .row.user-row-props .col form div.error {
+  display: none;
+}
+.user .row.user-row-props .col form .input-error {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px red solid;
+  color: red;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 0.5em;
+  outline: none;
+  box-shadow: rgba(223, 0, 0, 0.15) 0px 0px 20px 0px, rgba(223, 0, 0, 0.15) 1px 1px 20px 0px;
+  transition: 0.3s;
+}
+.user .row.user-row-props .col form .input-error:hover, .user .row.user-row-props .col form .input-error:active,
+.user .row.user-row-props .col form .input-error :focus {
+  border-color: red;
+  outline: none;
+}
+.user .row.user-row-props .col form div.active {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px red solid;
+  border-radius: 10px;
+  margin: 0.5em;
+  padding: 1.1em;
+  outline: none;
+  box-shadow: rgba(223, 0, 0, 0.15) 0px 0px 20px 0px, rgba(223, 0, 0, 0.15) 1px 1px 20px 0px;
+  transition: 0.3s;
+}
+.user .row.user-row-props .col form div.active:hover, .user .row.user-row-props .col form div.active:active,
+.user .row.user-row-props .col form div.active :focus {
+  border-color: red;
+  outline: none;
+}
+.user .row.user-row-props .col form div.active:hover label, .user .row.user-row-props .col form div.active:active label,
+.user .row.user-row-props .col form div.active :focus label {
+  color: #00ff85;
+}
+.user .row.user-row-props .col form div.active input {
+  width: 90%;
+  border: none;
+  margin: 0;
+  color: red;
+}
+.user .row.user-row-props .col form div.active .password-icon {
+  margin: 0 0.3em;
+  font-size: 22px;
+  color: #fc6e5e;
+  font-weight: bold;
+}
+.user .row.user-row-props .col form div.active h3 {
+  color: #f74835;
+  text-align: center;
+}
+.user .row.user-row-props .col form .loading,
+.user .row.user-row-props .col form .done {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user .row.user-row-props .col form .loading img,
+.user .row.user-row-props .col form .done img {
+  width: 50px;
+  height: 50px;
+}
+.user .row.user-row-props .col form .errorState {
+  display: none;
+}
 .user .pagination {
   display: flex;
   justify-content: center;
@@ -3084,6 +3252,13 @@ body {
 }
 .user .table table tbody tr td:last-child {
   text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+.user .table table tbody tr select {
+  padding: 12px;
+  border-radius: 0.4em;
+  background-color: #fff1ef;
 }
 .user .table table tbody tr:nth-child(even) {
   background-color: #fff1ef;

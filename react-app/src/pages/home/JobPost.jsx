@@ -9,6 +9,7 @@ import {useSelector } from "react-redux";
 const JobPost = () => {
   const { id } = useParams();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user= useSelector((state) => state.auth.user.user);
   const [job, setJob] = useState([]);
   const [like, setLike] = useState(false);
   const [formattedDate, setFormattedDate] = useState('');
@@ -205,7 +206,7 @@ const JobPost = () => {
           <span>salary: {job.salary} DH</span>
           
         </div>
-        {isAuthenticated?<Link>Apply Now</Link>:<span>Please login to Applay</span>}
+        {(isAuthenticated && !user.research) ?<Link>Apply Now</Link>:<span>Please login to Applay</span>}
       </motion.div>
 
       <motion.div

@@ -15,16 +15,20 @@ import { useParams } from "react-router-dom";
 import {useSelector } from "react-redux";
 import { ReaserchTable } from "../components/admin/ReaserchTable";
 import { Table } from "../components/admin/Table";
+import api from "../../toolkit/auth/config";
+import { ReaserchJobsTable } from "../components/admin/ReaserchJobsTable";
 const User = () => {
   const { id } = useParams();
   const [basics, setBasics] = useState(true);
   const [auth, setAuth] = useState(false);
   const [education, setEducation] = useState(false);
-  const job = education;
+
   const [experience, setExperience] = useState(false);
-  const [userData, setUser] = useState([]);
+  const [jobApplication,setJobApplication]=useState('')
+  const [jobs,setJobs]=useState('')
   const [resume, setResume] = useState(false);
   const [employee, setEmployee] = useState(false);
+  const [isCreatedNewJob,setCreatedNewJob]=useState(false)
   const [delay] = useState(0);
   const [propsDelay, setDelay] = useState(0.7);
   const ref = useRef(null);
@@ -42,8 +46,35 @@ const User = () => {
   }, [target, animate]);
 
   document.title = `${user.user.firstName} ${user.user.lastName}`;
- 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    const fetchFilteredJobs = async () => {
+      setError(false)
+      setLoading(false)
 
+      try
+       {
+
+          setLoading(true)
+          const response = await api.get("jobApplication");
+          const jobResponse= await api.get("jobs/userJobs");
+          const jobApplication = response.data.JobApplications
+          const jobs = jobResponse.data.jobs
+        setJobApplication(jobApplication);
+        setJobs(jobs)
+        setLoading(false)
+        
+  
+      } catch (error) {
+        setLoading(false)
+        setError(true)
+      }
+    };
+
+    fetchFilteredJobs();
+    
+  },[isCreatedNewJob]);
   const handleProfileMenu = (target) => {
     setDelay(0);
     switch (target) {
@@ -84,6 +115,31 @@ const User = () => {
         setResume(false);
     }
   };
+  const handleDelete = async (jobApplicationId) => {
+    try {
+      // Delete the job application
+      await api.delete(`jobApplication/${jobApplicationId}`);
+      const updatedJobApplications = jobApplication.filter((jobApp) => jobApp._id !== jobApplicationId);
+    setJobApplication(updatedJobApplications);
+    } catch (error) {
+      
+    }
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    try {
+      // Delete the job application
+      await api.delete(`jobs/${jobId}`);
+      const updatedJobApplications = jobApplication.filter((jobApp) => jobApp._id !== jobId);
+      const updatedJobs = jobs.filter((job) => job._id !== jobId);
+    setJobApplication(updatedJobApplications);
+    setJobs(updatedJobs)
+      
+    } catch (error) {
+    }
+  };
+
+  
 
   return (
     <motion.div
@@ -507,11 +563,15 @@ const User = () => {
         <>
           {basics && <Basics delay={propsDelay} user={user.user} />}
           {auth && <Auth delay={propsDelay} user={user.user}/>}
-          {job && <AddJob delay={propsDelay} user={user.user}/>}
+          {education && <AddJob delay={propsDelay} user={user.user} setCreatedNewJob={setCreatedNewJob}/>}
         </>
       )}
       {
-        user.user.research ? <ReaserchTable data={jobs}/>:<Table data={jobs}/>
+        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete}/>:<Table data={jobApplication}/>
+      }
+
+{
+        user.user.research && <ReaserchJobsTable data={jobs} onDelete={handleDeleteJob}/>
       }
     </motion.div>
   );

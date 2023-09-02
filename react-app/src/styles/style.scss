@@ -1404,7 +1404,171 @@ body {
               }
             }
           }
+          .password-error{
+            margin: 1em 1.5em;;
+            color: $error;
+            text-shadow: -1px 4px 16px rgb(238 26 26 / 36%);
+          }
+          a {
+            padding: 5px;
+            margin: 0.5em;
+            font-weight: bold;
+            color: $btn-bg;
+            span {
+              color: $success;
+            }
+          }
+          .input-group {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px $btn-bg solid;
+            border-radius: 10px;
+            margin: 0.5em;
+            padding: 0;
+            outline: none;
+            transition: 0.3s;
+            &:hover,
+            &:active,
+            :focus {
+              border-color: $info;
+              outline: none;
+              label {
+                color: $success;
+              }
+            }
+            input {
+              width: 90%;
+              border: none;
+              margin: 0;
+            }
+            .password-icon {
+              margin: 0 0.3em;
+              font-size: 22px;
+              color: $btn-bg;
+              font-weight: bold;
+            }
+          }
+          .error,.error-input-password {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px red solid;
+            border-radius: 10px;
+            margin: 0.5em;
+            padding: 0;
+            outline: none;
+            box-shadow: rgb(223 0 0 / 15%) 0px 0px 20px 0px,
+              rgb(223 0 0 / 15%) 1px 1px 20px 0px;
+            transition: 0.3s;
+            &:hover,
+            &:active,
+            :focus {
+              border-color: red;
+              outline: none;
+              label {
+                color: $success;
+              }
+            }
+            input {
+              width: 90%;
+              border: none;
+              margin: 0;
+              color: red;
+            }
+            .password-icon {
+              margin: 0 0.3em;
+              font-size: 22px;
+              color: $btn-bg;
+              font-weight: bold;
+            }
+          }
+          div.error {
+            display: none;
+          }
+          .input-error {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px red solid;
+            color: red;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 0.5em;
+            outline: none;
+            box-shadow: rgb(223 0 0 / 15%) 0px 0px 20px 0px,
+              rgb(223 0 0 / 15%) 1px 1px 20px 0px;
+            transition: 0.3s;
+            &:hover,
+            &:active,
+            :focus {
+              border-color: red;
+              outline: none;
+            }
+          }
+          div {
+            &.active {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 2px red solid;
+              border-radius: 10px;
+              margin: 0.5em;
+              padding: 1.1em;
+              outline: none;
+              box-shadow: rgb(223 0 0 / 15%) 0px 0px 20px 0px,
+                rgb(223 0 0 / 15%) 1px 1px 20px 0px;
+              transition: 0.3s;
+              &:hover,
+              &:active,
+              :focus {
+                border-color: red;
+                outline: none;
+                label {
+                  color: $success;
+                }
+              }
+              input {
+                width: 90%;
+                border: none;
+                margin: 0;
+                color: red;
+              }
+              .password-icon {
+                margin: 0 0.3em;
+                font-size: 22px;
+                color: $btn-bg;
+                font-weight: bold;
+              }
+    
+              h3 {
+                color: $error;
+                text-align: center;
+              }
+            }
+          }
+          .loading,
+          .done {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+              width: 50px;height: 50px;
+    
+            }
+          }
+    
+    
+          .errorState {
+            display: none;
+          }
+    
         }
+        
       }
     }
   }
@@ -1465,11 +1629,19 @@ body {
         tr{
           td:last-child{
             text-align: center;
+            display: flex;
+            justify-content: space-around;
+          }
+          select{
+            padding: 12px;
+            border-radius: 0.4em;
+            background-color: $input-bg;
           }
         }
         tr:nth-child(even){
           background-color: $input-bg;
         }
+        
         .delete-icon{
           color: $btn-bg;
           transition: .3s;

@@ -19,6 +19,7 @@ export const createJob = async (req, res, next) => {
     const job = await newJob.save();
     res.status(200).json({ job: job });
   } catch (e) {
+    next(errorHandler(500, e));
     next(errorHandler(500, "Access Denied:Can't Create This Job"));
   }
 };
@@ -90,6 +91,7 @@ export const getAllJobs = async (req, res, next) => {
         
       }
       else{
+        const jobs = await Job.find(filterJobs).sort({createdAt:-1});
         res.status(200).json({ jobs: jobs });
       }
       
@@ -123,6 +125,18 @@ export const getAllJobs = async (req, res, next) => {
       
     }
   } catch (e) {
+    next(errorHandler(500, "Access Denied:Can't Get Jobs ."));
+  }
+};
+
+export const getAllJobsByUser= async (req, res, next) => {
+
+  try {
+    const jobs = await Job.find({ userId: req.id}).sort({createdAt:-1});
+  
+    res.status(200).json({ jobs: jobs });
+  } catch (e) {
+    next(errorHandler(500, e));
     next(errorHandler(500, "Access Denied:Can't Get Jobs ."));
   }
 };

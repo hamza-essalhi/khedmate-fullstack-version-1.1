@@ -2,17 +2,26 @@ import React, { useState } from 'react';
 import TabelRow from './TabelRow';
 import Pagination from '../Home/Pagination';
 
-export const ReaserchTable = ({ data }) => {
+export const ReaserchTable = ({ data ,onDelete}) => {
+
   const [currentPage, setCurrentPage] = useState(1);
 const jobsPerPage=10
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = data.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(data.length / jobsPerPage);
-
+  
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  
+  if (!Array.isArray(data)) {
+    return (
+      <div className="table">
+        <p>No data available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="table">
@@ -30,7 +39,7 @@ const jobsPerPage=10
         </thead>
         <tbody>
           {currentJobs.map((job, i) => (
-            <TabelRow key={i} job={job} />
+            <TabelRow key={i} jobApplication={job} onDelete={onDelete} />
           ))}
         </tbody>
       </table>

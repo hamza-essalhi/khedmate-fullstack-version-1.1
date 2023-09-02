@@ -3,7 +3,7 @@ import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 
 // custom select no need for select input , bullshit :)
-const Select = ({ options, defaultValue, onChange }) => {
+const Select = ({ options, defaultValue, onChange,classValue }) => {
   const [selectedOption, setSelectedOption] = useState(defaultValue);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,7 +18,7 @@ const Select = ({ options, defaultValue, onChange }) => {
   };
 
   return (
-    <div className="custom-select">
+    <div className={classValue?`custom-select ${classValue}`:'custom-select' }>
       <div className="select-input" tabIndex="0" onClick={toggleOptionsList}>
         <span className="selected-option">
           {selectedOption || "Select an option"}

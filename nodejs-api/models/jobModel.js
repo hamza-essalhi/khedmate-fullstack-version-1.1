@@ -20,6 +20,7 @@ const JobSchema = new Schema(
       type: String,
       required: true,
     },
+    
     domain: {
       type: String,
       required: true,
@@ -29,6 +30,18 @@ const JobSchema = new Schema(
       required: true,
     },
     city:{
+      type: String,
+      required: true,
+    },
+    contactNumber:{
+      type: String,
+      required: true,
+    },
+    jobDescription:{
+      type: String,
+      required: true,
+    },
+    contactEmail:{
       type: String,
       required: true,
     },

@@ -56,57 +56,47 @@ export const deleteJobApplication = async (req, res, next) => {
 };
 
 export const getAllJobsApplications = async (req, res, next) => {
-
   try {
-    jobs = await JobApplication.find(userId = req.id)
-    if (jobs.userId != req.id) {
-      next(errorHandler(500, "Access Denied:Can't Get Job Applications ."));
+    const q = req.query;
+    const filterJobs = {
+      userId: req.id, // Filter by the specific user
+      ...(q.search && { title: { $regex: q.search, $options: 'i' } }), // Filter by title search
+      ...(q.city && { city: q.city }), // Filter by city
+      ...(q.domain && { domain: q.domain }), // Filter by domain
+      ...(q.education && { educationLevel: q.education }), // Filter by education level
+    };
+   
+
+   
+
+    // Find job applications matching the filter criteria
+    const jobs = await JobApplication.find(filterJobs);
+    if (q.time && q.time.toLowerCase() === 'new') {
+      jobs.sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt in descending order
+    } else if (q.time && q.time.toLowerCase() === 'old') {
+      jobs.sort((a, b) => a.createdAt - b.createdAt); // Sort by createdAt in ascending order
     }
-  }
-  catch {
-    next(errorHandler(500, "Access Denied:Can't Get Job Applications ."));
-  }
-  const q = req.query
-  const filterJobs = {
-    userId: req.id,
-    ...(q.search && { title: { $regex: q.search, $options: 'i' } }),
-    ...(q.city && { city: q.city }),
-    ...(q.domain && { domain: q.domain }),
-    ...(q.education && { educationLevel: q.education })
-
-  }
-  try {
-    const jobs = await JobApplication.find(filterJobs)
-    if (q.time && q.time.toLowerCase() == 'old') {
-      res.status(200).json({ JobApplication: jobs });
-
+    
+     // Check if any job applications were found
+     if (jobs.length === 0) {
+      // If no applications are found, return an error
+      return next(errorHandler(404, "No Job Applications found for this user."));
     }
-    else if (q.time && q.time.toLowerCase() == 'new') {
-      const jobs = await JobApplication.find(filterJobs).sort({ createdAt: -1 });
-      res.status(200).json({ JobApplication: jobs });
-
-    }
-    else {
-      res.status(200).json({ jobs: jobs });
-    }
-
-
+    res.status(200).json({ JobApplications: jobs });
   } catch (e) {
-    next(errorHandler(500, "Access Denied:Can't Get Jobs ."));
+    // Handle any errors that occur during the process
+    next(errorHandler(500, "An error occurred while fetching Job Applications."));
   }
 };
 
-
 export const getJobApplication = async (req, res, next) => {
   try {
-    const job = await Job.findById(req.params.id);
-
-    if (req.isAuthenticated) {
-      res.status(200).json({ job: job });
-    } else {
-      const { userId, ...jobsWithoutId } = job._doc;
-      res.status(200).json({ job: jobsWithoutId });
+    const job = await JobApplication.findById(req.params.id);
+    
+    if (job.jobApplicationOwner.toString() !== req.id) {
+      return next(errorHandler(500, "Access Denied: Unauthorized request"));
     }
+    res.status(200).json({ JobApplication: job });
   } catch (e) {
     next(errorHandler(500, "Access Denied: This Job Not Exists."));
   }
