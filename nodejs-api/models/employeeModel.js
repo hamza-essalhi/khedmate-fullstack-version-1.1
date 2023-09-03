@@ -43,7 +43,7 @@ const EducationSchema = new Schema({
 const EmployeeSchema = new Schema(
   
   {
-    userID: {
+    userId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
@@ -59,4 +59,4 @@ const EmployeeSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Employee", EmployeeSchema);
+export default mongoose.model("Employee", EmployeeSchema);

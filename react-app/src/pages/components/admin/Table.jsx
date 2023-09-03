@@ -14,6 +14,13 @@ const jobsPerPage=10
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  if (!Array.isArray(data)) {
+    return (
+      <div className="table">
+        <h1>No Job Applications available.</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="table">
@@ -30,7 +37,7 @@ const jobsPerPage=10
           </tr>
         </thead>
         <tbody>
-          {currentJobs.map((job, i) => (
+          {currentJobs?.map((job, i) => (
             <TabelRow key={i} job={job} />
           ))}
         </tbody>

@@ -14,12 +14,15 @@ import { motion, useAnimation, useInView } from "framer-motion";
 //rer api 
 
 import api from '../../toolkit/auth/config'
+import { useDispatch, useSelector } from "react-redux";
+import { clearRequest, clearRequestWithDelay, errorRequests, startRequest } from "../../toolkit/request/requestActions";
+import LoadingBox from "../components/LoadingBox";
 
 
 const Home = () => {
   document.title = 'Home';
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
+  const { isLoading, errorRequest } = useSelector((state) => state.request);
   const [currentPage, setCurrentPage] = useState(1);
   const [jobsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,8 +37,8 @@ const Home = () => {
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
- 
- 
+
+
 
 
   const transition = {
@@ -50,22 +53,22 @@ const Home = () => {
 
 
   const handleSelectChangeCities = (value) => {
-    if(value==='All'){
-      value=''
+    if (value === 'All') {
+      value = ''
     }
     setSelectedCities(value);
   };
 
   const handleSelectChangeDomain = (value) => {
-    if(value==='All'){
-      value=''
+    if (value === 'All') {
+      value = ''
     }
     setSelectedDomains(value);
 
   };
   const handleSelectChangeEducation = (value) => {
-    if(value==='All'){
-      value=''
+    if (value === 'All') {
+      value = ''
     }
     setSelectedEducation(value);
 
@@ -73,7 +76,7 @@ const Home = () => {
 
   // scroll button
 
-  
+
 
   // console.log(data)
 
@@ -99,52 +102,34 @@ const Home = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
- 
-  
+
+
   // fetch data
   useEffect(() => {
     const fetchFilteredJobs = async () => {
-      setError(false)
-      setLoading(false)
-    const headers = {
-      'Authorization': `Bearer `,
-      // other headers if needed
-    };
-      console.log(headers)
-      try
-       {
-       const  params= {
-          search:searchQuery,
+      dispatch(clearRequest())
+      dispatch(startRequest());
+
+      try {
+        const params = {
+          search: searchQuery,
           city: selectedCities,
           domain: selectedDomains,
           education: selectedEducation,
-          time:selectedTime
-        }
-        if(1>10 ){
-          const response = await api.get("jobs",{headers},{params});
-          const filteredJobs = response.data.jobs.slice(0, 200);
-        setFilteredJobs(filteredJobs);
-        setLoading(false)
-        }
-        else{
-          setLoading(true)
-          const response = await api.get("jobs",{params});
-          const filteredJobs = response.data.jobs.slice(0, 200);
-        setFilteredJobs(filteredJobs);
-        setLoading(false)
+          time: selectedTime
         }
 
-        
+        const response = await api.get("jobs", { params });
+        const filteredJobs = response.data.jobs
+        setFilteredJobs(filteredJobs);
+        dispatch(clearRequestWithDelay())
       } catch (error) {
-        setLoading(false)
-        setError(true)
+        dispatch(errorRequests())
       }
     };
 
     fetchFilteredJobs();
-
-    
-  }, [selectedCities, selectedDomains, selectedEducation, selectedTime,searchQuery]);
+  }, [selectedCities, selectedDomains, selectedEducation, selectedTime, searchQuery, dispatch]);
 
 
   // merge jobs and users,when we use api we need relationship in db cascade users and jobs
@@ -171,7 +156,7 @@ const Home = () => {
     { label: "Old", value: "Old" },
   ];
 
-  const handleSelectChangeTime= (value) => {
+  const handleSelectChangeTime = (value) => {
     setSelectedTime(value);
   };
 
@@ -258,7 +243,7 @@ const Home = () => {
                   type="text"
                   placeholder="Search..."
                   value={searchQuery}
-                  onChange={(e)=>setSearchQuery(e.target.value)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
@@ -294,7 +279,7 @@ const Home = () => {
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e)=>setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
 
             </div>
@@ -307,18 +292,18 @@ const Home = () => {
             )}
           </div>
         </div>
-        {loading ? "We are loding your data" : error ? 'Error' : currentJobs?.map((job,i) => {
+        {isLoading ? <LoadingBox /> : errorRequest ? 'Error' : currentJobs?.map((job, i) => {
           return <Job key={i} job={job} />;
         })}
-        
-          <div className="row pagination">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              handleClick={handleClick}
-            />
-          </div>
-       
+
+        <div className="row pagination">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handleClick={handleClick}
+          />
+        </div>
+
       </motion.div>
       <div
         className="scroll-top"

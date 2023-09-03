@@ -24,7 +24,7 @@ import { logoutAsync } from "../../toolkit/auth/authSlice";
 
 const MainNavBar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user?.user);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -112,7 +112,7 @@ const MainNavBar = () => {
             <Link to="/">Home</Link>
           </li>
           {isAuthenticated&& (<li>
-            <Link to={`/user/${user.user._id}`}>Profile</Link>
+            <Link to={`/user/${user._id}`}>Profile</Link>
           </li>)}
           <li>
             <Link to='about-us'>About Us</Link>
@@ -135,7 +135,7 @@ const MainNavBar = () => {
             </Link>
           </li>
           {isAuthenticated ?<li className="user-side">
-            <img src={userImage} onClick={userMenuHandler} alt="" id="user-button" />
+            <img src={user?.img? user.img:userImage } onClick={userMenuHandler} alt="" id="user-button" />
           </li>
           :
           <li className="user-side" onClick={userMenuHandler}>
@@ -149,7 +149,7 @@ const MainNavBar = () => {
       {
         isAuthenticated? (
           <div className={userMenuOpen ? "user-menu-active" : "user-menu"} >
-        <Link to={`/user/${user.user._id}`}>
+        <Link to={`/user/${user._id}`}>
           <FaUserAlt className="user-menu-icon"></FaUserAlt>
           Profile
         </Link>

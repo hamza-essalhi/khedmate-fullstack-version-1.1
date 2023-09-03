@@ -10,25 +10,30 @@ import Education from "../components/admin/Education";
 import Experience from "../components/admin/Experience";
 import Resume from "../components/admin/Resume";
 import AddJob from "../components/admin/AddJob";
-import jobs from "../../../src/data/jobs1.json"
-import { useParams } from "react-router-dom";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ReaserchTable } from "../components/admin/ReaserchTable";
 import { Table } from "../components/admin/Table";
 import api from "../../toolkit/auth/config";
 import { ReaserchJobsTable } from "../components/admin/ReaserchJobsTable";
+import { useDispatch } from 'react-redux';
+import { addMessage, clearMessagesWithDelay } from "../../toolkit/messages/messageActions";
+import Message from "../components/Message";
+import { clearRequest, clearRequestWithDelay, completeRequest, errorRequests, startRequest } from "../../toolkit/request/requestActions";
+
 const User = () => {
-  const { id } = useParams();
+  const { lastRequest } = useSelector((state) => state.request);
+
+  const messages = useSelector((state) => state.messages);
+  const dispatch = useDispatch();
   const [basics, setBasics] = useState(true);
   const [auth, setAuth] = useState(false);
   const [education, setEducation] = useState(false);
 
   const [experience, setExperience] = useState(false);
-  const [jobApplication,setJobApplication]=useState('')
-  const [jobs,setJobs]=useState('')
+  const [jobApplication, setJobApplication] = useState('')
+  const [jobs, setJobs] = useState('')
   const [resume, setResume] = useState(false);
-  const [employee, setEmployee] = useState(false);
-  const [isCreatedNewJob,setCreatedNewJob]=useState(false)
+  const [employee] = useState(false);
   const [delay] = useState(0);
   const [propsDelay, setDelay] = useState(0.7);
   const ref = useRef(null);
@@ -46,35 +51,26 @@ const User = () => {
   }, [target, animate]);
 
   document.title = `${user.user.firstName} ${user.user.lastName}`;
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
   useEffect(() => {
     const fetchFilteredJobs = async () => {
-      setError(false)
-      setLoading(false)
-
-      try
-       {
-
-          setLoading(true)
-          const response = await api.get("jobApplication");
-          const jobResponse= await api.get("jobs/userJobs");
-          const jobApplication = response.data.JobApplications
-          const jobs = jobResponse.data.jobs
+      try {
+        const response = await api.get("jobApplication");
+        const jobResponse = await api.get("jobs/userJobs");
+        const jobApplication = response.data.JobApplications
+        const jobs = jobResponse.data.jobs
         setJobApplication(jobApplication);
         setJobs(jobs)
-        setLoading(false)
         
-  
+        dispatch(clearRequestWithDelay())
       } catch (error) {
-        setLoading(false)
-        setError(true)
+        
       }
     };
 
     fetchFilteredJobs();
-    
-  },[isCreatedNewJob]);
+
+  }, [lastRequest,dispatch]);
   const handleProfileMenu = (target) => {
     setDelay(0);
     switch (target) {
@@ -116,30 +112,36 @@ const User = () => {
     }
   };
   const handleDelete = async (jobApplicationId) => {
+    dispatch(clearRequest())
+    dispatch(startRequest());
     try {
       // Delete the job application
       await api.delete(`jobApplication/${jobApplicationId}`);
-      const updatedJobApplications = jobApplication.filter((jobApp) => jobApp._id !== jobApplicationId);
-    setJobApplication(updatedJobApplications);
+      dispatch(completeRequest())
+      dispatch(addMessage("Success! Your job has been deleted."));
+      dispatch(clearMessagesWithDelay());
+      dispatch(clearRequestWithDelay())
     } catch (error) {
-      
+      dispatch(errorRequests())
     }
   };
 
   const handleDeleteJob = async (jobId) => {
+    dispatch(clearRequest())
+    dispatch(startRequest());
     try {
-      // Delete the job application
       await api.delete(`jobs/${jobId}`);
-      const updatedJobApplications = jobApplication.filter((jobApp) => jobApp._id !== jobId);
-      const updatedJobs = jobs.filter((job) => job._id !== jobId);
-    setJobApplication(updatedJobApplications);
-    setJobs(updatedJobs)
-      
+      dispatch(completeRequest())
+      dispatch(addMessage("Success! Your job application has been deleted."));
+      dispatch(clearMessagesWithDelay());
+      dispatch(clearRequestWithDelay())
+
     } catch (error) {
+      dispatch(errorRequests())
     }
   };
 
-  
+
 
   return (
     <motion.div
@@ -161,6 +163,7 @@ const User = () => {
       animate={animate}
       transition={transition}
     >
+      <Message messages={messages} />
       <motion.div
         className="row user-profile-menu"
         variants={{
@@ -180,44 +183,44 @@ const User = () => {
           delay: delay + 0.3,
         }}
       >
-        {employee ? (
+        {!user.user.research  ? (
           <div className="col">
             <motion.div
               variants={
                 !basics
                   ? {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 0,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 0,
+                    },
+                  }
                   : {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 20,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 20,
+                    },
+                  }
               }
               initial="start"
               animate="end"
               transition={
                 !basics
                   ? {
-                      duration: 0.5,
-                      delay: delay + 0.2,
-                    }
+                    duration: 0.5,
+                    delay: delay + 0.2,
+                  }
                   : {
-                      duration: 0.5,
-                      delay: 0.2,
-                    }
+                    duration: 0.5,
+                    delay: 0.2,
+                  }
               }
             >
               <FaRegUserCircle
@@ -231,38 +234,38 @@ const User = () => {
               variants={
                 !auth
                   ? {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 0,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 0,
+                    },
+                  }
                   : {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 20,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 20,
+                    },
+                  }
               }
               initial="start"
               animate="end"
               transition={
                 !auth
                   ? {
-                      duration: 0.5,
-                      delay: delay + 0.2,
-                    }
+                    duration: 0.5,
+                    delay: delay + 0.2,
+                  }
                   : {
-                      duration: 0.5,
-                      delay: 0.2,
-                    }
+                    duration: 0.5,
+                    delay: 0.2,
+                  }
               }
             >
               <BsFillShieldLockFill
@@ -276,38 +279,38 @@ const User = () => {
               variants={
                 !education
                   ? {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 0,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 0,
+                    },
+                  }
                   : {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 20,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 20,
+                    },
+                  }
               }
               initial="start"
               animate="end"
               transition={
                 !education
                   ? {
-                      duration: 0.5,
-                      delay: delay + 0.2,
-                    }
+                    duration: 0.5,
+                    delay: delay + 0.2,
+                  }
                   : {
-                      duration: 0.5,
-                      delay: 0.2,
-                    }
+                    duration: 0.5,
+                    delay: 0.2,
+                  }
               }
             >
               <IoMdSchool
@@ -321,38 +324,38 @@ const User = () => {
               variants={
                 !experience
                   ? {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 0,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 0,
+                    },
+                  }
                   : {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 20,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 20,
+                    },
+                  }
               }
               initial="start"
               animate="end"
               transition={
                 !experience
                   ? {
-                      duration: 0.5,
-                      delay: delay + 0.2,
-                    }
+                    duration: 0.5,
+                    delay: delay + 0.2,
+                  }
                   : {
-                      duration: 0.5,
-                      delay: 0.2,
-                    }
+                    duration: 0.5,
+                    delay: 0.2,
+                  }
               }
             >
               <BsPersonWorkspace
@@ -366,38 +369,38 @@ const User = () => {
               variants={
                 !resume
                   ? {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 0,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 0,
+                    },
+                  }
                   : {
-                      start: {
-                        opacity: 0,
-                        y: -100,
-                      },
-                      end: {
-                        opacity: 1,
-                        y: 20,
-                      },
-                    }
+                    start: {
+                      opacity: 0,
+                      y: -100,
+                    },
+                    end: {
+                      opacity: 1,
+                      y: 20,
+                    },
+                  }
               }
               initial="start"
               animate="end"
               transition={
                 !resume
                   ? {
-                      duration: 0.5,
-                      delay: delay + 0.2,
-                    }
+                    duration: 0.5,
+                    delay: delay + 0.2,
+                  }
                   : {
-                      duration: 0.5,
-                      delay: 0.2,
-                    }
+                    duration: 0.5,
+                    delay: 0.2,
+                  }
               }
             >
               <IoMdDocument
@@ -415,38 +418,38 @@ const User = () => {
                 variants={
                   !basics
                     ? {
-                        start: {
-                          opacity: 0,
-                          y: -100,
-                        },
-                        end: {
-                          opacity: 1,
-                          y: 0,
-                        },
-                      }
+                      start: {
+                        opacity: 0,
+                        y: -100,
+                      },
+                      end: {
+                        opacity: 1,
+                        y: 0,
+                      },
+                    }
                     : {
-                        start: {
-                          opacity: 0,
-                          y: -100,
-                        },
-                        end: {
-                          opacity: 1,
-                          y: 20,
-                        },
-                      }
+                      start: {
+                        opacity: 0,
+                        y: -100,
+                      },
+                      end: {
+                        opacity: 1,
+                        y: 20,
+                      },
+                    }
                 }
                 initial="start"
                 animate="end"
                 transition={
                   !basics
                     ? {
-                        duration: 0.5,
-                        delay: delay + 0.2,
-                      }
+                      duration: 0.5,
+                      delay: delay + 0.2,
+                    }
                     : {
-                        duration: 0.5,
-                        delay: 0.2,
-                      }
+                      duration: 0.5,
+                      delay: 0.2,
+                    }
                 }
               >
                 <FaRegUserCircle
@@ -460,38 +463,38 @@ const User = () => {
                 variants={
                   !auth
                     ? {
-                        start: {
-                          opacity: 0,
-                          y: -100,
-                        },
-                        end: {
-                          opacity: 1,
-                          y: 0,
-                        },
-                      }
+                      start: {
+                        opacity: 0,
+                        y: -100,
+                      },
+                      end: {
+                        opacity: 1,
+                        y: 0,
+                      },
+                    }
                     : {
-                        start: {
-                          opacity: 0,
-                          y: -100,
-                        },
-                        end: {
-                          opacity: 1,
-                          y: 20,
-                        },
-                      }
+                      start: {
+                        opacity: 0,
+                        y: -100,
+                      },
+                      end: {
+                        opacity: 1,
+                        y: 20,
+                      },
+                    }
                 }
                 initial="start"
                 animate="end"
                 transition={
                   !auth
                     ? {
-                        duration: 0.5,
-                        delay: delay + 0.2,
-                      }
+                      duration: 0.5,
+                      delay: delay + 0.2,
+                    }
                     : {
-                        duration: 0.5,
-                        delay: 0.2,
-                      }
+                      duration: 0.5,
+                      delay: 0.2,
+                    }
                 }
               >
                 <BsFillShieldLockFill
@@ -505,38 +508,38 @@ const User = () => {
                 variants={
                   !education
                     ? {
-                        start: {
-                          opacity: 0,
-                          y: -100,
-                        },
-                        end: {
-                          opacity: 1,
-                          y: 0,
-                        },
-                      }
+                      start: {
+                        opacity: 0,
+                        y: -100,
+                      },
+                      end: {
+                        opacity: 1,
+                        y: 0,
+                      },
+                    }
                     : {
-                        start: {
-                          opacity: 0,
-                          y: -100,
-                        },
-                        end: {
-                          opacity: 1,
-                          y: 20,
-                        },
-                      }
+                      start: {
+                        opacity: 0,
+                        y: -100,
+                      },
+                      end: {
+                        opacity: 1,
+                        y: 20,
+                      },
+                    }
                 }
                 initial="start"
                 animate="end"
                 transition={
                   !education
                     ? {
-                        duration: 0.5,
-                        delay: delay + 0.2,
-                      }
+                      duration: 0.5,
+                      delay: delay + 0.2,
+                    }
                     : {
-                        duration: 0.5,
-                        delay: 0.2,
-                      }
+                      duration: 0.5,
+                      delay: 0.2,
+                    }
                 }
               >
                 <IoMdSchool
@@ -551,28 +554,29 @@ const User = () => {
         )}
       </motion.div>
 
-      {employee ? (
+      {!user.user.research ? (
         <>
           {basics && <Basics delay={propsDelay} user={user.user} />}
-          {auth && <Auth delay={propsDelay} user={user.user}/>}
-          {education && <Education delay={propsDelay} user={user.user}/>}
-          {experience && <Experience delay={propsDelay} user={user.user}/>}
-          {resume && <Resume delay={propsDelay} user={user.user}/>}
+          {auth && <Auth delay={propsDelay} user={user.user} />}
+          {education && <Education delay={propsDelay} user={user.user} />}
+          {experience && <Experience delay={propsDelay} user={user.user} />}
+          {resume && <Resume delay={propsDelay} user={user.user} />}
         </>
       ) : (
         <>
           {basics && <Basics delay={propsDelay} user={user.user} />}
-          {auth && <Auth delay={propsDelay} user={user.user}/>}
-          {education && <AddJob delay={propsDelay} user={user.user} setCreatedNewJob={setCreatedNewJob}/>}
+          {auth && <Auth delay={propsDelay} user={user.user} />}
+          {education && <AddJob delay={propsDelay} user={user.user} />}
         </>
       )}
       {
-        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete}/>:<Table data={jobApplication}/>
+        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete} /> : <Table data={jobApplication} />
       }
 
-{
-        user.user.research && <ReaserchJobsTable data={jobs} onDelete={handleDeleteJob}/>
+      {
+        user.user.research && <ReaserchJobsTable data={jobs} onDelete={handleDeleteJob} />
       }
+      
     </motion.div>
   );
 };

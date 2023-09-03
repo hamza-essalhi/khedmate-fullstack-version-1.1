@@ -4,10 +4,12 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { motion, useAnimation, useInView } from "framer-motion";
 
+import api from "../../../toolkit/auth/config";
 
-const Job = (props) => {
-  const job = props.job;
-  const [like, setLike] = useState(false);
+
+const Job = ({job}) => {
+  const [user,setUser]=useState('')
+  const [like] = useState(false);
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
@@ -16,6 +18,15 @@ const Job = (props) => {
     duration: 0.5,
     delay: 0.1,
   };
+
+  useEffect(()=>{
+    const getUser = async ()=>{
+      
+      const response = await api.get(`users/${job.userId}`)
+      setUser(response.data.user)
+    }
+    getUser()
+  },[job.userId])
   useEffect(() => {
     const timestampStr = job.createdAt;
 
@@ -31,7 +42,7 @@ const Job = (props) => {
   }, [target,animate]);
 
   const handleLike = () => {
-    
+  
   };
 
   return (
@@ -74,7 +85,7 @@ const Job = (props) => {
             delay: 0.4,
           }}
         >
-          <img src={userImage} alt="" />
+          <img src={user.img? user.img:userImage} alt="" />
           <div className="sub-col">
             <h3>{job?.title}</h3>
             <span>
@@ -155,7 +166,7 @@ const Job = (props) => {
           delay: 0.9,
         }}
       >
-        <span>{job?.title.slice(0, 200)}...</span>
+        <span>{job?.jobDescription}</span>
 
         <Link to={"job/" + job?._id}>Apply Now</Link>
       </motion.div>

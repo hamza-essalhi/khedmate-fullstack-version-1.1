@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaEdit, FaShare, FaTrash } from 'react-icons/fa'
+import { FaShare, FaTrash } from 'react-icons/fa'
 import api from '../../../toolkit/auth/config';
 import { Link } from 'react-router-dom';
 
@@ -44,7 +44,8 @@ export default function TabelRow({ jobApplication,onDelete }) {
       <td className='status'>
         <select name="" id="">
           <option >{jobApplication.applicationStatus}</option>
-          <option value="accepted">accepted</option>
+          <option value="accepted">accepted
+          </option>
           <option value="rejected">rejected</option>
         </select></td>
       <td ><FaTrash onClick={handleDelete} className='delete-icon'></FaTrash>

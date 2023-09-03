@@ -5,6 +5,7 @@
   width: 200px;
   border-radius: 10px;
   z-index: 4;
+
   .select-input {
     display: flex;
     align-items: center;
@@ -15,10 +16,12 @@
     border-radius: 10px;
     font-weight: bolder;
     cursor: pointer;
+
     &:focus {
       outline: none;
       box-shadow: 0 0 0 1px $input-bg;
     }
+
     .arrow-down {
       margin-left: auto;
       border: solid black;
@@ -53,18 +56,21 @@
       font-size: 14px;
       font-weight: bolder;
       transition: .3s;
+
       &:hover {
         background-color: $btn-bg;
         color: white;
-        
+
       }
     }
+
     li.selected {
       background-color: $btn-bg;
       color: white;
     }
 
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+
     &::-webkit-scrollbar-track {
       box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
       background-color: white;
@@ -77,36 +83,165 @@
 
     &::-webkit-scrollbar-thumb {
       box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-      background-color:$btn-bg;
+      background-color: $btn-bg;
       border-radius: 3px;
       padding: 10px;
+
       &:hover {
         background-color: mix($btn-bg, black, 20%);
       }
     }
-   
+
     @keyframes select-animation-custom {
       from {
         opacity: 0;
         height: 0;
       }
+
       to {
         opacity: 1;
         height: max-content;
-        
+
       }
     }
   }
 }
 
-.custom-select-1{
+.custom-select-1 {
   z-index: 5 !important;
 }
-.custom-select-2{
+
+.custom-select-2 {
   z-index: 6 !important;
 }
 
-.custom-select-3{
+.custom-select-3 {
   z-index: 7 !important;
 }
 
+.loading {
+  img {
+    width: 50px;
+  }
+}
+
+.message-alert {
+  div {
+    background-color: $success;
+    padding: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 80%;
+    right: 0;
+    margin: 1em;
+    width: max-content;
+    color: rgb(0, 0, 0);
+    font-weight: bolder;
+  }
+
+  .error {
+    background-color: $error !important;
+  }
+}
+
+.loading-box {
+  height: 400px;
+
+  .top {
+    background-color: $bg;
+    height: 50%;
+    width: 100%;
+    border-radius: 20px;
+    animation: placeHolderShimmer 2s linear infinite forwards;
+
+  }
+
+  .bottom {
+    margin: 1em;
+    width: 100%;
+    height: 40%;
+    div {
+      height: 25px;
+      border-radius: 20px;
+      background-color: $bg;
+      margin: 1em;
+      animation: widthAnimation 2s linear infinite forwards;
+      &:nth-child(even) {
+        width: 50%;
+      }
+      &:nth-child(3n-3) {
+        width: 50%;
+      }
+
+      &:nth-child(2) {
+        width: 50%;
+        animation: widthAnimation-1 2s linear infinite forwards;
+      }
+      &:nth-child(3) {
+        width: 50%;
+        animation: widthAnimation-2 2s linear infinite forwards;
+      }
+      &:nth-child(4) {
+        width: 50%;
+        animation: widthAnimation-3  2s linear infinite forwards;
+      }
+
+    }
+    @keyframes widthAnimation {
+      0% {
+        width: 30%;
+        right: 0;
+      }
+      100% {
+        width: 100%;
+        right: 0;
+      }
+    }
+   
+    @keyframes widthAnimation-1 {
+      0% {
+        width: 70%;
+        right: 0;
+      }
+      100% {
+        width: 100%;
+        right: 0;
+      }
+    }
+    @keyframes widthAnimation-2 {
+      0% {
+        width: 50%;
+        right: 0;
+      }
+      100% {
+        width: 100%;
+        right: 0;
+      }
+    }
+    @keyframes widthAnimation-3 {
+      0% {
+        width: 60%;
+        right: 0;
+      }
+      100% {
+        width: 100%;
+        right: 0;
+      }
+    }
+    @keyframes placeHolderShimmer {
+      0% {
+        background-position: 50% 0;
+        background-color: rgb(133, 133, 133);
+       
+      }
+      100% {
+        background-position: -50% 0, 150% 0;
+        background-color: $bg;
+        
+      }
+    }
+    
+    
+  }
+
+}

@@ -80,7 +80,7 @@ export const getAllJobs = async (req, res, next) => {
   try {
     const jobs = await Job.find(filterJobs);
 
-    if (req.isAuthenticated) {
+    if (req.isAuthenticated || !req.isAuthenticated) {
       if(q.time && q.time.toLowerCase()=='old'){
         res.status(200).json({ jobs: jobs });
 
@@ -97,30 +97,18 @@ export const getAllJobs = async (req, res, next) => {
       
     } else {
       if(q.time && q.time.toLowerCase()=='old'){
-        const jobsWithoutId = jobs.map((job) => {
-          const { userId, ...jobWithoutId } = job.toObject();
-          return jobWithoutId
-        });
-  
-        res.status(200).json({ jobs: jobsWithoutId });
-
+        res.status(200).json({ jobs: jobs });
       }
       else if (q.time && q.time.toLowerCase()=='new'){
         const jobs = await Job.find(filterJobs).sort({createdAt:-1});
-        const jobsWithoutId = jobs.map((job) => {
-          const { userId, ...jobWithoutId } = job.toObject();
-          return jobWithoutId
-        });
+        
   
-        res.status(200).json({ jobs: jobsWithoutId });
+        res.status(200).json({ jobs: jobs });
       }
       else{
-        const jobsWithoutId = jobs.map((job) => {
-          const { userId, ...jobWithoutId } = job.toObject();
-          return jobWithoutId
-        });
+        
   
-        res.status(200).json({ jobs: jobsWithoutId });
+        res.status(200).json({ jobs: jobs});
       }
       
     }
@@ -146,7 +134,7 @@ export const getJob = async (req, res, next) => {
   try {
     const job = await Job.findById(req.params.id);
 
-    if (req.isAuthenticated) {
+    if (req.isAuthenticated || !req.isAuthenticated) {
       res.status(200).json({ job: job });
     } else {
       const { userId, ...jobsWithoutId } = job._doc;

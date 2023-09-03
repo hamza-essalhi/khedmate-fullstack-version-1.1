@@ -1,24 +1,39 @@
 import { motion} from "framer-motion";
 
-
+import { startRequest, completeRequest, errorRequests, clearRequestWithDelay, clearRequest } from '../../../toolkit/request/requestActions';
+import { addMessage, clearMessagesWithDelay } from "../../../toolkit/messages/messageActions";
+import Loading from "../Loading";
 import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import authService from "../../../toolkit/auth/authService";
+import { useDispatch, useSelector } from "react-redux";
+
+
 const Auth = ({ delay,user}) => {
+  const { isLoading, errorRequest } = useSelector((state) => state.request);
+  
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
   const [showRpassword, setShowRpassword] = useState(false);
   const [isWeakPassword, setIsWeakPassword] = useState(false)
   const [isPasswordsMatch, setPasswordsMatch] = useState(false)
+  const [isOldPasswordsMatch, setOldPasswordsMatch] = useState(false)
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [error, setError] = useState(false)
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+  const [password, setPassword] = useState("");
   const [emailMatch, setEmailMatch] = useState(true);
   const [email, setEmail] = useState("");
   const newDelay = delay;
+  const [formErrors, setFormErrors] = useState({});
 
   const [formData, setFormData] = useState({
    
       email: "",
       password: "",
+      newPassword:'',
       rpassword:''
   });
   useEffect(() => {
@@ -71,21 +86,27 @@ const Auth = ({ delay,user}) => {
     } else {
       setEmailMatch(true)
     }
+    if(password.length<=0){
+      setOldPasswordsMatch(false)
+    }
+    else {
+      setOldPasswordsMatch(true)
+    }
 
     const lowercaseRegex = /[a-z]/; // Regular expression for lowercase letters
     const uppercaseRegex = /[A-Z]/; // Regular expression for uppercase letters
     const digitRegex = /\d/; // Regular expression for digits
 
-    if (password1.length < 8 && password1 !== '') {
+    if (password1.length < 8 ) {
       setIsWeakPassword(true);
       setPasswordErrorMessage('Your password is weak (less than 8 characters)');
-    } else if (!lowercaseRegex.test(password1) && password1 !== '') {
+    } else if (!lowercaseRegex.test(password1) ) {
       setIsWeakPassword(true);
       setPasswordErrorMessage('Your password is weak (missing lowercase letters)');
-    } else if (!uppercaseRegex.test(password1) && password1 !== '') {
+    } else if (!uppercaseRegex.test(password1) ) {
       setIsWeakPassword(true);
       setPasswordErrorMessage('Your password is weak (missing uppercase letters)');
-    } else if (!digitRegex.test(password1) && password1 !== '') {
+    } else if (!digitRegex.test(password1) ) {
       setIsWeakPassword(true);
       setPasswordErrorMessage('Your password is weak (missing digits)');
     } else {
@@ -93,12 +114,13 @@ const Auth = ({ delay,user}) => {
       setPasswordErrorMessage(''); // Password is strong, reset error message
     }
 
-    setPassword1(formData.password)
+    setPassword1(formData.newPassword)
     setPassword2(formData.rpassword)
+    setPassword(formData.password)
     setEmail(formData.email)
     
 
-  }, [password1, password2, email, formData.password, formData.rpassword, formData.email]);
+  }, [password,password1, password2, email,formData.password, formData.newPassword, formData.rpassword, formData.email]);
   const animationProps = {
     start: {
       opacity: 0,
@@ -133,19 +155,70 @@ const Auth = ({ delay,user}) => {
       ...prevFormData,
       [name]: value,
     }));
-    setPassword1(formData.password)
-    setPassword2(formData.password2)
+    setPassword1(formData.newPassword)
+    setPassword2(formData.rpassword)
+    setPassword(formData.password)
     setEmail(formData.email)
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.email) {
+      errors.title = 'Email is required';
+    }
+    if (!formData.password) {
+      errors.passowrd = 'Old Password is required';
+    }
+    
+    if (!formData.rpassword) {
+      errors.newPassowrd = 'New Password is required';
+    }
+    if (!formData.newPassword) {
+      errors.rNewPassowrd = 'New Password is required';
+    }
+    
+    setFormErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
+    
+  
+  setError(false)
+  if (validateForm()){
+      dispatch(clearRequest());
+    dispatch(startRequest());
+      try {
+        // Use the authService to update the user
+        await authService.updateUser(user._id, formData);
+        dispatch(completeRequest());
+        dispatch(addMessage('User updated successfully!'));
+        dispatch(clearRequestWithDelay());
+        dispatch(clearMessagesWithDelay());
+        setTimeout(() => {
+          window.location.reload();
+        }, 2100); // 3000 milliseconds (3 seconds)
+      } catch (error) {
+        dispatch(errorRequests());
+      }
+    }
+    else{
+      setError(true)
+      
+    }
+
   };
   const handlePassword = (e) => {
     const input =document.querySelector('#password-input')
     setShowPassword(!showPassword);
    input.type=!showPassword ? 'text' : 'password';
+  };
+  const handlePassword1 = (e) => {
+    const input =document.querySelector('#password1-input')
+    setShowPassword1(!showPassword1);
+   input.type=!showPassword1 ? 'text' : 'password';
   };
   const handleRpassword = () => {
     const input =document.querySelector('#rpassword-input')
@@ -211,9 +284,7 @@ const Auth = ({ delay,user}) => {
                 Pleas Enter A Valide Email
               </motion.h5>}            
             <label htmlFor="">Old Password</label>
-            <input type="password" name="old_password" placeholder="Old Password" onChange={handleChange} />
-            <label htmlFor="">Password</label>
-            <div className={isPasswordsMatch ? 'input-group' : 'error-input-password'} >
+            <div className={isOldPasswordsMatch ? 'input-group' : 'error-input-password'} >
               <input type="password" name="password" id="password-input" placeholder="Password" onChange={handleChange} />
               {showPassword ? (
                 <AiOutlineEyeInvisible
@@ -224,6 +295,40 @@ const Auth = ({ delay,user}) => {
                 <AiOutlineEye
                   className="password-icon"
                   onClick={handlePassword}
+                ></AiOutlineEye>
+              )}
+            </div>
+            {!isOldPasswordsMatch && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              Please Enter Your Old Password
+            </motion.h5>}
+            <label htmlFor="">New Password</label>
+            <div className={isPasswordsMatch ? 'input-group' : 'error-input-password'} >
+              <input type="password" name="newPassword" id="password1-input" placeholder="Password" onChange={handleChange} />
+              {showPassword1 ? (
+                <AiOutlineEyeInvisible
+                  className="password-icon"
+                  onClick={handlePassword1}
+                ></AiOutlineEyeInvisible>
+              ) : (
+                <AiOutlineEye
+                  className="password-icon"
+                  onClick={handlePassword1}
                 ></AiOutlineEye>
               )}
             </div>
@@ -285,6 +390,47 @@ const Auth = ({ delay,user}) => {
                 Edite
               </button>
             </div>
+            {isLoading && <Loading />}
+
+        
+{errorRequest && <motion.h5
+  variants={{
+    start: {
+      x: -10,
+    },
+    end: {
+      x: 0,
+    },
+  }}
+  initial="start"
+  animate="end"
+  transition={{
+    duration: 0.5,
+    delay: 0.1,
+  }}
+  className="password-error"
+>
+  Oops! Incorrect old password"
+</motion.h5>}
+{error && <motion.h5
+  variants={{
+    start: {
+      x: -10,
+    },
+    end: {
+      x: 0,
+    },
+  }}
+  initial="start"
+  animate="end"
+  transition={{
+    duration: 0.5,
+    delay: 0.1,
+  }}
+  className="password-error"
+>
+  Oops! please complete all fields"
+</motion.h5>}
           </motion.div>
         </form>
       </div>

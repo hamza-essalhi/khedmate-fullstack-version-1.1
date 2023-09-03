@@ -88,12 +88,12 @@ const SignUp = () => {
   };
   const handleSelectResearch = (value) => {
     if (value === 'Human Researcher') {
-      value = true
+      formData.research = true
     }
     else {
-      value = false
+      formData.research = false
     }
-    formData.research = value
+   
   };
 
   
@@ -186,7 +186,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.firstName && formData.lastName && formData.research && formData.email && formData.phone && isPasswordsMatch && !emailMatch && !phoneMatch && !isWeakPassword) {
+    if (formData.firstName && formData.lastName && formData.research !=='' && formData.email && formData.phone && isPasswordsMatch && !emailMatch && !phoneMatch && !isWeakPassword) {
       try {
         dispatch(registerAsync(formData));
         setErrorMessage('This user already exists. Please try using a different email or log in.')

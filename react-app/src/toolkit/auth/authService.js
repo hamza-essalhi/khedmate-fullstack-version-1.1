@@ -13,6 +13,16 @@ const authService = {
       throw error;
     }
   },
+  updateUser: async (userId, updatedUserData) => {
+    try {
+      const response = await api.put(`users/update/${userId}`, updatedUserData);
+      const updatedUser = response.data;
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return updatedUser;
+    } catch (error) {
+      throw error;
+    }
+  },
   register: async (data) => {
     try {
       const response = await api.post(`auth/register`, data);

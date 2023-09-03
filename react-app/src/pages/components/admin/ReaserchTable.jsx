@@ -38,7 +38,7 @@ const jobsPerPage=10
           </tr>
         </thead>
         <tbody>
-          {currentJobs.map((job, i) => (
+          {currentJobs?.map((job, i) => (
             <TabelRow key={i} jobApplication={job} onDelete={onDelete} />
           ))}
         </tbody>

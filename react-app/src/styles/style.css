@@ -188,6 +188,117 @@ body::-webkit-scrollbar-thumb {
   z-index: 7 !important;
 }
 
+.loading img {
+  width: 50px;
+}
+
+.message-alert div {
+  background-color: #00ff85;
+  padding: 20px;
+  border-radius: 10px;
+  position: fixed;
+  top: 80%;
+  right: 0;
+  margin: 1em;
+  width: max-content;
+  color: rgb(0, 0, 0);
+  font-weight: bolder;
+}
+.message-alert .error {
+  background-color: #f74835 !important;
+}
+
+.loading-box {
+  height: 400px;
+}
+.loading-box .top {
+  background-color: rgba(119, 109, 109, 0.1843137255);
+  height: 50%;
+  width: 100%;
+  border-radius: 20px;
+  animation: placeHolderShimmer 2s linear infinite forwards;
+}
+.loading-box .bottom {
+  margin: 1em;
+  width: 100%;
+  height: 40%;
+}
+.loading-box .bottom div {
+  height: 25px;
+  border-radius: 20px;
+  background-color: rgba(119, 109, 109, 0.1843137255);
+  margin: 1em;
+  animation: widthAnimation 2s linear infinite forwards;
+}
+.loading-box .bottom div:nth-child(even) {
+  width: 50%;
+}
+.loading-box .bottom div:nth-child(3n-3) {
+  width: 50%;
+}
+.loading-box .bottom div:nth-child(2) {
+  width: 50%;
+  animation: widthAnimation-1 2s linear infinite forwards;
+}
+.loading-box .bottom div:nth-child(3) {
+  width: 50%;
+  animation: widthAnimation-2 2s linear infinite forwards;
+}
+.loading-box .bottom div:nth-child(4) {
+  width: 50%;
+  animation: widthAnimation-3 2s linear infinite forwards;
+}
+@keyframes widthAnimation {
+  0% {
+    width: 30%;
+    right: 0;
+  }
+  100% {
+    width: 100%;
+    right: 0;
+  }
+}
+@keyframes widthAnimation-1 {
+  0% {
+    width: 70%;
+    right: 0;
+  }
+  100% {
+    width: 100%;
+    right: 0;
+  }
+}
+@keyframes widthAnimation-2 {
+  0% {
+    width: 50%;
+    right: 0;
+  }
+  100% {
+    width: 100%;
+    right: 0;
+  }
+}
+@keyframes widthAnimation-3 {
+  0% {
+    width: 60%;
+    right: 0;
+  }
+  100% {
+    width: 100%;
+    right: 0;
+  }
+}
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: 50% 0;
+    background-color: rgb(133, 133, 133);
+  }
+  100% {
+    background-position: -50% 0, 150% 0;
+    background-color: rgba(119, 109, 109, 0.1843137255);
+  }
+}
+
 body {
   background-color: rgba(119, 109, 109, 0.1843137255);
 }
@@ -3082,8 +3193,8 @@ body {
 }
 .user .row.user-row-props .col form .loading img,
 .user .row.user-row-props .col form .done img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
 }
 .user .row.user-row-props .col form .errorState {
   display: none;

@@ -5,11 +5,13 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { motion, useAnimation, useInView } from "framer-motion";
 import {useSelector } from "react-redux";
+import api from "../../toolkit/auth/config";
 
 const JobPost = () => {
   const { id } = useParams();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user= useSelector((state) => state.auth.user.user);
+  const logedUser=useSelector((state) => state.auth.user.user);
+  const [user,setUser]=useState('')
   const [job, setJob] = useState([]);
   const [like, setLike] = useState(false);
   const [formattedDate, setFormattedDate] = useState('');
@@ -27,18 +29,45 @@ const JobPost = () => {
   }, [target, animate]);
 
   useEffect(() => {
+    // Fetch job data asynchronously
     axios
       .get(`http://localhost:9000/api/jobs/${id}`)
       .then((response) => {
         const jobPosts = response.data.job;
-        setJob(jobPosts);
+        // Check if jobPosts contains valid data
+        if (jobPosts && jobPosts.userId) {
+          setJob(jobPosts);
+        } else {
+          console.error('Job data is missing userId:', jobPosts);
+        }
       })
       .catch((error) => {
-        console.log(error);
+        console.error('Error fetching job data:', error);
       });
-      
-    
   }, [id]);
+  
+  // ...
+  
+  useEffect(() => {
+    // Check if job and job.userId are defined before making the API request
+    if (job?.userId) {
+      const getUser = async () => {
+        try {
+          const response = await api.get(`users/${job.userId}`);
+          const userData = response.data.user;
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+      getUser();
+    } 
+  }, [job]);
+  
+  
+  
+  
+  
   useEffect(() => {
     try {
       const likedJobs = JSON.parse(localStorage.getItem("likedJobs")) || [];
@@ -49,6 +78,7 @@ const JobPost = () => {
     }
   }, [id]);
   const handleLike = () => {
+    
     setLike(!like);
     const likedJobs = JSON.parse(localStorage.getItem("likedJobs")) || [];
     const index = likedJobs.findIndex((j) => j.id === job.id);
@@ -110,7 +140,7 @@ const JobPost = () => {
             delay: 0.4,
           }}
         >
-          <img src={jobImage} alt="" />
+          <img src={user?.img? user.img:jobImage} alt="" />
         </motion.div>
         <motion.div
           className="col date"
@@ -206,7 +236,8 @@ const JobPost = () => {
           <span>salary: {job.salary} DH</span>
           
         </div>
-        {(isAuthenticated && !user.research) ?<Link>Apply Now</Link>:<span>Please login to Applay</span>}
+        {(isAuthenticated && !logedUser.research) &&<Link>Apply Now</Link>}
+        
       </motion.div>
 
       <motion.div

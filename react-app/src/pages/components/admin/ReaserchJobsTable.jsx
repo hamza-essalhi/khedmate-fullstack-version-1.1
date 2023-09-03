@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Pagination from '../Home/Pagination';
 import JobsTabelRow from './JobsTabelRow';
-
+import cities from "../../../data/cities.json";
+import domain from "../../../data/dmains.json";
+import education from "../../../data/education.json";
 export const ReaserchJobsTable  = ({ data ,onDelete}) => {
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +41,7 @@ const jobsPerPage=10
           </tr>
         </thead>
         <tbody>
-          {currentJobs.map((job, i) => (
+          {currentJobs?.map((job, i) => (
             <JobsTabelRow key={i} job={job} onDelete={onDelete} />
           ))}
         </tbody>
