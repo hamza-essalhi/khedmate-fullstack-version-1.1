@@ -461,7 +461,7 @@ const SignUp = () => {
                   { "label": "Searching For Job", "value": "Searching For Job" }
                 ]
               }
-              defaultValue="Select"
+              op="Select"
               onChange={handleSelectResearch}
             />
 

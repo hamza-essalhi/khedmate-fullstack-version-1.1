@@ -17,10 +17,11 @@ const jobsPerPage=10
   if (!Array.isArray(data)) {
     return (
       <div className="table">
-        <h1>No Job Applications available.</h1>
+        <p>No data available.</p>
       </div>
     );
   }
+  
 
   return (
     <div className="table">

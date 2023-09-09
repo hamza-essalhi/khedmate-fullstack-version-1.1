@@ -208,7 +208,7 @@ const Home = () => {
               <h4>Sort by old or new</h4>
               <Select
                 options={options}
-                defaultValue="Select"
+                op="Select"
                 onChange={handleSelectChangeTime}
               />
             </div>
@@ -216,7 +216,7 @@ const Home = () => {
               <h4>Cities</h4>
               <Select
                 options={cities}
-                defaultValue="Select"
+                op="Select"
                 onChange={handleSelectChangeCities}
               />
             </div>
@@ -224,7 +224,7 @@ const Home = () => {
               <h4>Domain</h4>
               <Select
                 options={domain}
-                defaultValue="Select"
+                op="Select"
                 onChange={handleSelectChangeDomain}
               />
             </div>
@@ -233,7 +233,7 @@ const Home = () => {
               <h4>Educations</h4>
               <Select
                 options={education}
-                defaultValue="Select"
+                op="Select"
                 onChange={handleSelectChangeEducation}
               />
             </div>

@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 
 // custom select no need for select input , bullshit :)
-const Select = ({ options, defaultValue, onChange,classValue }) => {
-  const [selectedOption, setSelectedOption] = useState(defaultValue);
+const Select = ({ options, op, onChange,classValue }) => {
+  const [selectedOption, setSelectedOption] = useState('');
+  
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleOptionsList = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(()=>{
+    if (selectedOption === ''){
+      setSelectedOption(op)
+    }
+  },[op,selectedOption])
 
   const handleSelection = (value) => {
     setSelectedOption(value);
@@ -21,7 +27,7 @@ const Select = ({ options, defaultValue, onChange,classValue }) => {
     <div className={classValue?`custom-select ${classValue}`:'custom-select' }>
       <div className="select-input" tabIndex="0" onClick={toggleOptionsList}>
         <span className="selected-option">
-          {selectedOption || "Select an option"}
+          {selectedOption || 'Selecte'}
         </span>
         {isOpen ? (
           <AiFillCaretUp></AiFillCaretUp>

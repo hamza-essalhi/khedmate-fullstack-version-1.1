@@ -120,11 +120,30 @@ export const getAllJobs = async (req, res, next) => {
 export const getAllJobsByUser= async (req, res, next) => {
 
   try {
-    const jobs = await Job.find({ userId: req.id}).sort({createdAt:-1});
+    const q = req.query;
+    const filterJobs = {
+      userId: req.id, // Filter by the specific user
+      ...(q.search && { title: { $regex: q.search, $options: 'i' } }), // Filter by title search
+      ...(q.city && { city: q.city }), // Filter by city
+      ...(q.domain && { domain: q.domain }), // Filter by domain
+      ...(q.education && { educationLevel: q.education }), // Filter by education level
+    };
+    
+    const jobs = await Job.find(filterJobs).sort({createdAt:-1})
+    if (q.time && q.time.toLowerCase() === 'new') {
+      jobs.sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt in descending order
+    } else if (q.time && q.time.toLowerCase() === 'old') {
+      jobs.sort((a, b) => a.createdAt - b.createdAt); // Sort by createdAt in ascending order
+    }
+    
+     // Check if any job applications were found
+     if (jobs.length === 0) {
+      // If no applications are found, return an error
+      return next(errorHandler(200, "No Job Applications found for this user."));
+    }
   
     res.status(200).json({ jobs: jobs });
   } catch (e) {
-    next(errorHandler(500, e));
     next(errorHandler(500, "Access Denied:Can't Get Jobs ."));
   }
 };

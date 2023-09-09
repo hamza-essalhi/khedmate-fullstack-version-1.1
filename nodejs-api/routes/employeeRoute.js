@@ -5,7 +5,7 @@ const router = express.Router()
 
 
 router.post('/create',tokenChecker,createEmployee)
-router.put('/update/:id',tokenChecker,updateEmployee)
-router.get('/:id',getEmployee)
+router.put('/update',tokenChecker,updateEmployee)
+router.get('/',tokenChecker,getEmployee)
 
 export default router

@@ -33,7 +33,6 @@ const User = () => {
   const [jobApplication, setJobApplication] = useState('')
   const [jobs, setJobs] = useState('')
   const [resume, setResume] = useState(false);
-  const [employee] = useState(false);
   const [delay] = useState(0);
   const [propsDelay, setDelay] = useState(0.7);
   const ref = useRef(null);
@@ -59,8 +58,15 @@ const User = () => {
         const jobResponse = await api.get("jobs/userJobs");
         const jobApplication = response.data.JobApplications
         const jobs = jobResponse.data.jobs
-        setJobApplication(jobApplication);
-        setJobs(jobs)
+        
+        
+        if (jobApplication.lenght !==0 ){
+          setJobApplication(jobApplication);
+          
+        }
+        if (jobs.lenght!==0){
+          setJobs(jobs)
+        }
         
         dispatch(clearRequestWithDelay())
       } catch (error) {

@@ -59,7 +59,7 @@ const Chat = () => {
         <div>
           <Select
             options={options}
-            defaultValue="All"
+            op="All"
             onChange={handleSelectOption}
           ></Select>
           {filteredConversations.map((conversation, i) => (

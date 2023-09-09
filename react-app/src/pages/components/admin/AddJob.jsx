@@ -394,7 +394,7 @@ const AddJob = ({ delay, }) => {
             <label htmlFor="">City</label>
             <Select
               options={cities.filter(city => city.value !== "All")}
-              defaultValue="Select"
+              op="Select"
               onChange={handleSelectChangeCities}
               classValue='custom-select-3'
             />
@@ -420,7 +420,7 @@ const AddJob = ({ delay, }) => {
             <label htmlFor="">Education</label>
             <Select
               options={education.filter(e => e.value !== "All")}
-              defaultValue="Select"
+              op="Select"
               onChange={handleSelectChangeEducation}
               classValue='custom-select-2'
             />
@@ -446,7 +446,7 @@ const AddJob = ({ delay, }) => {
             <label htmlFor="">Domin</label>
             <Select
               options={domain.filter(e => e.value !== "All")}
-              defaultValue="Select"
+              op="Select"
               onChange={handleSelectChangeDomain}
               classValue='custom-select-1'
             />

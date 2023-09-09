@@ -6,6 +6,11 @@ const JobExperienceSchema = new Schema({
     type: String,
     required: true,
   },
+  
+  domain: {
+    type: String,
+    required: true,
+  },
   position: {
     type: String,
     required: true,

@@ -60,17 +60,12 @@ export const getAllJobsApplications = async (req, res, next) => {
     const q = req.query;
     const filterJobs = {
       userId: req.id, // Filter by the specific user
-      ...(q.search && { title: { $regex: q.search, $options: 'i' } }), // Filter by title search
-      ...(q.city && { city: q.city }), // Filter by city
-      ...(q.domain && { domain: q.domain }), // Filter by domain
-      ...(q.education && { educationLevel: q.education }), // Filter by education level
+      ...(q.search && { institution: { $regex: q.search, $options: 'i' } }), // Filter by title search
+      ...(q.dogree && { dogree: q.dogree }), // Filter by city
+      ...(q.fieldOfStudy && { fieldOfStudy: q.fieldOfStudy }), // Filter by domain
     };
    
-
-   
-
-    // Find job applications matching the filter criteria
-    const jobs = await JobApplication.find(filterJobs);
+    const jobs = await JobApplication.find(filterJobs).sort({createdAt:-1});
     if (q.time && q.time.toLowerCase() === 'new') {
       jobs.sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt in descending order
     } else if (q.time && q.time.toLowerCase() === 'old') {
@@ -80,7 +75,7 @@ export const getAllJobsApplications = async (req, res, next) => {
      // Check if any job applications were found
      if (jobs.length === 0) {
       // If no applications are found, return an error
-      return next(errorHandler(404, "No Job Applications found for this user."));
+      return next(errorHandler(200, "No Job Applications found for this user."));
     }
     res.status(200).json({ JobApplications: jobs });
   } catch (e) {

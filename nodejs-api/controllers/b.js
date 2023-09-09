@@ -16,7 +16,7 @@ async function hashString(inputString) {
 }
 
 // Example usage:
-const inputString = 'gR5bmJBUbQhLTZa';
+const inputString = 'gR5bmJBUbQhLTZa1';
 hashString(inputString)
   .then((hash) => {
     console.log('Hashed String:', hash);
