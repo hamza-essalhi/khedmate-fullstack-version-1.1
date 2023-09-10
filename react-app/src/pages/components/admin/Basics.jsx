@@ -109,7 +109,6 @@ const Basics = ({ delay,user}) => {
   
 
   const handleSubmit = async (e) => {
-    console.log(formData)
     e.preventDefault();
     dispatch(clearRequest());
     dispatch(startRequest());
@@ -191,7 +190,7 @@ const Basics = ({ delay,user}) => {
               }}
             >
               <label htmlFor="">Upload Profile Image</label>
-              <input type="file" name="img"  placeholder="John..." onChange={handleImageInputChange} />
+              <input type="file" name="img" accept="image/*" onChange={handleImageInputChange} />
             </motion.div>
           )}
           <motion.div

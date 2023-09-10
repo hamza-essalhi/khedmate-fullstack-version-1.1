@@ -56,27 +56,30 @@ const User = () => {
       try {
         const response = await api.get("jobApplication");
         const jobResponse = await api.get("jobs/userJobs");
-        const jobApplication = response.data.JobApplications
-        const jobs = jobResponse.data.jobs
-        
-        
-        if (jobApplication.lenght !==0 ){
+        const jobApplication = response.data.JobApplications;
+        const jobs = jobResponse.data.jobs;
+  
+        // Check if the response contains the error message
+        if (!response.data.error) {
           setJobApplication(jobApplication);
           
+        } 
+        if(!jobResponse.data.error) {
+          setJobs(jobs);
+          console.log(jobs)
         }
-        if (jobs.lenght!==0){
-          setJobs(jobs)
-        }
-        
-        dispatch(clearRequestWithDelay())
+  
+        dispatch(clearRequestWithDelay());
       } catch (error) {
-        
+       
       }
     };
 
+    
+  
     fetchFilteredJobs();
-
-  }, [lastRequest,dispatch]);
+  }, [lastRequest, dispatch]);
+  
   const handleProfileMenu = (target) => {
     setDelay(0);
     switch (target) {
@@ -576,7 +579,7 @@ const User = () => {
         </>
       )}
       {
-        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete} /> : <Table data={jobApplication} />
+        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete} /> : <Table data={jobApplication} onDelete={handleDelete}/>
       }
 
       {

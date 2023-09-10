@@ -192,6 +192,9 @@ body::-webkit-scrollbar-thumb {
   width: 50px;
 }
 
+.message-alert {
+  z-index: 20;
+}
 .message-alert div {
   background-color: #00ff85;
   padding: 20px;
@@ -3366,10 +3369,21 @@ body {
   display: flex;
   justify-content: space-around;
 }
-.user .table table tbody tr select {
-  padding: 12px;
-  border-radius: 0.4em;
-  background-color: #fff1ef;
+.user .table table tbody tr span {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: yellow;
+  color: white;
+  font-weight: bolder;
+  box-shadow: -1px 4px 16px rgba(192, 238, 26, 0.36);
+}
+.user .table table tbody tr span.accepted {
+  background-color: #00ff85;
+  box-shadow: -1px 4px 16px rgba(0, 252, 134, 0.36);
+}
+.user .table table tbody tr span.rejected {
+  background-color: #f74835;
+  box-shadow: -1px 4px 16px rgba(238, 26, 26, 0.36);
 }
 .user .table table tbody tr:nth-child(even) {
   background-color: #fff1ef;
@@ -3710,6 +3724,182 @@ body {
   100% {
     top: 0;
   }
+}
+
+.job-application-container .user-top-row {
+  margin-top: 3em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fc6e5e;
+  padding: 10px;
+  border-radius: 10px;
+}
+.job-application-container .user-top-row img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+}
+.job-application-container .user-top-row .statut {
+  flex: 4;
+  display: flex;
+  justify-content: flex-end;
+}
+.job-application-container .user-top-row .user-info {
+  margin: 1em;
+}
+.job-application-container .user-top-row .user-info div {
+  display: flex;
+  margin: 1em;
+  color: white;
+}
+.job-application-container .user-top-row .user-info div h4:last-child {
+  margin-left: 2em;
+}
+.job-application-container .user-top-row .user-info div.contact {
+  flex-direction: column;
+}
+.job-application-container .user-top-row .user-info div.contact h6 {
+  margin: 0.5em 0;
+}
+.job-application-container .user-top-row .user-info h4, .job-application-container .user-top-row .user-info h6 {
+  color: white;
+}
+.job-application-container .user-top-row .user-info h4 span, .job-application-container .user-top-row .user-info h6 span {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: yellow;
+  font-weight: bolder;
+  color: white;
+  box-shadow: -1px 4px 16px rgba(192, 238, 26, 0.36);
+}
+.job-application-container .user-top-row .user-info h4 span.accepted, .job-application-container .user-top-row .user-info h6 span.accepted {
+  background-color: #00ff85;
+  box-shadow: -1px 4px 16px rgba(0, 252, 134, 0.36);
+}
+.job-application-container .user-top-row .user-info h4 span.rejected, .job-application-container .user-top-row .user-info h6 span.rejected {
+  background-color: #f74835;
+  box-shadow: -1px 4px 16px rgba(238, 26, 26, 0.36);
+}
+.job-application-container .job-application-row-props h3, .job-application-container .job-application-row-props h4 {
+  margin: 1em;
+}
+.job-application-container .job-application-row-props .col h6, .job-application-container .job-application-row-props .col h4 {
+  display: flex;
+  margin: 2em;
+}
+.job-application-container .job-application-row-props .col h6 span, .job-application-container .job-application-row-props .col h4 span {
+  width: 30%;
+}
+.job-application-container .job-application-row-props form {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 3em;
+}
+.job-application-container .job-application-row-props form .custom-select {
+  width: 100% !important;
+  z-index: 4;
+  margin: 0.5em;
+}
+.job-application-container .job-application-row-props form label,
+.job-application-container .job-application-row-props form input,
+.job-application-container .job-application-row-props form select .btn {
+  margin: 1em;
+}
+.job-application-container .job-application-row-props form textarea {
+  resize: none;
+}
+.job-application-container .job-application-row-props form input,
+.job-application-container .job-application-row-props form select {
+  border: 2px #fc6e5e solid;
+  width: 100%;
+  border-radius: 10px;
+  padding: 15px;
+  outline: none;
+  transition: 0.3s;
+  margin: 1em;
+}
+.job-application-container .job-application-row-props form input:hover, .job-application-container .job-application-row-props form input:active,
+.job-application-container .job-application-row-props form input :focus,
+.job-application-container .job-application-row-props form select:hover,
+.job-application-container .job-application-row-props form select:active,
+.job-application-container .job-application-row-props form select :focus {
+  border-color: rgba(0, 247, 255, 0.8705882353);
+  outline: none;
+}
+.job-application-container .job-application-row-props form input:hover label, .job-application-container .job-application-row-props form input:active label,
+.job-application-container .job-application-row-props form input :focus label,
+.job-application-container .job-application-row-props form select:hover label,
+.job-application-container .job-application-row-props form select:active label,
+.job-application-container .job-application-row-props form select :focus label {
+  color: #00ff85;
+}
+.job-application-container .job-application-row-props form button {
+  margin: 1em;
+  width: 40%;
+  height: auto;
+  background-color: #fc6e5e;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+  transition: 0.3s;
+  padding: 15px;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.job-application-container .job-application-row-props form button:hover {
+  background-color: #e36355;
+  color: white;
+}
+.job-application-container .job-application-row-props form button:active {
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.job-application-container .job-application-row-props form .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .main-footer {

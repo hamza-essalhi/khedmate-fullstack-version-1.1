@@ -20,6 +20,6 @@ export const startRequest = () => ({
         setTimeout(() => {
             dispatch(clearRequest());
             
-        }, 500); // 3000 milliseconds (3 seconds)
+        }, 2000); // 3000 milliseconds (3 seconds)
     };
 };

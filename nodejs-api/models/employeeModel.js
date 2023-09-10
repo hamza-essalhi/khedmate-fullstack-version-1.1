@@ -53,7 +53,18 @@ const EmployeeSchema = new Schema(
       required: true,
       ref: "User",
     },
+    phone:{
+      type:String,
+      required: true,
+    },
+    email:{
+      type:String,
+      required: true,
+    },
     resume: {
+      type: String,
+    },
+    motivationLetter: {
       type: String,
     },
     jobExperience: [JobExperienceSchema],

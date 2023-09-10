@@ -7,20 +7,21 @@ import { addMessage, clearMessagesWithDelay } from "../../../toolkit/messages/me
 import { startRequest, completeRequest, errorRequests, clearRequestWithDelay, clearRequest } from '../../../toolkit/request/requestActions';
 import api from "../../../toolkit/auth/config";
 import Loading from "../Loading";
-const Experience= ({ delay}) => {
-  const { isLoading, errorRequest,lastRequest } = useSelector((state) => state.request);
+const Experience = ({ delay }) => {
+  const { isLoading, errorRequest, lastRequest } = useSelector((state) => state.request);
   const dispatch = useDispatch();
   const newDelay = delay;
   const [selectedEducation, setEducation] = useState("");
   const [error, setError] = useState(false);
-  const [educationData, setEducationData] = useState('')
+  const [resData, setResData] = useState('')
   const [formErrors, setFormErrors] = useState({});
+  const [isEmpty, setEmpty] = useState(true)
   const [formData, setFormData] = useState({
     company: '',
-        domain:'',
-        position: '',
-        startDate: '',
-        endDate: ''
+    domain: '',
+    position: '',
+    startDate: '',
+    endDate: ''
   });
 
   const animationProps = {
@@ -50,39 +51,42 @@ const Experience= ({ delay}) => {
       scale: 1,
     },
   };
- 
+
 
   useEffect(() => {
     const fetchFilteredJobs = async () => {
       try {
         const response = await api.get("employees");
         const employee = response.data.employee.jobExperience[0]
-        
-          setEducationData(employee)
-        
-        
+        setResData(employee)
         dispatch(clearRequestWithDelay())
+        if (Object.keys(response.data.employee).length === 0) {
+          setEmpty(true)
+        }
+        else {
+          setEmpty(false)
+        }
       } catch (error) {
-        
+
       }
     };
 
     fetchFilteredJobs();
 
-  }, [lastRequest,dispatch]);
+  }, [lastRequest, dispatch]);
   useEffect(() => {
 
-    if (educationData) {
+    if (resData) {
       setFormData({
-        company: educationData.company || "",
-        domain: educationData.domain || "",
-        position: educationData.position || "",
-        startDate: educationData.startDate || "",
-        endDate: educationData.endDate || "",
+        company: resData.company || "",
+        position: resData.position || "",
+        startDate: resData.startDate || "",
+        endDate: resData.endDate || "",
+        domain: resData.domain || "",
 
       });
     }
-  }, [educationData]);
+  }, [resData]);
   const validateForm = () => {
     const errors = {};
 
@@ -92,10 +96,13 @@ const Experience= ({ delay}) => {
     if (!formData.domain) {
       errors.domain = 'Domain is required';
     }
-    if (!formData.startDate && !formData.endDate) {
-      errors.date = 'Start Date and End Date is required';
+    if (!formData.startDate) {
+      errors.startDate = 'Start Date is required';
     }
-    
+    if (!formData.endDate) {
+      errors.endDate = 'End Date is required';
+    }
+
     if (!formData.position) {
       errors.position = 'Position Of  is required';
     }
@@ -115,8 +122,11 @@ const Experience= ({ delay}) => {
     if (!formData.domain) {
       errors.domain = 'Domain is required';
     }
-    if (!formData.startDate && !formData.endDate) {
-      errors.date = 'Start Date and End Date is required';
+    if (!formData.startDate) {
+      errors.startDate = 'Start Date is required';
+    }
+    if (!formData.endDate) {
+      errors.endDate = 'End Date is required';
     }
     if (!formData.position) {
       errors.position = 'Position Of  is required';
@@ -150,7 +160,7 @@ const Experience= ({ delay}) => {
     e.preventDefault();
     setError(false)
     dispatch(clearRequest())
-    if (validateForm() && !educationData) {
+    if (validateForm()) {
       dispatch(startRequest());
       await api.post('employees/create', { jobExperience: [formData] }).then(() => dispatch(completeRequest())).catch((e) => dispatch(errorRequests()))
       dispatch(addMessage('Congratulations, your experience informations has been successfully added!'));
@@ -170,7 +180,7 @@ const Experience= ({ delay}) => {
     dispatch(clearRequest())
     dispatch(startRequest());
     try {
-      
+
       await api.put('employees/update', { jobExperience: [formData] });
       dispatch(completeRequest())
       dispatch(
@@ -181,22 +191,17 @@ const Experience= ({ delay}) => {
     } catch (error) {
       dispatch(errorRequests())
     }
-    
-    
+
+
   };
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    let month = (d.getMonth() + 1).toString();
-    if (month.length === 1) {
-      month = `0${month}`; // Add leading zero if the month is a single digit
-    }
-    let day = d.getDate().toString();
-    if (day.length === 1) {
-      day = `0${day}`; // Add leading zero if the day is a single digit
-    }
-    return `${year}-${month}-${day}`;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add 1 to month because months are zero-indexed
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
   };
+
 
 
 
@@ -212,32 +217,55 @@ const Experience= ({ delay}) => {
       }}
     >
       <div className="col">
-      <motion.h1
-        className="form-content"
-        variants={formProps}
-        initial="start"
-        animate="end"
-        transition={{
-          duration: 0.5,
-          delay: newDelay + 0.8,
-        }}>
-         Experience
+        <motion.h1
+          className="form-content"
+          variants={formProps}
+          initial="start"
+          animate="end"
+          transition={{
+            duration: 0.5,
+            delay: newDelay + 0.8,
+          }}>
+          Experience
         </motion.h1>
-        {educationData ? <form action="">
-         
-         <motion.div
-           className="form-content"
-           variants={formProps}
-           initial="start"
-           animate="end"
-           transition={{
-             duration: 0.5,
-             delay: newDelay + 0.9,
-           }}
-         >
-           <label htmlFor="">Company Name</label>
-           <input type="text" name="company" placeholder="Fsac..." onChange={handleChange} defaultValue={educationData.company} />
-           {formErrors.company && <motion.h5
+        {!isEmpty ? <form action="">
+
+          <motion.div
+            className="form-content"
+            variants={formProps}
+            initial="start"
+            animate="end"
+            transition={{
+              duration: 0.5,
+              delay: newDelay + 0.9,
+            }}
+          >
+            <label htmlFor="">Company Name</label>
+            
+            <input type="text" name="company" placeholder="Fsac..." onChange={handleChange} defaultValue={resData?.company} />
+            {formErrors.company && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              {formErrors.company}
+            </motion.h5>}
+            <label htmlFor="">Start Date ({formatDate(resData?.startDate)})</label>
+
+            <input type="date" name="startDate" placeholder="2023..."   onChange={handleChange} defaultValue={formatDate(resData?.startDate)} />
+              {formErrors.startDate && <motion.h5
                 variants={{
                   start: {
                     x: -10,
@@ -254,16 +282,11 @@ const Experience= ({ delay}) => {
                 }}
                 className="password-error"
               >
-                {formErrors.company}
-              </motion.h5>} 
-           <label htmlFor="">Period </label>
-           <div className="input-group">
-             <label htmlFor="">From</label>
-             <input type="date" name="stratDate" id="" onChange={handleChange} defaultValue={formatDate(educationData.startDate)} />
-             <label htmlFor="">To</label>
-             <input type="date" name="endDate" id="" onChange={handleChange} defaultValue={formatDate(educationData.endDate)}/>
-           </div>
-           {formErrors.date && <motion.h5
+                {formErrors.startDate}
+              </motion.h5>}
+              <label htmlFor="">End Date ({formatDate(resData?.endDate)})</label>
+              <input type="date" name="endDate" placeholder="2023..." defaultValue={formatDate(resData?.endDate)} onChange={handleChange} />
+              {formErrors.endDate && <motion.h5
                 variants={{
                   start: {
                     x: -10,
@@ -280,61 +303,99 @@ const Experience= ({ delay}) => {
                 }}
                 className="password-error"
               >
-                {formErrors.date}
-              </motion.h5>} 
-           <label htmlFor="">Position</label>
-           <input type="text" name="position" placeholder="rh.." onChange={handleChange} defaultValue={educationData.position} />
-           {formErrors.position && <motion.h5
-                variants={{
-                  start: {
-                    x: -10,
-                  },
-                  end: {
-                    x: 0,
-                  },
-                }}
-                initial="start"
-                animate="end"
-                transition={{
-                  duration: 0.5,
-                  delay: 0.1,
-                }}
-                className="password-error"
-              >
-                {formErrors.position}
-              </motion.h5>} 
-           <label htmlFor="">Domain</label>
-           <input name="domain" type="text" disabled='disabled' defaultValue={educationData.domain} onChange={handleChange}/>
-              <Select
-                options={domain.filter(e => e.value !== "All")}
-                op={educationData.domain}
-                onChange={handleSelectChangeEducation}
-                classValue='custom-select-2'
-              />
-         {formErrors.domain && <motion.h5
-                variants={{
-                  start: {
-                    x: -10,
-                  },
-                  end: {
-                    x: 0,
-                  },
-                }}
-                initial="start"
-                animate="end"
-                transition={{
-                  duration: 0.5,
-                  delay: 0.1,
-                }}
-                className="password-error"
-              >
-                {formErrors.domain}
-              </motion.h5>}           <div className="btn">
-             <button onClick={handleEdit}  type="button">
-              Edit
-             </button>
-           </div>
-           {isLoading && <Loading />}
+                {formErrors.endDate}
+              </motion.h5>}
+            <label htmlFor="">Position</label>
+            <input type="text" name="position" placeholder="rh.." onChange={handleChange} defaultValue={resData?.position} />
+            {formErrors.position && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              {formErrors.position}
+            </motion.h5>}
+            <label htmlFor="">Domain</label>
+            <input name="domain" type="text" disabled='disabled' defaultValue={resData?.domain} onChange={handleChange} />
+            <Select
+              options={domain.filter(e => e.value !== "All")}
+              op={resData?.domain}
+              onChange={handleSelectChangeEducation}
+              classValue='custom-select-2'
+            />
+            {formErrors.domain && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              {formErrors.domain}
+            </motion.h5>}           <div className="btn">
+              <button onClick={handleEdit} type="button">
+                Edit
+              </button>
+            </div>
+            {isLoading && <Loading />}
+
+            {error && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              Form data is not valid.
+            </motion.h5>}
+            {errorRequest && <motion.h5
+              variants={{
+                start: {
+                  x: -10,
+                },
+                end: {
+                  x: 0,
+                },
+              }}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+              }}
+              className="password-error"
+            >
+              Oops! It looks like there was an issue adding your {isLoading && <Loading />}
 
               {error && <motion.h5
                 variants={{
@@ -372,64 +433,26 @@ const Experience= ({ delay}) => {
                 }}
                 className="password-error"
               >
-                Oops! It looks like there was an issue adding your {isLoading && <Loading />}
+                Oops! It looks like there was an issue adding your request. Please double-check your information and try again. If the problem persists, feel free to reach out to our support team for assistance. We're here to help!"
+              </motion.h5>}. Please double-check your information and try again. If the problem persists, feel free to reach out to our support team for assistance. We're here to help!"
+            </motion.h5>}
+          </motion.div>
+        </form> :
+          <form action="">
 
-                {error && <motion.h5
-                  variants={{
-                    start: {
-                      x: -10,
-                    },
-                    end: {
-                      x: 0,
-                    },
-                  }}
-                  initial="start"
-                  animate="end"
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.1,
-                  }}
-                  className="password-error"
-                >
-                  Form data is not valid.
-                </motion.h5>}
-                {errorRequest && <motion.h5
-                  variants={{
-                    start: {
-                      x: -10,
-                    },
-                    end: {
-                      x: 0,
-                    },
-                  }}
-                  initial="start"
-                  animate="end"
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.1,
-                  }}
-                  className="password-error"
-                >
-                  Oops! It looks like there was an issue adding your request. Please double-check your information and try again. If the problem persists, feel free to reach out to our support team for assistance. We're here to help!"
-                </motion.h5>}. Please double-check your information and try again. If the problem persists, feel free to reach out to our support team for assistance. We're here to help!"
-              </motion.h5>}
-         </motion.div>
-       </form> :
-       <form action="">
-         
-       <motion.div
-         className="form-content"
-         variants={formProps}
-         initial="start"
-         animate="end"
-         transition={{
-           duration: 0.5,
-           delay: newDelay + 0.9,
-         }}
-       >
-         <label htmlFor="">Company Name</label>
-         <input type="text" name="company" placeholder="Fsac..." onChange={handleChange} />
-         {formErrors.company && <motion.h5
+            <motion.div
+              className="form-content"
+              variants={formProps}
+              initial="start"
+              animate="end"
+              transition={{
+                duration: 0.5,
+                delay: newDelay + 0.9,
+              }}
+            >
+              <label htmlFor="">Company Name</label>
+              <input type="text" name="company" placeholder="Fsac..." onChange={handleChange} />
+              {formErrors.company && <motion.h5
                 variants={{
                   start: {
                     x: -10,
@@ -448,14 +471,10 @@ const Experience= ({ delay}) => {
               >
                 {formErrors.company}
               </motion.h5>}
-         <label htmlFor="">Period </label>
-         <div className="input-group">
-           <label htmlFor=""  >From</label>
-           <input type="date" name="startDate" id="" onChange={handleChange} />
-           <label htmlFor="">To</label>
-           <input type="date" name="endDate" id="" />
-         </div>
-         {formErrors.date && <motion.h5
+              <label htmlFor="">Start Date ({formatDate(resData.startDate)})</label>
+
+              <input type="date" name="startDate" placeholder="2023..." defaultValue={formatDate(resData.startDate)} onChange={handleChange} />
+              {formErrors.startDate && <motion.h5
                 variants={{
                   start: {
                     x: -10,
@@ -472,11 +491,32 @@ const Experience= ({ delay}) => {
                 }}
                 className="password-error"
               >
-                {formErrors.date}
+                {formErrors.startDate}
+              </motion.h5>}
+              <label htmlFor="">End Date ({formatDate(resData.endDate)})</label>
+              <input type="date" name="endDate" placeholder="2023..." defaultValue={formatDate(resData?.endDate)} onChange={handleChange} />
+              {formErrors.endDate && <motion.h5
+                variants={{
+                  start: {
+                    x: -10,
+                  },
+                  end: {
+                    x: 0,
+                  },
+                }}
+                initial="start"
+                animate="end"
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1,
+                }}
+                className="password-error"
+              >
+                {formErrors.endDate}
               </motion.h5>}
               <label htmlFor="">Position</label>
-         <input type="text" name="position" placeholder="Rh..." onChange={handleChange} />
-         {formErrors.position && <motion.h5
+              <input type="text" name="position" placeholder="Rh..." onChange={handleChange} />
+              {formErrors.position && <motion.h5
                 variants={{
                   start: {
                     x: -10,
@@ -495,14 +535,14 @@ const Experience= ({ delay}) => {
               >
                 {formErrors.position}
               </motion.h5>}
-         <label htmlFor="">Domain</label>
+              <label htmlFor="">Domain</label>
               <Select
                 options={domain.filter(e => e.value !== "All")}
                 op={'Selecte'}
                 onChange={handleSelectChangeEducation}
                 classValue='custom-select-2'
               />
-         {formErrors.domain && <motion.h5
+              {formErrors.domain && <motion.h5
                 variants={{
                   start: {
                     x: -10,
@@ -521,12 +561,12 @@ const Experience= ({ delay}) => {
               >
                 {formErrors.domain}
               </motion.h5>}
-         <div className="btn">
-           <button onClick={handleSubmit}  type="button">
-             Add
-           </button>
-         </div>
-         {isLoading && <Loading />}
+              <div className="btn">
+                <button onClick={handleSubmit} type="button">
+                  Add
+                </button>
+              </div>
+              {isLoading && <Loading />}
 
               {error && <motion.h5
                 variants={{
@@ -564,7 +604,7 @@ const Experience= ({ delay}) => {
                 }}
                 className="password-error"
               >
-                Oops! It looks like there was an issue adding your {isLoading && <Loading />}
+                Oops! It looks like there was an issue adding your 
 
                 {error && <motion.h5
                   variants={{
@@ -605,12 +645,12 @@ const Experience= ({ delay}) => {
                   Oops! It looks like there was an issue adding your request. Please double-check your information and try again. If the problem persists, feel free to reach out to our support team for assistance. We're here to help!"
                 </motion.h5>}. Please double-check your information and try again. If the problem persists, feel free to reach out to our support team for assistance. We're here to help!"
               </motion.h5>}
-       </motion.div>
-     </form>}
+            </motion.div>
+          </form>}
       </div>
     </motion.div>
   );
 };
 
- 
+
 export default Experience;

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
+import Employee from "./employeeModel.js";
 
 const JobApplicationSchema = new Schema(
   {
@@ -8,11 +9,24 @@ const JobApplicationSchema = new Schema(
       ref: "User",
       required: true,
     },
-    jobApplicationOwner: {
+    jobOwner: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    firstName:{
+      type:String,
+      required: true,
+    },
+    lastName:{
+      type:String,
+      required: true,
+    },
+    img:{
+      type:String,
+      required: true,
+    },
+
     jobId: {
       type: Schema.Types.ObjectId,
       ref: "Job",
@@ -24,20 +38,10 @@ const JobApplicationSchema = new Schema(
       enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
-    coverLetter: {
-      type: String,
+    employee: {
+      type: Schema.Types.Mixed // Embed the entire Employee schema
     },
-    resumeLink: {
-      type: String,
-      required: true,
-    },
-    applicationDate: {
-      type: Date,
-      default: Date.now,
-    },
-    lastUpdated: {
-      type: Date,
-    },
+    
   },
   {
     timestamps: true,

@@ -25,7 +25,7 @@ export default function JobsTabelRow({ job,onDelete }) {
   return (
     <tr>
       <td>{job._id.slice(6, 9)}</td>
-      <td>{job.title}</td>
+      <td>{job?.title}</td>
       <td>{formattedDate}</td>
       <td>{job.domain}</td>
       <td>{job.city}</td>

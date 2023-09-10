@@ -126,6 +126,7 @@
 }
 
 .message-alert {
+  z-index: 20;
   div {
     background-color: $success;
     padding: 20px;

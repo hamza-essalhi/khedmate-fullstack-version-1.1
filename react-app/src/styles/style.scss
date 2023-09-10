@@ -1632,11 +1632,23 @@ body {
             display: flex;
             justify-content: space-around;
           }
-          select{
-            padding: 12px;
-            border-radius: 0.4em;
-            background-color: $input-bg;
-          }
+          span{
+            padding: 10px;
+            border-radius: 5px;
+            background-color: yellow;
+            color: white;
+            font-weight: bolder;
+            box-shadow: -1px 4px 16px rgba(192, 238, 26, 0.36);
+        
+        &.accepted{
+          background-color: $success;
+          box-shadow: -1px 4px 16px rgba(0, 252, 134, 0.36);
+        }
+        &.rejected{
+          background-color: $error;
+          box-shadow: -1px 4px 16px rgb(238 26 26 / 36%);
+        }
+            }
         }
         tr:nth-child(even){
           background-color: $input-bg;
@@ -1960,6 +1972,132 @@ body {
   }
 }
 
+.job-application-container{
+  .user-top-row{
+    margin-top: 3em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: $btn-bg;
+    padding: 10px;
+    border-radius: 10px;
+    img{
+      width: 100px;
+      height: 100px;
+    border-radius: 100%;
+
+    }
+    .statut{
+      flex: 4;
+      display: flex;
+    justify-content: flex-end;
+    }
+    .user-info{
+      margin: 1em;
+      
+      div{
+        display: flex;
+        margin: 1em;
+        color: white;
+        h4:last-child{
+          margin-left: 2em;
+        }
+        &.contact{
+          flex-direction: column;
+          h6{
+            margin: 0.5em 0;
+          }
+        }
+      }
+      h4,h6{
+        color: white;
+        span{
+        padding: 10px;
+        border-radius: 5px;
+        background-color: yellow;
+        font-weight: bolder;
+        color: white;
+        box-shadow: -1px 4px 16px rgba(192, 238, 26, 0.36);
+        
+        &.accepted{
+          background-color: $success;
+          box-shadow: -1px 4px 16px rgba(0, 252, 134, 0.36);
+        }
+        &.rejected{
+          background-color: $error;
+          box-shadow: -1px 4px 16px rgb(238 26 26 / 36%);
+        }
+        }
+
+      }
+    }
+  }
+  .job-application-row-props{
+    h3,h4{
+      margin: 1em;
+    }
+    .col{
+      h6,h4{
+        display: flex;
+        margin: 2em;
+        span{
+         width: 30%;
+          
+        }
+      }
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 60%;
+      margin: 3em;
+      .custom-select {
+        width: 100% !important;
+        z-index: 4;
+        margin: 0.5em;
+      }
+      label,
+      input,
+      select
+      .btn {
+        margin: 1em;
+      }
+      textarea {
+        resize: none;
+      }
+      input,
+      select {
+        border: 2px $btn-bg solid;
+        width: 100%;
+        border-radius: 10px;
+        padding: 15px;
+        outline: none;
+        transition: 0.3s;
+        margin: 1em;
+        &:hover,
+        &:active,
+        :focus {
+          border-color: $info;
+          outline: none;
+          label {
+            color: $success;
+          }
+        }
+      }
+      button {
+        margin: 1em;
+        @include btn($btn-bg, white, 40%, auto);
+        padding: 15px;
+      }
+      .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+}
 .main-footer {
   background-color: white;
   @include flex($col: true, $v-center: true, $h-center: true);

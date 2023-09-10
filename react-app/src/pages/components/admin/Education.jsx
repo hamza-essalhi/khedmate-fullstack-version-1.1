@@ -13,13 +13,15 @@ const Education = ({ delay }) => {
   const newDelay = delay;
   const [selectedEducation, setEducation] = useState("");
   const [error, setError] = useState(false);
-  const [educationData, setEducationData] = useState('')
+  const [resData, setResData] = useState('')
+  const [isEmpty, setEmpty] = useState(true)
   const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     institution: "",
     fieldOfStudy: "",
     startDate: "",
-    endDate: ""
+    endDate: "",
+    degree:''
   });
 
   const animationProps = {
@@ -56,8 +58,15 @@ const Education = ({ delay }) => {
       try {
         const response = await api.get("employees");
         const employee = response.data.employee.education[0]
-        setEducationData(employee)
+        setResData(employee)
         dispatch(clearRequestWithDelay())
+        if (Object.keys(response.data.employee).length === 0) {
+          setEmpty(true)
+        }
+        else{
+          setEmpty(false)
+          
+        }
       } catch (error) {
         
       }
@@ -68,16 +77,17 @@ const Education = ({ delay }) => {
   }, [lastRequest,dispatch]);
   useEffect(() => {
 
-    if (educationData) {
+    if (resData) {
       setFormData({
-        institution: educationData.institution || "",
-        fieldOfStudy: educationData.fieldOfStudy || "",
-        startDate: educationData.startDate || "",
-        endDate: educationData.endDate || "",
+        institution: resData.institution || "",
+        fieldOfStudy: resData.fieldOfStudy || "",
+        startDate: resData.startDate || "",
+        endDate: resData.endDate || "",
+        degree:resData.degree || ''
 
       });
     }
-  }, [educationData]);
+  }, [resData]);
   const validateForm = () => {
     const errors = {};
 
@@ -184,18 +194,12 @@ const Education = ({ delay }) => {
     
     
   };
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    let month = (d.getMonth() + 1).toString();
-    if (month.length === 1) {
-      month = `0${month}`; // Add leading zero if the month is a single digit
-    }
-    let day = d.getDate().toString();
-    if (day.length === 1) {
-      day = `0${day}`; // Add leading zero if the day is a single digit
-    }
-    return `${year}-${month}-${day}`;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add 1 to month because months are zero-indexed
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
   };
 
 
@@ -224,7 +228,7 @@ const Education = ({ delay }) => {
           Education
         </motion.h1>
         {
-          educationData ? <form action="">
+          !isEmpty ? <form action="">
 
             <motion.div
               className="form-content"
@@ -237,7 +241,7 @@ const Education = ({ delay }) => {
               }}
             >
               <label htmlFor="">School / University Name </label>
-              <input type="text" name="institution" placeholder="Fsac..." defaultValue={educationData.institution} onChange={handleChange} />
+              <input type="text" name="institution" placeholder="Fsac..." defaultValue={resData?.institution} onChange={handleChange} />
               {formErrors.title && <motion.h5
                 variants={{
                   start: {
@@ -257,8 +261,9 @@ const Education = ({ delay }) => {
               >
                 {formErrors.title}
               </motion.h5>}
-              <label htmlFor="">Start Date</label>
-              <input type="date" name="startDate" placeholder="2023..." defaultValue={formatDate(educationData.startDate)} onChange={handleChange} />
+              <label htmlFor="">Start Date ({formatDate(resData?.startDate)})</label>
+
+              <input type="date" name="startDate" placeholder="2023..." defaultValue={formatDate(resData?.startDate)}  onChange={handleChange} />
               {formErrors.startDate && <motion.h5
                 variants={{
                   start: {
@@ -278,8 +283,8 @@ const Education = ({ delay }) => {
               >
                 {formErrors.startDate}
               </motion.h5>}
-              <label htmlFor="">End Date</label>
-              <input type="date" name="endDate" placeholder="2023..." defaultValue={formatDate(educationData.endDate)} onChange={handleChange} />
+              <label htmlFor="">End Date ({formatDate(resData?.endDate)})</label>
+              <input type="date" name="endDate" placeholder="2023..." defaultValue={formatDate(resData?.endDate)} onChange={handleChange} />
               {formErrors.endDate && <motion.h5
                 variants={{
                   start: {
@@ -300,7 +305,7 @@ const Education = ({ delay }) => {
                 {formErrors.endDate}
               </motion.h5>}
               <label htmlFor="">Specialty</label>
-              <input type="text" name="fieldOfStudy" placeholder="Physics.."  defaultValue={educationData.fieldOfStudy} onChange={handleChange} />
+              <input type="text" name="fieldOfStudy" placeholder="Physics.."  defaultValue={resData?.fieldOfStudy} onChange={handleChange} />
               {formErrors.fieldOfStudy && <motion.h5
                 variants={{
                   start: {
@@ -321,10 +326,10 @@ const Education = ({ delay }) => {
                 {formErrors.fieldOfStudy}
               </motion.h5>}
               <label htmlFor="">Degree</label>
-              <input name="degree" type="text" disabled='disabled' defaultValue={educationData.degree} onChange={handleChange}/>
+              <input name="degree" type="text" disabled='disabled' defaultValue={resData?.degree} onChange={handleChange}/>
               <Select
                 options={education.filter(e => e.value !== "All")}
-                op={educationData.degree}
+                op={resData?.degree}
                 onChange={handleSelectChangeEducation}
                 classValue='custom-select-2'
               />

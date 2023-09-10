@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import jobImage from "../../images/user.jpg";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { motion, useAnimation, useInView } from "framer-motion";
-import {useSelector } from "react-redux";
+import {useDispatch, useSelector } from "react-redux";
 import api from "../../toolkit/auth/config";
-
+import { startRequest, completeRequest, errorRequests, clearRequestWithDelay, clearRequest }from "../../toolkit/request/requestActions";
+import Loading from "../components/Loading";
+import { addMessage, clearMessagesWithDelay } from "../../toolkit/messages/messageActions";
+import Message from "../components/Message";
 const JobPost = () => {
   const { id } = useParams();
+  const { isLoading, errorRequest, lastRequest } = useSelector((state) => state.request);
+  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.messages);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const logedUser=useSelector((state) => state.auth.user.user);
   const [user,setUser]=useState('')
@@ -44,7 +50,7 @@ const JobPost = () => {
       .catch((error) => {
         console.error('Error fetching job data:', error);
       });
-  }, [id]);
+  }, [id,lastRequest]);
   
   // ...
   
@@ -78,20 +84,25 @@ const JobPost = () => {
     }
   }, [id]);
   const handleLike = () => {
-    
-    setLike(!like);
-    const likedJobs = JSON.parse(localStorage.getItem("likedJobs")) || [];
-    const index = likedJobs.findIndex((j) => j.id === job.id);
-
-    if (index !== -1) {
-      likedJobs[index].liked = !likedJobs[index].liked;
-    } else {
-      likedJobs.push({ id: job.id, liked: like });
-    }
-
-    localStorage.setItem("likedJobs", JSON.stringify(likedJobs));
   };
+  
 
+  const hanleSubmit =async()=>{
+    dispatch(clearRequest())
+    try{
+      dispatch(startRequest());
+      await api.post(`jobApplication/create/${job._id}`).then(() => {
+        dispatch(completeRequest())
+        dispatch(addMessage('Congratulations, your job application has been successfully sent'));
+      }).catch((e) => dispatch(errorRequests()))
+      
+      dispatch(clearRequestWithDelay())
+      dispatch(clearMessagesWithDelay());
+    }
+    catch{
+      dispatch(errorRequests())
+    }
+  }
   useEffect(() => {
     const timestampStr = job.createdAt;
 
@@ -120,6 +131,7 @@ const JobPost = () => {
       animate={animate}
       transition={transition}
     >
+      <Message messages={messages} />
       <div className="sub-row">
         <motion.div
           className="col job-data"
@@ -236,7 +248,30 @@ const JobPost = () => {
           <span>salary: {job.salary} DH</span>
           
         </div>
-        {(isAuthenticated && !logedUser.research) &&<Link>Apply Now</Link>}
+        {(isAuthenticated && !logedUser.research) &&<button onClick={hanleSubmit}>Apply Now</button>
+        }
+        {isLoading && <Loading />}
+
+
+{errorRequest && <motion.h5
+  variants={{
+    start: {
+      x: -10,
+    },
+    end: {
+      x: 0,
+    },
+  }}
+  initial="start"
+  animate="end"
+  transition={{
+    duration: 0.5,
+    delay: 0.1,
+  }}
+  className="password-error"
+>
+Oops! It looks like you've already sent an application for this job.
+</motion.h5>}
         
       </motion.div>
 

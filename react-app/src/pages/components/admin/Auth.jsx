@@ -25,10 +25,10 @@ const Auth = ({ delay,user}) => {
   const [password2, setPassword2] = useState("");
   const [password, setPassword] = useState("");
   const [emailMatch, setEmailMatch] = useState(true);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(user.email);
+  
   const newDelay = delay;
-  const [formErrors, setFormErrors] = useState({});
-
+  const [setFormErrors] = useState({});
   const [formData, setFormData] = useState({
    
       email: "",
@@ -81,7 +81,7 @@ const Auth = ({ delay,user}) => {
     } else {
       setPasswordsMatch(true);
     }
-    if (forbiddenDomain) {
+    if (forbiddenDomain || email==='') {
       setEmailMatch(false)
     } else {
       setEmailMatch(true)
@@ -262,7 +262,7 @@ const Auth = ({ delay,user}) => {
             }}
           >
             <label htmlFor="">Email</label>
-            <input type="email" name="email" className={emailMatch ? 'input-error' : ''} placeholder="name@domain.com" onChange={handleChange} />
+            <input type="email" name="email" defaultValue={user.email} className={emailMatch ? 'input-error' : ''} placeholder="name@domain.com" onChange={handleChange} />
             {emailMatch&&<motion.h5
                 variants={{
                   start: {

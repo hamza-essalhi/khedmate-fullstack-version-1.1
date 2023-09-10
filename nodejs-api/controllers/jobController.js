@@ -1,5 +1,6 @@
 import { errorHandler } from "../utils/errorHandler.js";
 import Job from "../models/jobModel.js";
+import JobApplication from "../models/jobApplicationModel.js";
 import User from "../models/userModel.js";
 import FavoriteJob from "../models/favoriteModel.js";
 
@@ -59,6 +60,7 @@ export const deleteJob = async (req, res, next) => {
     }
 
     await Job.findByIdAndDelete(req.params.id)
+    await JobApplication.deleteMany({ jobId: req.params.id });
     res.status(200).json({ success: "Job Deleted" });
   }
   catch (e) {
@@ -139,7 +141,7 @@ export const getAllJobsByUser= async (req, res, next) => {
      // Check if any job applications were found
      if (jobs.length === 0) {
       // If no applications are found, return an error
-      return next(errorHandler(200, "No Job Applications found for this user."));
+      return next(errorHandler(200, "No Job found for this user."));
     }
   
     res.status(200).json({ jobs: jobs });

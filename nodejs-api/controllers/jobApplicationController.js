@@ -3,26 +3,40 @@ import { errorHandler } from "../utils/errorHandler.js";
 import Job from "../models/jobModel.js";
 import JobApplication from "../models/jobApplicationModel.js";
 import User from "../models/userModel.js";
+import Employee from "../models/employeeModel.js";
 
 export const createJobApplication = async (req, res, next) => {
-
-
 
   try {
     await User.findById(req.id)
     await Job.findById(req.params.id)
-
+    await Employee.find({userId:req.id})
   }
   catch (e) {
     return next(errorHandler(500, "Access Denied: Params Not Valide"));
   }
+  const employee = await Employee.findOne({ userId: req.id });
+    if (!employee) {
+      return next(errorHandler(404, "Employee not found"));
+    }
+  const user =await User.findById(req.id)
   const job = await Job.findById(req.params.id)
-  const jobApplicationOwner = job.userId
+  const jobOwner = job.userId
   const newJobApplication = new JobApplication({
     jobId: req.params.id,
-    jobApplicationOwner: jobApplicationOwner,
+    jobOwner: jobOwner,
     userId: req.id,
-    ...req.body,
+    firstName:user.firstName,
+    lastName:user.lastName,
+    img:user.img,
+    employee: {
+      email:employee.email || '',
+      phone:employee.phone || '',
+      education: employee.education || [],
+      jobExperience:employee.jobExperience || [],
+      resume:employee.resume || '',
+      motivationLetter:employee.motivationLetter || []
+    },
   });
 
   try {
@@ -37,6 +51,18 @@ export const updateJobApplication = async (req, res, next) => {
   if (!req.research) {
     return next(errorHandler(500, "Access Denied: Unauthorized request"));
   }
+  try {
+    
+    const updated = await JobApplication.findOneAndUpdate({jobOwner:req.id}, req.body, {
+        new: true,
+    });
+    if (!updated) {
+        return res.status(404).json({ error: 'Employee not found' });
+    }
+    res.status(200).json(updated);
+} catch (error) {
+
+}
 };
 export const deleteJobApplication = async (req, res, next) => {
 
@@ -57,13 +83,27 @@ export const deleteJobApplication = async (req, res, next) => {
 
 export const getAllJobsApplications = async (req, res, next) => {
   try {
+    let filterJobs;
+    const user = await User.findById(req.id)
     const q = req.query;
-    const filterJobs = {
-      userId: req.id, // Filter by the specific user
-      ...(q.search && { institution: { $regex: q.search, $options: 'i' } }), // Filter by title search
-      ...(q.dogree && { dogree: q.dogree }), // Filter by city
-      ...(q.fieldOfStudy && { fieldOfStudy: q.fieldOfStudy }), // Filter by domain
-    };
+    if (user.research){
+       filterJobs = {
+        jobOwner: req.id, // Filter by the specific user
+        ...(q.search && { institution: { $regex: q.search, $options: 'i' } }), // Filter by title search
+        ...(q.dogree && { dogree: q.dogree }), // Filter by city
+        ...(q.fieldOfStudy && { fieldOfStudy: q.fieldOfStudy }), // Filter by domain
+      };
+    }
+    else{
+       filterJobs = {
+        userId: req.id, // Filter by the specific user
+        ...(q.search && { institution: { $regex: q.search, $options: 'i' } }), // Filter by title search
+        ...(q.dogree && { dogree: q.dogree }), // Filter by city
+        ...(q.fieldOfStudy && { fieldOfStudy: q.fieldOfStudy }), // Filter by domain
+      };
+    }
+    
+    
    
     const jobs = await JobApplication.find(filterJobs).sort({createdAt:-1});
     if (q.time && q.time.toLowerCase() === 'new') {
@@ -88,7 +128,7 @@ export const getJobApplication = async (req, res, next) => {
   try {
     const job = await JobApplication.findById(req.params.id);
     
-    if (job.jobApplicationOwner.toString() !== req.id) {
+    if (job.jobOwner.toString() !== req.id) {
       return next(errorHandler(500, "Access Denied: Unauthorized request"));
     }
     res.status(200).json({ JobApplication: job });
