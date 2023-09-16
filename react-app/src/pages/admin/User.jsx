@@ -39,6 +39,11 @@ const User = () => {
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
   const user = useSelector((state) => state.auth.user);
+  const [selectedCities, setSelectedCities] = useState("");
+  const [selectedDomains, setSelectedDomains] = useState("");
+  const [selectedEducation, setSelectedEducation] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [paramsError,setPramsError]=useState(false)
   const transition = {
     duration: 0.5,
     delay: delay,
@@ -54,32 +59,56 @@ const User = () => {
   useEffect(() => {
     const fetchFilteredJobs = async () => {
       try {
+        setPramsError(false)
+        const params = {
+          search: searchQuery,
+          city: selectedCities,
+          domain: selectedDomains,
+          education: selectedEducation,
+        }
         const response = await api.get("jobApplication");
-        const jobResponse = await api.get("jobs/userJobs");
+        const jobResponse = await api.get("jobs/userJobs",{ params });
         const jobApplication = response.data.JobApplications;
         const jobs = jobResponse.data.jobs;
-  
+        
+
         // Check if the response contains the error message
         if (!response.data.error) {
           setJobApplication(jobApplication);
-          
-        } 
-        if(!jobResponse.data.error) {
-          setJobs(jobs);
-          console.log(jobs)
         }
-  
+        if (!jobResponse.data.error) {
+          setJobs(jobs);
+        }
+        else{
+          setPramsError(true)
+        }
+
         dispatch(clearRequestWithDelay());
       } catch (error) {
-       
+
       }
     };
 
-    
-  
+
+
     fetchFilteredJobs();
-  }, [lastRequest, dispatch]);
-  
+  }, [lastRequest, dispatch,selectedCities,selectedDomains,selectedEducation,searchQuery]);
+
+  const handleSelectChangeCities = (value) => {
+    setSelectedCities(value);
+  };
+
+  const handleSelectChangeDomain = (value) => {
+    setSelectedDomains(value);
+
+  };
+  const handleSelectChangeEducation = (value) => {
+    setSelectedEducation(value);
+
+  };
+  const handleSelectChangeSearch = (value) =>{
+    setSearchQuery(value)
+  }
   const handleProfileMenu = (target) => {
     setDelay(0);
     switch (target) {
@@ -192,7 +221,7 @@ const User = () => {
           delay: delay + 0.3,
         }}
       >
-        {!user.user.research  ? (
+        {!user.user.research ? (
           <div className="col">
             <motion.div
               variants={
@@ -579,13 +608,13 @@ const User = () => {
         </>
       )}
       {
-        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete} /> : <Table data={jobApplication} onDelete={handleDelete}/>
+        user.user.research ? <ReaserchTable data={jobApplication} onDelete={handleDelete} /> : <Table data={jobApplication} onDelete={handleDelete} />
       }
 
       {
-        user.user.research && <ReaserchJobsTable data={jobs} onDelete={handleDeleteJob} />
+        user.user.research && <ReaserchJobsTable data={jobs} onDelete={handleDeleteJob} selectChangeSearch={handleSelectChangeSearch} selectChangeCities={handleSelectChangeCities} selectChangeDomain={handleSelectChangeDomain} selectChangeEducation={handleSelectChangeEducation} paramsError={paramsError} />
       }
-      
+
     </motion.div>
   );
 };

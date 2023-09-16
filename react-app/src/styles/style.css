@@ -3348,6 +3348,8 @@ body {
 }
 .user .table table {
   width: 100%;
+  margin: 1em;
+  padding: 1em;
 }
 .user .table table thead tr, .user .table table thead th {
   text-align: start;
@@ -3395,6 +3397,118 @@ body {
 }
 .user .table table tbody .delete-icon:hover {
   color: white;
+}
+.user .table .form {
+  width: 100%;
+  padding: 0;
+}
+.user .table .form input {
+  width: 90%;
+  background-color: #fff1ef;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px;
+  border: 2px transparent solid;
+  outline: none;
+  transition: 0.3s;
+  margin: 0 !important;
+  width: 100% !important;
+}
+.user .table .form input:hover, .user .table .form input:active, .user .table .form input:focus {
+  outline: none;
+  border: none;
+  border: 2px #fc6e5e solid;
+}
+.user .table .form button {
+  width: auto;
+  height: auto;
+  background-color: #fc6e5e;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+  transition: 0.3s;
+  padding: 15px;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.user .table .form button:hover {
+  background-color: #e36355;
+  color: white;
+}
+.user .table .form button:active {
+  animation: shake 0.8s ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.user .table .row {
+  display: flex;
+  align-items: center;
+}
+.user .table .row .sub-row {
+  display: flex;
+  margin: 0.5em;
+}
+.user .table .row .col {
+  margin-right: 1em;
+}
+.user .table .row .search-box {
+  width: 100%;
+}
+.user .table .row .search-box .col {
+  margin: 0;
+}
+.user .table .params-error {
+  display: flex;
+  justify-content: center;
+}
+.user .table .params-error p {
+  width: 40%;
+  background-color: #f74835;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: -1px 4px 16px rgba(238, 26, 26, 0.36);
 }
 
 .chat-container {

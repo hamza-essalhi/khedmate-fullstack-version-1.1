@@ -11,10 +11,13 @@ const jobsPerPage=10
   const currentJobs = data.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(data.length / jobsPerPage);
   
+
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
   
+ 
+
   if (!Array.isArray(data)) {
     return (
       <div className="table">
@@ -26,6 +29,7 @@ const jobsPerPage=10
   return (
     <div className="table">
       <h1>Applications</h1>
+      
       <table>
         <thead>
           <tr>

@@ -132,16 +132,12 @@ export const getAllJobsByUser= async (req, res, next) => {
     };
     
     const jobs = await Job.find(filterJobs).sort({createdAt:-1})
-    if (q.time && q.time.toLowerCase() === 'new') {
-      jobs.sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt in descending order
-    } else if (q.time && q.time.toLowerCase() === 'old') {
-      jobs.sort((a, b) => a.createdAt - b.createdAt); // Sort by createdAt in ascending order
-    }
+    
     
      // Check if any job applications were found
      if (jobs.length === 0) {
       // If no applications are found, return an error
-      return next(errorHandler(200, "No Job found for this user."));
+      return next(errorHandler(200, "No Job found ."));
     }
   
     res.status(200).json({ jobs: jobs });
