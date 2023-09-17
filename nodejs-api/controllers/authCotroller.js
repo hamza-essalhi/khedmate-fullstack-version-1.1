@@ -45,6 +45,7 @@ export const register = async (req, res,next) => {
     await newUser.save();
     res.status(200).json({success:'User Created'});
   } catch (err) {
+    next(errorHandler(500, err));
     next(errorHandler(500, 'User Not Created: This user already exists.'));
   }
 };

@@ -4,9 +4,10 @@ const { Schema } = mongoose;
 const ConversionSchema = new Schema(
   {
     id: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "User",
+      unique: true,
+
     },
     fromUnit: {
       type: String,
@@ -34,4 +35,4 @@ const ConversionSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Conversion", ConversionSchema);
+export default mongoose.model("Conversion", ConversionSchema);

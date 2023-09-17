@@ -4,7 +4,7 @@ import { tokenChecker } from "../middleware/jwt.js";
 const router = express.Router()
 
 
-router.delete('/:id',tokenChecker,deleteUserController)
+router.delete('/delete/:id',tokenChecker,deleteUserController)
 router.put('/update/:id',tokenChecker,UpdateUser)
 router.get('/:id',getUser)
 

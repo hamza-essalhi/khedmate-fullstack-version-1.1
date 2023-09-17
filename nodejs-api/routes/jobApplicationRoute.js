@@ -7,7 +7,7 @@ const router = express.Router()
 router.post('/create/:id',tokenChecker,createJobApplication)
 router.get('/',tokenChecker,getAllJobsApplications)
 router.get('/:id',tokenChecker,getJobApplication)
-router.put('/',tokenChecker,updateJobApplication)
+router.put('/:id',tokenChecker,updateJobApplication)
 router.delete('/:id',tokenChecker,deleteJobApplication)
 
 export default router

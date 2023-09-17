@@ -28,7 +28,7 @@ const Auth = ({ delay,user}) => {
   const [email, setEmail] = useState(user.email);
   
   const newDelay = delay;
-  const [setFormErrors] = useState({});
+  // const [setFormErrors] = useState({});
   const [formData, setFormData] = useState({
    
       email: "",
@@ -178,7 +178,7 @@ const Auth = ({ delay,user}) => {
       errors.rNewPassowrd = 'New Password is required';
     }
     
-    setFormErrors(errors);
+    
 
     return Object.keys(errors).length === 0;
   };

@@ -1,13 +1,15 @@
 import dotenv from "dotenv";
 import User from "../models/userModel.js";
 import { errorHandler } from "../utils/errorHandler.js";
-import multer from 'multer';
+import Job from "../models/jobModel.js";
+import JobApplication from "../models/jobApplicationModel.js";
 import bcrypt from "bcrypt";
 dotenv.config();
 
 
 export const deleteUserController = async (req, res, next) => {
   const user = await User.findById(req.params.id);
+  
 
   if (!user) {
     return next(errorHandler(500, "Access Denied: Unable to delete user"));
@@ -16,6 +18,8 @@ export const deleteUserController = async (req, res, next) => {
       return next(errorHandler(500, "Access Denied: Unauthorized request"));
     }
 
+    await Job.deleteMany({ userId:user.id })
+    await JobApplication.deleteMany({ jobOwner:user.id })
     await User.findByIdAndDelete(req.params.id);
     res.status(200).json({ success: "User Deleted" });
   }

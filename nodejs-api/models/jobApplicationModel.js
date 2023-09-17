@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
-import Employee from "./employeeModel.js";
 
 const JobApplicationSchema = new Schema(
   {

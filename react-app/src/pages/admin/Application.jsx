@@ -2,11 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from 'react-router-dom';
-import { FaBusinessTime, FaDesktop, FaInfo, FaRegUserCircle } from "react-icons/fa";
-import { BsFillShieldLockFill, BsPersonWorkspace } from "react-icons/bs";
-import { IoMdDocument, IoMdSchool } from "react-icons/io";
-
+import { Link, useParams } from 'react-router-dom';
+import { FaBusinessTime, FaFacebookMessenger, FaInfo, FaRegUserCircle } from "react-icons/fa";
+import { IoMdSchool } from "react-icons/io";
+import { generateUniqueId } from "../../utils/generateUnId";
 import { addMessage, clearMessagesWithDelay } from "../../toolkit/messages/messageActions";
 import { clearRequest, clearRequestWithDelay, completeRequest, errorRequests, startRequest } from "../../toolkit/request/requestActions";
 import api from "../../toolkit/auth/config";
@@ -89,7 +88,7 @@ const Application = () => {
     dispatch(startRequest());
     try {
       
-      await api.put('jobApplication', decision);
+      await api.put(`jobApplication/${id}`, decision);
       dispatch(completeRequest())
       dispatch(
         addMessage(`This job application has been successfully ${decision.applicationStatus}!`)
@@ -121,7 +120,7 @@ const Application = () => {
 
 
         fetchFilteredJobs();
-    }, [lastRequest, dispatch]);
+    }, [lastRequest, dispatch,id]);
     document.title = ``;
     return (
         <motion.div
@@ -160,6 +159,7 @@ const Application = () => {
                         </div>
                     </div>
                     <div className="user-info statut">
+                        <Link to={`/chat/${jobApplication.userId}${jobApplication.jobOwner}`}><FaFacebookMessenger></FaFacebookMessenger></Link>
                         <h4><span className={
                             jobApplication.applicationStatus === "accepted"
                                 ? "accepted"
@@ -404,6 +404,7 @@ const Application = () => {
                 <form action="" onSubmit={handleSubmit} >
                     <label >Decision:</label>
                     <select id="decision" name="applicationStatus" value={decision.applicationStatus} onChange={handleChange}>
+                        <option >Select</option>
                         <option value="accepted">Accepted</option>
                         <option value="rejected">Rejected</option>
                     </select>
