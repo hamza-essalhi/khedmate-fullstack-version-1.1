@@ -39,6 +39,7 @@ function App() {
           <Route path="" element={<PrivetRoute />}>
             <Route path="/user/:id" element={<User />} />
             <Route path="/chat/:id" element={<Chat />} />
+            <Route path="/chat/" element={<Chat />} />
             <Route path="/applications/:id" element={<Application />} />
           </Route>
           <Route path="/error" element={<Error />} />

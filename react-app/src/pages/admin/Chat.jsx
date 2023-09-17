@@ -15,6 +15,7 @@ const Chat = () => {
     const { lastRequest } = useSelector((state) => state.request);
   const [selectedOption, setSelectedOption] = useState("All");
   const [converstion, setConverstion] = useState("");
+  const [_id,putId]=useState('')
   
   const options = [
     { label: "All", value: "All" },
@@ -28,9 +29,10 @@ const Chat = () => {
   useEffect(() => {
     const fetchFilteredConversation = async () => {
         try {
-            const response = await api.get(`conversation/${id}`);
+            const response = await api.get(`conversations/`);
 
             const conversation = response.data.conversation;
+            console.log(conversation)
             // Check if the response contains the error message
             if (!response.data.error) {
                 setConverstion(conversation);
@@ -47,7 +49,10 @@ const Chat = () => {
 
     fetchFilteredConversation();
 }, [lastRequest, dispatch,id]);
-
+const getMessagesByConversation =(e)=>{
+  console.log(e)
+  putId(e)
+}
 
   return (
     <div className="chat-container">
@@ -58,19 +63,20 @@ const Chat = () => {
             op="All"
             onChange={handleSelectOption}
           ></Select>
-          {converstion.map((conversation, i) => (
+          {converstion &&converstion.map((conversation, i) => (
             <ConversationList
               key={i}
               conversation={conversation}
               defaultValue={conversation}
+              getMessagesByConversation={getMessagesByConversation}
               
             />
           ))}
         </div>
       </div>
       <div className="right">
-        {converstion ? (
-          <ConversationBox conversation={converstion} />
+        {id ? (
+          <ConversationBox  id={id}/>
         ) : (
           <div className="no-selected-conversation">
             <span>Pleas select a&#160;<strong> Conversation</strong></span>

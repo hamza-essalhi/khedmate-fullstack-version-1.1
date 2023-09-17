@@ -17,6 +17,32 @@ const ConversionSchema = new Schema(
       type: String,
       required: true,
     },
+
+    fromUnitName: {
+      type: String,
+      required: true,
+    },
+    toUnitName: {
+      type: String,
+      required: true,
+    },
+    fromUnitImg: {
+      type: String,
+      required: true,
+    },
+    toUnitImg: {
+      type: String,
+      required: true,
+    },
+    
+    fromUnitLastSeen: {
+      type: String,
+      required: true,
+    },
+    toUnitLastSeen: {
+      type: String,
+      required: true,
+    },
     readedByfromUnit:{
       type:Boolean,
       required:true

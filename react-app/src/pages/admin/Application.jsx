@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { FaBusinessTime, FaFacebookMessenger, FaInfo, FaRegUserCircle } from "react-icons/fa";
 import { IoMdSchool } from "react-icons/io";
-import { generateUniqueId } from "../../utils/generateUnId";
 import { addMessage, clearMessagesWithDelay } from "../../toolkit/messages/messageActions";
 import { clearRequest, clearRequestWithDelay, completeRequest, errorRequests, startRequest } from "../../toolkit/request/requestActions";
 import api from "../../toolkit/auth/config";
@@ -13,6 +12,7 @@ import BasicsEmplyee from "../components/admin/BasicsEmplyee";
 import ExperienceEmplyee from "../components/admin/ExperienceEmplyee";
 import EducationEmplyee from "../components/admin/EducationEmplyee";
 import ResumeEmplyee from "../components/admin/ResumeEmplyee";
+import { generateUniqueId } from "../../utils/generateUnId";
 const Application = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -72,7 +72,7 @@ const Application = () => {
         }
     }, [target, animate]);
 
-
+    
     const handleChange= (e) => {
         const { name, value } = e.target;
         setDecision((prevDecision) => ({
@@ -122,6 +122,8 @@ const Application = () => {
         fetchFilteredJobs();
     }, [lastRequest, dispatch,id]);
     document.title = ``;
+    const conversationId = generateUniqueId(`${jobApplication.jobOwner}${jobApplication.userId}`)
+    console.log(conversationId)
     return (
         <motion.div
             className="user job-application-container"
@@ -159,7 +161,7 @@ const Application = () => {
                         </div>
                     </div>
                     <div className="user-info statut">
-                        <Link to={`/chat/${jobApplication.userId}${jobApplication.jobOwner}`}><FaFacebookMessenger></FaFacebookMessenger></Link>
+                        <Link to={`/chat/${conversationId}`}><FaFacebookMessenger></FaFacebookMessenger></Link>
                         <h4><span className={
                             jobApplication.applicationStatus === "accepted"
                                 ? "accepted"

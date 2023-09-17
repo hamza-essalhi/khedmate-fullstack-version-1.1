@@ -1,37 +1,39 @@
 import { BsCheck2All } from "react-icons/bs";
-import userImage from "../../../images/user.jpg";
+// import { useSelector} from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import moment from "moment";
+import { useSelector } from "react-redux";
 
-
-const TenWordsSpan = ({text}) => {
-    const tenWords = text.split(' ').length > 6 ? text.split(' ').slice(0, 5).join('') :text;
+const TenWordsSpan = ({conversation}) => {
+    const tenWords = conversation.split(' ').length > 6 ? conversation.split(' ').slice(0, 5).join('') :conversation;
     
-    return text?.split(' ').length > 4 ? <span className="alert-message">{tenWords}...</span>:<span className="alert-message">{tenWords}</span>;
+    return tenWords?.split(' ').length > 4 ? <span className="alert-message">{tenWords}...</span>:<span className="alert-message">{tenWords}</span>;
   }
 
 
 
-const ConversationList = ({func,conversation}) => {
-  
-  
+const ConversationList = ({getMessagesByConversation,conversation}) => {
+  const user = useSelector((state) => state.auth.user?.user);
 
-
+  const navigate = useNavigate();
   const handleSelection = () => {
-   
-    func(conversation.id-1)
+    getMessagesByConversation(conversation._id)
+    const route = `/chat/${conversation._id}`;
+    navigate(route);
   };
   return (
     <div className="conversation-list" onClick={handleSelection}>
       <div  className='row'>
-        <img src={userImage} alt="" onClick={handleSelection}/>
+        <img src={(conversation.fromUnit ===user._id )?conversation.fromUnitImg:conversation.toUnitImg} alt="" onClick={handleSelection}/>
         <div>
-          <span>{conversation.name}</span>
-          <TenWordsSpan text={conversation.lastMessage} />
+          <div className="name-date"><span>{conversation.toUnitName}</span>
+          <span>{moment(conversation.updatedAt).fromNow()}</span></div>
+          {conversation.lastMessage &&<TenWordsSpan conversation={conversation.lastMessage} />}
         </div>
       </div>
       <div className="row">
-            <span>2m ago</span>
-          {!conversation.read &&<span className="counter">5</span>}
-          {conversation.read && <BsCheck2All className="ckeckers"></BsCheck2All>}
+            <span></span>
+          {conversation.readedByfromUnit && conversation.lastMessage &&<BsCheck2All className="ckeckers"></BsCheck2All>}
         
       </div>
     </div>
