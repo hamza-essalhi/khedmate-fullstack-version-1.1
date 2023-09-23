@@ -96,10 +96,10 @@ useEffect(() => {
     <div className="conversation">
       <div className="top">
         <div>
-          <img src={(conversation.fromUnit ===user._id )?conversation.fromUnitImg:conversation.toUnitImg} alt="" />
+          <img src={(conversation.fromUnit !==user._id )?conversation.fromUnitImg:conversation.toUnitImg} alt="" />
           <div>
-            <span>{messages.name}</span>
-            <span>Last seen {moment(conversation.updatedAt).fromNow()} </span>
+            <span>{(conversation.fromUnit !==user._id )?conversation.fromUnitName:conversation.toUnitName}</span>
+            <span>Last seen {(conversation.fromUnit !==user._id )?moment(conversation.fromUnitLastSeen).fromNow():moment(conversation.toUnitLastSeen).fromNow()} </span>
           </div>
         </div>
         <div>

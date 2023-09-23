@@ -21,19 +21,21 @@ const ConversationList = ({getMessagesByConversation,conversation}) => {
     const route = `/chat/${conversation._id}`;
     navigate(route);
   };
+  console.log(conversation.toUnitLastSeen)
+  console.log(conversation.fromUnitLastSeen)
   return (
     <div className="conversation-list" onClick={handleSelection}>
       <div  className='row'>
-        <img src={(conversation.fromUnit ===user._id )?conversation.fromUnitImg:conversation.toUnitImg} alt="" onClick={handleSelection}/>
+        <img src={(conversation.ToUnit ===user._id )?conversation.fromUnitImg:conversation.toUnitImg} alt="" onClick={handleSelection}/>
         <div>
           <div className="name-date"><span>{conversation.toUnitName}</span>
-          <span>{moment(conversation.updatedAt).fromNow()}</span></div>
+          <span>{moment(conversation.toUnitLastSeen).fromNow()}</span></div>
           {conversation.lastMessage &&<TenWordsSpan conversation={conversation.lastMessage} />}
         </div>
       </div>
       <div className="row">
             <span></span>
-          {conversation.readedByfromUnit && conversation.lastMessage &&<BsCheck2All className="ckeckers"></BsCheck2All>}
+          {conversation.readedByToUnit && conversation.lastMessage &&<BsCheck2All className="ckeckers"></BsCheck2All>}
         
       </div>
     </div>

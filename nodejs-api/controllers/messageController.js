@@ -11,10 +11,18 @@ export const createMessage = async (req, res, next) => {
       await User.findById(req.id); // Use await here
       const conversation = await Conversion.findById(id); // Use await here
       
-      if (conversation.toUnit === req.id) {
+      if (conversation.toUnit == req.id) {
         await conversation.updateOne({
-          readedBytoUnit: true,
-          lastMessage:req.body.message
+          readedByToUnit: true,
+          lastMessage:req.body.message,
+          toUnitLastSeen : new Date()
+        });
+      }
+      else{
+        await conversation.updateOne({
+          readedByFromeUnit: true,
+          lastMessage:req.body.message,
+          fromUnitLastSeen : new Date()
         });
       }
       

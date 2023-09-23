@@ -36,18 +36,18 @@ const ConversionSchema = new Schema(
     },
     
     fromUnitLastSeen: {
-      type: String,
+      type: Date,
       required: true,
     },
     toUnitLastSeen: {
-      type: String,
+      type: Date,
       required: true,
     },
-    readedByfromUnit:{
+    readedByFromUnit:{
       type:Boolean,
       required:true
     },
-    readedBytoUnit:{
+    readedByToUnit:{
       type:Boolean,
       required:true
     },

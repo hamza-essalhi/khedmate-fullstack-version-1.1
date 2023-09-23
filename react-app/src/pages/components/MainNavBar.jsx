@@ -18,7 +18,7 @@ import { FaUserAlt } from "react-icons/fa";
 //utls
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutAsync } from "../../toolkit/auth/authSlice";
 
 
@@ -31,12 +31,12 @@ const MainNavBar = () => {
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
 
 
-  
+
   const transition = {
     duration: 0.5,
     delay: 0.1,
@@ -45,19 +45,19 @@ const MainNavBar = () => {
     if (target) {
       animate.start("end");
     }
-  }, [target,animate]);
+  }, [target, animate]);
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth > 700) {
         setMenuOpen(false);
         setUserMenuOpen(false)
       }
-      
+
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const logoutFunc=()=>{
+  const logoutFunc = () => {
     dispatch(logoutAsync())
     navigate('/login')
   }
@@ -67,8 +67,8 @@ const MainNavBar = () => {
     const navButton = document.querySelector('#nav-button')
     const isClickedUserButton = userButton.contains(event.target);
     const isClickedNavButton = navButton.contains(event.target);
-  
-    if (!isClickedUserButton ) {
+
+    if (!isClickedUserButton) {
       setUserMenuOpen(false);
     }
     if (!isClickedNavButton) {
@@ -79,7 +79,7 @@ const MainNavBar = () => {
   const userMenuHandler = () => setUserMenuOpen((userMenuOpen) => !userMenuOpen);
   return (
     <motion.nav className={menuOpen ? "main-nav-active" : "main-nav-bar"}
-    ref={ref}
+      ref={ref}
       variants={{
         start: {
           opacity: 0,
@@ -111,7 +111,7 @@ const MainNavBar = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          {isAuthenticated&& (<li>
+          {isAuthenticated && (<li>
             <Link to={`/user/${user._id}`}>Profile</Link>
           </li>)}
           <li>
@@ -124,56 +124,64 @@ const MainNavBar = () => {
       </div>
       <div className="right">
         <ul>
-          <li>
-            <Link to="/chat">
-              <AiFillMessage></AiFillMessage>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <IoMdNotifications></IoMdNotifications>
-            </Link>
-          </li>
-          {isAuthenticated ?<li className="user-side">
-            <img src={user?.img? user.img:userImage } onClick={userMenuHandler} alt="" id="user-button" />
-          </li>
-          :
-          <li className="user-side" onClick={userMenuHandler}>
-            <span>
-            <FaUserAlt   id="user-button"></FaUserAlt>
-            </span>
           
-          </li>}
+            <li>
+            {isAuthenticated &&
+              <Link to="/chat">
+                <AiFillMessage></AiFillMessage>
+              </Link>
+              }
+            </li>
+          
+          
+            <li>
+            {isAuthenticated &&
+              <Link to="/">
+                <IoMdNotifications></IoMdNotifications>
+              </Link>
+}
+            </li>
+          
+          {isAuthenticated ? <li className="user-side">
+            <img src={user?.img ? user.img : userImage} onClick={userMenuHandler} alt="" id="user-button" />
+          </li>
+            :
+            <li className="user-side" onClick={userMenuHandler}>
+              <span>
+                <FaUserAlt id="user-button"></FaUserAlt>
+              </span>
+
+            </li>}
         </ul>
       </div>
       {
-        isAuthenticated? (
+        isAuthenticated ? (
           <div className={userMenuOpen ? "user-menu-active" : "user-menu"} >
-        <Link to={`/user/${user._id}`}>
-          <FaUserAlt className="user-menu-icon"></FaUserAlt>
-          Profile
-        </Link>
-        <Link to="/">
-          <IoMdSettings className="user-menu-icon"></IoMdSettings>
-          Settings
-        </Link>
-        <Link to="/" onClick={logoutFunc}>
-          <IoMdLogOut className="user-menu-icon" ></IoMdLogOut>
-          Logout
-        </Link>
-      </div>
-        ):(
+            <Link to={`/user/${user._id}`}>
+              <FaUserAlt className="user-menu-icon"></FaUserAlt>
+              Profile
+            </Link>
+            <Link to="/">
+              <IoMdSettings className="user-menu-icon"></IoMdSettings>
+              Settings
+            </Link>
+            <Link to="/" onClick={logoutFunc}>
+              <IoMdLogOut className="user-menu-icon" ></IoMdLogOut>
+              Logout
+            </Link>
+          </div>
+        ) : (
           <div className={userMenuOpen ? "user-menu-active login-menu" : "user-menu"} >
-        <Link to="/login">
-          <AiOutlineLogin className="user-menu-icon"></AiOutlineLogin>
-         login
-        </Link>
-        <Link to="/sign-up">
-          <IoMdPersonAdd className="user-menu-icon"></IoMdPersonAdd>
-          Sign Up
-        </Link>
-       
-      </div>
+            <Link to="/login">
+              <AiOutlineLogin className="user-menu-icon"></AiOutlineLogin>
+              login
+            </Link>
+            <Link to="/sign-up">
+              <IoMdPersonAdd className="user-menu-icon"></IoMdPersonAdd>
+              Sign Up
+            </Link>
+
+          </div>
         )
       }
       <div className="menu">
