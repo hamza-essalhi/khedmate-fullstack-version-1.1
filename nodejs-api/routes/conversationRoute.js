@@ -8,5 +8,5 @@ router.post('/create/',tokenChecker,createConversation)
 router.get('/',tokenChecker,getAllConversations)
 router.get('/:id',tokenChecker,getConversation)
 router.put('/:id',tokenChecker,updateConversation)
-router.delete('/:id',tokenChecker,deleteConversation)
+router.delete('/delete/:id',tokenChecker,deleteConversation)
 export default router

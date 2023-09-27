@@ -43,6 +43,7 @@ export const createJobApplication = async (req, res, next) => {
     const jobApplication = await newJobApplication.save();
     res.status(200).json({ jobApplication: jobApplication });
   } catch (e) {
+    next(errorHandler(500,e))
     next(errorHandler(500, "Access Denied:Can't Create This Job Application"));
   }
 };

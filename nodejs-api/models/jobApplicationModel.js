@@ -7,6 +7,7 @@ const JobApplicationSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
     },
     jobOwner: {
       type: Schema.Types.ObjectId,
@@ -23,14 +24,15 @@ const JobApplicationSchema = new Schema(
     },
     img:{
       type:String,
-      required: true,
+      
     },
 
     jobId: {
       type: Schema.Types.ObjectId,
       ref: "Job",
       required: true,
-      unique: true,
+      unique: false,
+      
     },
     applicationStatus: {
       type: String,

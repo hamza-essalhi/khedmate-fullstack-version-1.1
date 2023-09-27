@@ -25,7 +25,8 @@ import { logoutAsync } from "../../toolkit/auth/authSlice";
 const MainNavBar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user?.user);
-
+  let counter =useSelector((state) => state.chatNotification.chatNotificationCounter);
+  let chatNotification=useSelector((state) => state.chatNotification.isChatNotification);
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const ref = useRef(null);
@@ -129,6 +130,9 @@ const MainNavBar = () => {
             {isAuthenticated &&
               <Link to="/chat">
                 <AiFillMessage></AiFillMessage>
+                {/* {
+                  chatNotification && <span className="chat-notification"> {counter}</span>
+                } */}
               </Link>
               }
             </li>
@@ -138,6 +142,7 @@ const MainNavBar = () => {
             {isAuthenticated &&
               <Link to="/">
                 <IoMdNotifications></IoMdNotifications>
+                
               </Link>
 }
             </li>

@@ -12,7 +12,7 @@ import conversationRoute from "./routes/conversationRoute.js";
 import messageRoute from "./routes/messageRoute.js";
 import employeeRoute from "./routes/employeeRoute.js";
 import { error } from "./controllers/errorController.js";
-
+import { Server, Socket } from 'socket.io';
 dotenv.config();//Configs
 const app = express();
 const port = 9000;
@@ -45,6 +45,42 @@ app.use("/api/jobApplication", jobApplicationRoute);
 //Errors
 app.use(error);
 
-app.listen(port, () => {
+const server =app.listen(port, () => {
   console.log(`The server is runing on  http://localhost:${port}`);
 });
+
+// const io = new Server(server, {
+//   pingTimeOut: 6000,
+//   cors: {
+//     origin: 'http://localhost:3000'
+//   }
+// });
+
+// io.on('connection', (socket) => {
+//   socket.on('setup', (userData) => {
+//     socket.join(userData._id);
+//     socket.emit('connected');
+//   });
+
+//   socket.on('conversation', (conversation, userData) => {
+//     socket.join(conversation.conversionGeneId);
+//     console.log(userData.firstName, 'Joined conversation:', conversation.conversionGeneId);
+//     socket.emit('connected');
+//   });
+
+//   socket.on('newMessage', async (newMessage, user) => {
+//     socket.join(newMessage.conversionId);
+//     console.log(newMessage);
+  
+//     // Check if the user is authorized to send this message
+//     if (newMessage.userId !== user._id) {
+//       // Send an error event to the client
+//       socket.emit('messageError', "Unauthorized to modify an unrecognized user in this conversation.");
+//       return;
+//     }
+  
+//     // Emit the new message to all clients in the conversation
+//     socket.emit('updateMessages', newMessage);
+//   });
+  
+// });

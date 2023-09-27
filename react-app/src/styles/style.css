@@ -473,7 +473,8 @@ body {
   width: 60%;
   justify-content: space-evenly;
 }
-.main-nav-bar .right ul li a, .main-nav-bar .right ul li span {
+.main-nav-bar .right ul li a,
+.main-nav-bar .right ul li span {
   width: 30px;
   height: 30px;
   display: flex;
@@ -2541,7 +2542,8 @@ body {
   color: #fc6e5e;
   font-weight: bold;
 }
-.auth .right form .error, .auth .right form .error-input-password {
+.auth .right form .error,
+.auth .right form .error-input-password {
   width: 100%;
   display: flex;
   align-items: center;
@@ -2555,23 +2557,29 @@ body {
   transition: 0.3s;
 }
 .auth .right form .error:hover, .auth .right form .error:active,
-.auth .right form .error :focus, .auth .right form .error-input-password:hover, .auth .right form .error-input-password:active,
+.auth .right form .error :focus,
+.auth .right form .error-input-password:hover,
+.auth .right form .error-input-password:active,
 .auth .right form .error-input-password :focus {
   border-color: red;
   outline: none;
 }
 .auth .right form .error:hover label, .auth .right form .error:active label,
-.auth .right form .error :focus label, .auth .right form .error-input-password:hover label, .auth .right form .error-input-password:active label,
+.auth .right form .error :focus label,
+.auth .right form .error-input-password:hover label,
+.auth .right form .error-input-password:active label,
 .auth .right form .error-input-password :focus label {
   color: #00ff85;
 }
-.auth .right form .error input, .auth .right form .error-input-password input {
+.auth .right form .error input,
+.auth .right form .error-input-password input {
   width: 90%;
   border: none;
   margin: 0;
   color: red;
 }
-.auth .right form .error .password-icon, .auth .right form .error-input-password .password-icon {
+.auth .right form .error .password-icon,
+.auth .right form .error-input-password .password-icon {
   margin: 0 0.3em;
   font-size: 22px;
   color: #fc6e5e;
@@ -3092,7 +3100,8 @@ body {
   color: #fc6e5e;
   font-weight: bold;
 }
-.user .row.user-row-props .col form .error, .user .row.user-row-props .col form .error-input-password {
+.user .row.user-row-props .col form .error,
+.user .row.user-row-props .col form .error-input-password {
   width: 100%;
   display: flex;
   align-items: center;
@@ -3106,23 +3115,29 @@ body {
   transition: 0.3s;
 }
 .user .row.user-row-props .col form .error:hover, .user .row.user-row-props .col form .error:active,
-.user .row.user-row-props .col form .error :focus, .user .row.user-row-props .col form .error-input-password:hover, .user .row.user-row-props .col form .error-input-password:active,
+.user .row.user-row-props .col form .error :focus,
+.user .row.user-row-props .col form .error-input-password:hover,
+.user .row.user-row-props .col form .error-input-password:active,
 .user .row.user-row-props .col form .error-input-password :focus {
   border-color: red;
   outline: none;
 }
 .user .row.user-row-props .col form .error:hover label, .user .row.user-row-props .col form .error:active label,
-.user .row.user-row-props .col form .error :focus label, .user .row.user-row-props .col form .error-input-password:hover label, .user .row.user-row-props .col form .error-input-password:active label,
+.user .row.user-row-props .col form .error :focus label,
+.user .row.user-row-props .col form .error-input-password:hover label,
+.user .row.user-row-props .col form .error-input-password:active label,
 .user .row.user-row-props .col form .error-input-password :focus label {
   color: #00ff85;
 }
-.user .row.user-row-props .col form .error input, .user .row.user-row-props .col form .error-input-password input {
+.user .row.user-row-props .col form .error input,
+.user .row.user-row-props .col form .error-input-password input {
   width: 90%;
   border: none;
   margin: 0;
   color: red;
 }
-.user .row.user-row-props .col form .error .password-icon, .user .row.user-row-props .col form .error-input-password .password-icon {
+.user .row.user-row-props .col form .error .password-icon,
+.user .row.user-row-props .col form .error-input-password .password-icon {
   margin: 0 0.3em;
   font-size: 22px;
   color: #fc6e5e;
@@ -3351,19 +3366,22 @@ body {
   margin: 1em;
   padding: 1em;
 }
-.user .table table thead tr, .user .table table thead th {
+.user .table table thead tr,
+.user .table table thead th {
   text-align: start;
   background-color: #fff1ef;
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 3em;
 }
-.user .table table tbody tr, .user .table table tbody td {
+.user .table table tbody tr,
+.user .table table tbody td {
   padding: 15px;
   border-radius: 5px;
   transition: 0.3s;
 }
-.user .table table tbody tr:hover, .user .table table tbody td:hover {
+.user .table table tbody tr:hover,
+.user .table table tbody td:hover {
   background-color: rgba(119, 109, 109, 0.1843137255);
 }
 .user .table table tbody tr td:last-child {
@@ -3577,6 +3595,47 @@ body {
 .chat-container .left .conversation-list .row span {
   padding: 4px;
 }
+.chat-container .left .conversation-list .row .div-conv {
+  width: 100%;
+}
+.chat-container .left .conversation-list .row .last-message {
+  display: flex;
+  flex-direction: row !important;
+  width: 100% !important;
+}
+.chat-container .left .conversation-list .row .last-message .ckeckers {
+  color: #0f5ea7;
+  width: 20px;
+  height: 20px;
+  margin-left: 1em;
+  margin-top: 0.5em;
+}
+.chat-container .left .conversation-list .row .user-img-online span {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: #00ff85;
+  border-radius: 100%;
+  bottom: 50px;
+  left: 34px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.chat-container .left .conversation-list .row .user-img-online img {
+  border: 2px #00ff85 solid;
+}
+.chat-container .left .conversation-list .row .user-img-offline span {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: #f74835;
+  border-radius: 100%;
+  bottom: 50px;
+  left: 34px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.chat-container .left .conversation-list .row .user-img-offline img {
+  border: 2px #f74835 solid;
+}
 .chat-container .left .conversation-list .row.active {
   background-color: red;
 }
@@ -3646,6 +3705,32 @@ body {
   padding: 10px;
   border-radius: 10px 10px 0px 0px;
 }
+.chat-container .right .top .user-img-online span {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: #00ff85;
+  border-radius: 100%;
+  bottom: 50px;
+  left: 25px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.chat-container .right .top .user-img-online img {
+  border: 2px #00ff85 solid;
+}
+.chat-container .right .top .user-img-offline span {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: #f74835;
+  border-radius: 100%;
+  bottom: 50px;
+  left: 25px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.chat-container .right .top .user-img-offline img {
+  border: 2px #f74835 solid;
+}
 .chat-container .right .top img {
   width: 60px;
   height: 60px;
@@ -3662,6 +3747,13 @@ body {
 }
 .chat-container .right .top div:nth-child(1) div span {
   font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+.chat-container .right .top div:nth-child(1) div span .dot {
+  width: 20px;
+  height: 20px;
+  color: #00ff85;
 }
 .chat-container .right .top div:nth-child(1) div span:nth-child(1) {
   font-size: 16px;
@@ -3702,6 +3794,52 @@ body {
   color: #fc6e5e;
   font-weight: bolder;
 }
+.chat-container .right .conversation .typing-box .typing {
+  position: relative;
+}
+.chat-container .right .conversation .typing-box .typing span {
+  content: "";
+  animation: blink 1.5s infinite;
+  animation-fill-mode: both;
+  height: 10px;
+  width: 10px;
+  background: #3b5998;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+}
+.chat-container .right .conversation .typing-box .typing span:nth-child(2) {
+  animation-delay: 0.2s;
+  margin-left: 15px;
+}
+.chat-container .right .conversation .typing-box .typing span:nth-child(3) {
+  animation-delay: 0.4s;
+  margin-left: 30px;
+}
+@keyframes blink {
+  0% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
+.chat-container .right .conversation .typing-box .message-from-unit {
+  background-color: transparent !important;
+}
+.chat-container .right .conversation .typing-box .message-to-unit {
+  background-color: transparent !important;
+}
+.chat-container .right .conversation .typing-box .message-to-unit .typing {
+  margin-left: 2em !important;
+}
+.chat-container .right .conversation .typing-box .message-box-unit {
+  align-items: center !important;
+}
 .chat-container .right .conversation .conversation-box {
   height: 70vh;
   overflow-y: auto;
@@ -3710,6 +3848,48 @@ body {
 .chat-container .right .conversation .conversation-box .message-box {
   display: flex;
   margin: 1em;
+}
+.chat-container .right .conversation .conversation-box .message-box-unit .message-content,
+.chat-container .right .conversation .conversation-box .message-box .message-content {
+  display: flex;
+  flex-direction: column;
+  min-width: max-content;
+  max-width: 50%;
+}
+.chat-container .right .conversation .conversation-box .message-box-unit .message-content .time,
+.chat-container .right .conversation .conversation-box .message-box .message-content .time {
+  font-size: 10px;
+}
+.chat-container .right .conversation .conversation-box .message-box-unit .message-content .hide-time,
+.chat-container .right .conversation .conversation-box .message-box .message-content .hide-time {
+  animation-name: hide-time;
+  animation-duration: 0.4s;
+  animation-timing-function: ease;
+  display: none;
+}
+@keyframes show-time {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+.chat-container .right .conversation .conversation-box .message-box-unit .message-content .show-time,
+.chat-container .right .conversation .conversation-box .message-box .message-content .show-time {
+  animation-name: show-time;
+  animation-duration: 0.4s;
+  animation-timing-function: ease;
+}
+@keyframes show-time {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    display: block;
+  }
 }
 .chat-container .right .conversation .conversation-box .message-box-unit img,
 .chat-container .right .conversation .conversation-box .message-box img {
@@ -3729,13 +3909,15 @@ body {
   font-size: 12px;
   border-radius: 10px;
   color: white;
+  word-wrap: break-word;
+  max-width: 500px;
+  min-width: 90px;
 }
 .chat-container .right .conversation .conversation-box .message-box-unit .message-from-unit,
 .chat-container .right .conversation .conversation-box .message-box .message-from-unit {
-  margin: 0.7rex 0;
+  margin: 0.7em 0;
   background-color: #fc6e5e;
   border-radius: 0px 20px 20px 20px;
-  max-width: 50%;
 }
 .chat-container .right .conversation .conversation-box .message-box-unit .message-to-unit,
 .chat-container .right .conversation .conversation-box .message-box .message-to-unit {
@@ -3886,10 +4068,12 @@ body {
 .job-application-container .user-top-row .user-info div.contact h6 {
   margin: 0.5em 0;
 }
-.job-application-container .user-top-row .user-info h4, .job-application-container .user-top-row .user-info h6 {
+.job-application-container .user-top-row .user-info h4,
+.job-application-container .user-top-row .user-info h6 {
   color: white;
 }
-.job-application-container .user-top-row .user-info h4 span, .job-application-container .user-top-row .user-info h6 span {
+.job-application-container .user-top-row .user-info h4 span,
+.job-application-container .user-top-row .user-info h6 span {
   padding: 10px;
   border-radius: 5px;
   background-color: yellow;
@@ -3897,22 +4081,27 @@ body {
   color: white;
   box-shadow: -1px 4px 16px rgba(192, 238, 26, 0.36);
 }
-.job-application-container .user-top-row .user-info h4 span.accepted, .job-application-container .user-top-row .user-info h6 span.accepted {
+.job-application-container .user-top-row .user-info h4 span.accepted,
+.job-application-container .user-top-row .user-info h6 span.accepted {
   background-color: #00ff85;
   box-shadow: -1px 4px 16px rgba(0, 252, 134, 0.36);
 }
-.job-application-container .user-top-row .user-info h4 span.rejected, .job-application-container .user-top-row .user-info h6 span.rejected {
+.job-application-container .user-top-row .user-info h4 span.rejected,
+.job-application-container .user-top-row .user-info h6 span.rejected {
   background-color: #f74835;
   box-shadow: -1px 4px 16px rgba(238, 26, 26, 0.36);
 }
-.job-application-container .job-application-row-props h3, .job-application-container .job-application-row-props h4 {
+.job-application-container .job-application-row-props h3,
+.job-application-container .job-application-row-props h4 {
   margin: 1em;
 }
-.job-application-container .job-application-row-props .col h6, .job-application-container .job-application-row-props .col h4 {
+.job-application-container .job-application-row-props .col h6,
+.job-application-container .job-application-row-props .col h4 {
   display: flex;
   margin: 2em;
 }
-.job-application-container .job-application-row-props .col h6 span, .job-application-container .job-application-row-props .col h4 span {
+.job-application-container .job-application-row-props .col h6 span,
+.job-application-container .job-application-row-props .col h4 span {
   width: 30%;
 }
 .job-application-container .job-application-row-props form {

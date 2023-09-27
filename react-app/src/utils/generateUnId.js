@@ -1,4 +1,4 @@
-import crypto from "crypto-browserify";
+import crypto from "crypto";
 
 export const generateUniqueId =(id)=> {
   const len = parseInt(id.length/2)

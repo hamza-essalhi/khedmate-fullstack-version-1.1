@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaBusinessTime, FaFacebookMessenger, FaInfo, FaRegUserCircle } from "react-icons/fa";
 import { IoMdSchool } from "react-icons/io";
 import { addMessage, clearMessagesWithDelay } from "../../toolkit/messages/messageActions";
@@ -14,6 +14,7 @@ import EducationEmplyee from "../components/admin/EducationEmplyee";
 import ResumeEmplyee from "../components/admin/ResumeEmplyee";
 import { generateUniqueId } from "../../utils/generateUnId";
 const Application = () => {
+    const navigate=useNavigate()
     const { id } = useParams();
     const dispatch = useDispatch();
     const { lastRequest } = useSelector((state) => state.request);
@@ -121,9 +122,29 @@ const Application = () => {
 
         fetchFilteredJobs();
     }, [lastRequest, dispatch,id]);
-    document.title = ``;
+    document.title = `${jobApplication.firstName} ${jobApplication.lastName}`;
     const conversationId = generateUniqueId(`${jobApplication.jobOwner}${jobApplication.userId}`)
-    console.log(conversationId)
+    const creatConversation= async(e)=>{
+        e.preventDefault()
+    const toUnit = {
+        toUnit: jobApplication.userId
+    }
+    dispatch(clearRequest())
+    dispatch(startRequest());
+
+    await api.post(`conversations/create`, toUnit).then((res) => 
+    {
+        const data=res.data
+     dispatch(completeRequest())
+    navigate(`/chat/${data.conversation.conversionGeneId}`)
+    }
+    ).catch((e) => {
+        dispatch(errorRequests())
+        navigate(`/chat/${conversationId}`)})
+    dispatch(clearRequestWithDelay())
+    
+    
+    }
     return (
         <motion.div
             className="user job-application-container"
@@ -161,7 +182,11 @@ const Application = () => {
                         </div>
                     </div>
                     <div className="user-info statut">
-                        <Link to={`/chat/${conversationId}`}><FaFacebookMessenger></FaFacebookMessenger></Link>
+                        <h4 onClick={creatConversation}>
+                            <span className="chat-box">
+                            <FaFacebookMessenger></FaFacebookMessenger>
+                            </span>
+                        </h4>
                         <h4><span className={
                             jobApplication.applicationStatus === "accepted"
                                 ? "accepted"

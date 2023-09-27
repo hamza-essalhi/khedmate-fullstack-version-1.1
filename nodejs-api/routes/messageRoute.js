@@ -5,8 +5,7 @@ import {getMessage,getAllMessages,deleteMessage,createMessage,updateMessage} fro
 const router = express.Router()
 
 router.post('/create/:id',tokenChecker,createMessage)
-router.get('/',tokenChecker,getAllMessages)
+// router.get('/',tokenChecker,getAllMessages)
 router.get('/:id',tokenChecker,getMessage)
-router.put('/:id',tokenChecker,updateMessage)
 router.delete('/:id',tokenChecker,deleteMessage)
 export default router

@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const ConversionSchema = new Schema(
   {
-    id: {
+    conversionGeneId: {
       type: String,
       required: true,
       unique: true,
@@ -28,20 +28,20 @@ const ConversionSchema = new Schema(
     },
     fromUnitImg: {
       type: String,
-      required: true,
+      
     },
     toUnitImg: {
       type: String,
-      required: true,
+      
     },
     
     fromUnitLastSeen: {
       type: Date,
-      required: true,
+      required: false,
     },
     toUnitLastSeen: {
       type: Date,
-      required: true,
+      required: false,
     },
     readedByFromUnit:{
       type:Boolean,

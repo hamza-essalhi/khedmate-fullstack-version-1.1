@@ -16,7 +16,7 @@ const JobPost = () => {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messages);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const logedUser=useSelector((state) => state.auth.user.user);
+  const logedUser=useSelector((state) => state.auth.user?.user);
   const [user,setUser]=useState('')
   const [job, setJob] = useState([]);
   const [like, setLike] = useState(false);
