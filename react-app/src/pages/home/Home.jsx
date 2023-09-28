@@ -183,7 +183,7 @@ const Home = () => {
       var specificHeight = 300; // Adjust this value to your specific height
   
       // Calculate the bottom position of the div
-      var divBottom = scrollableDiv.offsetTop + scrollableDiv.clientHeight;
+      var divBottom = scrollableDiv?.offsetTop + scrollableDiv?.clientHeight;
   
       if (window.scrollY >= specificHeight && window.scrollY < divBottom) {
         if(window.scrollY>731){
