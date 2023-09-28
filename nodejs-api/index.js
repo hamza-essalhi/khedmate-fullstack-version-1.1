@@ -49,38 +49,59 @@ const server =app.listen(port, () => {
   console.log(`The server is runing on  http://localhost:${port}`);
 });
 
-// const io = new Server(server, {
-//   pingTimeOut: 6000,
-//   cors: {
-//     origin: 'http://localhost:3000'
-//   }
-// });
+const io = new Server(server, {
+  pingTimeOut: 6000,
+  cors: {
+    origin: 'http://localhost:3000'
+  }
+});
 
-// io.on('connection', (socket) => {
-//   socket.on('setup', (userData) => {
-//     socket.join(userData._id);
-//     socket.emit('connected');
-//   });
+let users = [];
 
-//   socket.on('conversation', (conversation, userData) => {
-//     socket.join(conversation.conversionGeneId);
-//     console.log(userData.firstName, 'Joined conversation:', conversation.conversionGeneId);
-//     socket.emit('connected');
-//   });
+const addUser = (userId, socketId) => {
+    !users.some((user) => user.userId === userId) &&
+        users.push({ userId, socketId });
+};
 
-//   socket.on('newMessage', async (newMessage, user) => {
-//     socket.join(newMessage.conversionId);
-//     console.log(newMessage);
-  
-//     // Check if the user is authorized to send this message
-//     if (newMessage.userId !== user._id) {
-//       // Send an error event to the client
-//       socket.emit('messageError', "Unauthorized to modify an unrecognized user in this conversation.");
-//       return;
-//     }
-  
-//     // Emit the new message to all clients in the conversation
-//     socket.emit('updateMessages', newMessage);
-//   });
-  
-// });
+const removeUser = (socketId) => {
+    users = users.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (userId) => {
+    return users.find((user) => user.userId === userId);
+};
+io.on('connection', (socket) => {
+  // console.log(`Socket is connectedd`);    
+  socket.on('postUser', userId => {
+        addUser(userId, socket.id)
+        io.emit('getOnlineUsers', users)
+    })
+
+
+    socket.on('sendMessage', ({ userId, conversationId, toUnit, message }) => {
+        const user = getUser(toUnit)
+
+        if (user) {
+            io.to(user.socketId).emit('getMessage', {
+                userId,
+                message,
+                conversationId
+            });
+        } 
+    })
+
+
+    socket.on('typing', ({toUnit, conversationId}) => {
+        const user = getUser(toUnit)
+
+        if (user) {
+            // io.to(user.socketId).emit('typing', conversationId);
+            socket.broadcast.to(user.socketId).emit('typing', conversationId);
+        } 
+    });
+    socket.on("disconnect", () => {
+        removeUser(socket.id);
+        io.emit("getUsers", users);
+      });
+
+})

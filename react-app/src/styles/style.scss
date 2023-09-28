@@ -202,6 +202,34 @@ body {
   }
 }
 
+@media only screen and (max-width: 1400px) {
+  .chat-container {
+    .left {
+
+      flex: 1 !important;
+       
+    }
+  
+    .right {
+      flex: 4 !important;
+
+    }
+  }
+}
+@media only screen and (max-width: 1100px) {
+  .chat-container {
+    .left {
+
+      flex: 1 !important;
+       
+    }
+  
+    .right {
+      flex: 3 !important;
+
+    }
+  }
+}
 @media only screen and (max-width: 960px) {
   .main-nav-bar {
     .banner {
@@ -243,8 +271,92 @@ body {
       }
     }
   }
-}
+  .chat-container {
+    display: flex;
+    margin: 2em 2em;
+    
+  
+  
+    .left {
 
+      flex: 1 !important;
+      .conversation-list{
+        cursor: pointer;
+        display: flex;
+        justify-content: center !important;
+        padding: 0 !important;
+        border-radius: 10px;
+        box-shadow:none !important;
+        margin: 1em 0em;
+        .row{
+          padding: 0 !important;
+          justify-content: center;
+          .div-conv{
+            display: none !important;
+          }
+          .user-img-online{
+            display: flex !important;
+            justify-content: center;
+          }
+        }
+      }
+      
+      
+    }
+  
+    .right {
+      flex: 9 !important;
+
+    }
+  }
+}
+@media screen and (max-width: 780px) {
+  .chat-container {
+    display: flex;
+    margin: 2em 2em;
+    
+  
+  
+    .left {
+
+      flex: 1 !important;
+       
+    }
+  
+    .right {
+      flex: 7 !important;
+
+    }
+  }
+}
+@media screen and (max-width: 750px) {
+  .chat-container {
+    .left {
+      display:  none !important;
+      flex: 1 !important;
+      
+      &.show{
+        display: flex !important;
+        position: absolute;
+      left: 0 !important;
+      }
+      
+    }
+    .show-side-menu{
+      display: flex !important;
+      position: fixed;
+      top:60%;
+      left: 10px;
+    }
+  
+    .right {
+      flex: 2 !important;
+      &.show{
+        margin-left: 4em !important;
+      }
+    }
+  }
+}
 @media screen and (max-width: 700px) {
   .main-nav-bar {
     justify-content: space-between;
@@ -2004,13 +2116,26 @@ body {
     padding: 10px;
     border-radius: 10px;
   }
+  .show-side-menu{
+    display: none ;
+    font-size: 30px;
+    text-shadow: -1px 4px 16px rgb(238 26 26 / 36%);
+       color: black;
+   background-color: transparent;
+   
+  }
+.in-m{
+  left: 60px;
+}
 
   .left {
-    flex: 2;
+    flex: 1;
     margin-right: 1em;
     height: 100vh;
     overflow-y: auto;
-
+.show-side-menu{
+  display: none;
+}
     &::-webkit-scrollbar-track {
       box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px;
       background-color: white;
@@ -2194,9 +2319,9 @@ body {
       }
     }
   }
-
+  
   .right {
-    flex: 4;
+    flex: 5;
     padding: 0;
     display: flex;
     flex-direction: column;

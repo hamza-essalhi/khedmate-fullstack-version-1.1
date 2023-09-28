@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import {setChatNotification,clearChatNotification} from "../../../toolkit/chatNotification/chatNotificationActions"
 
 import io from 'socket.io-client'
-const endPoint = 'http://localhost:4000'
+const endPoint = 'http://localhost:9000'
 const TenWordsSpan = ({ conversation }) => {
   const tenWords = conversation.split(' ').length > 6 ? conversation.split(' ').slice(0, 5).join('') : conversation;
 

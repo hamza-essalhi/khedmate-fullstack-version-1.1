@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import io from 'socket.io-client'
-const endPoint = 'http://localhost:4000'
+const endPoint = 'http://localhost:9000'
 
 
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Select from "../components/Select";
 import ConversationList from "../components/admin/ConversationList";
 
 import ConversationBox from "../components/admin/ConversationBox";
@@ -8,24 +7,23 @@ import api from "../../toolkit/auth/config";
 import { clearRequestWithDelay, } from "../../toolkit/request/requestActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { BsFillChatLeftFill } from "react-icons/bs";
 
 const Chat = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
     const { lastRequest } = useSelector((state) => state.request);
-  const [setSelectedOption] = useState("All");
   const [converstion, setConverstion] = useState("");
+  const [showSideBar, setShowSideBar] = useState("");
   // const [_id,putId]=useState('')
   
-  const options = [
-    { label: "All", value: "All" },
-    { label: "Unread", value: "Unread" },
-  ];
+  
+const showSideBarHandler=()=>{
+  setShowSideBar(!showSideBar)
+  console.log(showSideBar)
+}
 
-
-  const handleSelectOption = (value) => {
-    setSelectedOption(value);
-  };
+ 
   useEffect(() => {
     const fetchFilteredConversation = async () => {
         try {
@@ -53,13 +51,14 @@ const getMessagesByConversation =(e)=>{
 
   return (
     <div className="chat-container">
-      <div className="left">
+      <div className="show-side-menu" onClick={showSideBarHandler}>
+        <BsFillChatLeftFill></BsFillChatLeftFill>
+        </div>
+      <div className={showSideBar ? 'left show':'left'}>
+      <div className="show-side-menu in-m" onClick={showSideBarHandler}>
+        <BsFillChatLeftFill></BsFillChatLeftFill>
+        </div>
         <div>
-          <Select
-            options={options}
-            op="All"
-            onChange={handleSelectOption}
-          ></Select>
           {converstion ?converstion.map((conversation, i) => (
             <ConversationList
               key={i}
@@ -71,7 +70,7 @@ const getMessagesByConversation =(e)=>{
           )):<h4>There is No Conversation</h4>}
         </div>
       </div>
-      <div className="right">
+      <div className={showSideBar ? 'right show':'right'}>
         {id ? (
           <ConversationBox  id={id}/>
         ) : (
