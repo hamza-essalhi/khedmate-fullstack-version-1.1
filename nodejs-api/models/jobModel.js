@@ -4,9 +4,8 @@ const { Schema } = mongoose;
 const JobSchema = new Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "User",
     },
     ownerFirstName:{
       type: String,

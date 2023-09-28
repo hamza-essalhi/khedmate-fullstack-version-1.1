@@ -17,11 +17,13 @@ import api from '../../toolkit/auth/config'
 import { useDispatch, useSelector } from "react-redux";
 import { clearRequest, clearRequestWithDelay, errorRequests, startRequest } from "../../toolkit/request/requestActions";
 import LoadingBox from "../components/LoadingBox";
+import Message from "../components/Message";
 
 
 const Home = () => {
   document.title = 'Home';
   const dispatch = useDispatch();
+  const messages = useSelector((state) => state.messages);
   const { isLoading, errorRequest } = useSelector((state) => state.request);
   const [currentPage, setCurrentPage] = useState(1);
   const [jobsPerPage] = useState(10);
@@ -34,6 +36,7 @@ const Home = () => {
   const [selectedEducation, setSelectedEducation] = useState("");
   const [showTopButton, setShowTopButton] = useState(false);
   const [showBottomButton, setShowBottomButton] = useState(false);
+  const [window731,setWindow731]=useState(false)
   const ref = useRef(null);
   const target = useInView(ref, { once: true });
   const animate = useAnimation();
@@ -171,9 +174,35 @@ const Home = () => {
   useEffect(() => {
     setSearchLenght(displayJobs.length);
   }, [displayJobs.length]);
+
+
+
+  useEffect(()=>{
+    window.addEventListener("scroll", function() {
+      var scrollableDiv = document.getElementById("scrollableDiv");
+      var specificHeight = 300; // Adjust this value to your specific height
+  
+      // Calculate the bottom position of the div
+      var divBottom = scrollableDiv.offsetTop + scrollableDiv.clientHeight;
+  
+      if (window.scrollY >= specificHeight && window.scrollY < divBottom) {
+        if(window.scrollY>731){
+          setWindow731(true)
+        }
+        else {
+          setWindow731(false)
+        }
+          
+      }
+  });
+  })
+
+
+
+
   return (
     <div className="home container">
-
+<Message messages={messages} />
       <div className="scroll-bottom">
         <button
           onClick={scrollToBottom}
@@ -183,7 +212,7 @@ const Home = () => {
         </button>
       </div>
       <motion.div
-        className="left"
+      className={window731 ? 'left window731-left':'left window731-left-show'}
         ref={ref}
         variants={{
           start: {
@@ -251,7 +280,8 @@ const Home = () => {
         </div>
       </motion.div>
       <motion.div
-        className="right"
+      id="scrollableDiv"
+        className={window731 ? 'right window731-right':'right window731-right-show'}
         ref={ref}
         variants={{
           start: {

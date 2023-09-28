@@ -120,7 +120,7 @@ export const getAllJobs = async (req, res, next) => {
 };
 
 export const getAllJobsByUser= async (req, res, next) => {
-
+console.log(req.id)
   try {
     const q = req.query;
     const filterJobs = {
@@ -132,7 +132,7 @@ export const getAllJobsByUser= async (req, res, next) => {
     };
     
     const jobs = await Job.find(filterJobs).sort({createdAt:-1})
-    
+    console.log(await Job.find({userId: req.id}))
     
      // Check if any job applications were found
      if (jobs.length === 0) {

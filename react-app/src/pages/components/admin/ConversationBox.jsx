@@ -46,7 +46,6 @@ const ConversationBox = ({ id }) => {
 
     })
     socket.current.on('typing', (conversationId) => {
-      console.log(conversationId)
       if (id=== conversationId) {
         setIsTyping(true);
     
@@ -232,7 +231,7 @@ const ConversationBox = ({ id }) => {
               }
             >
               
-              <div class="typing">
+              <div className="typing">
                 <span></span>
                 <span></span>
                 <span></span>

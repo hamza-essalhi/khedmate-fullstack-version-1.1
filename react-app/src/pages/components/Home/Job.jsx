@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { motion, useAnimation, useInView } from "framer-motion";
 
 import api from "../../../toolkit/auth/config";
+import moment from "moment";
 
 
 const Job = ({job}) => {
@@ -28,11 +29,8 @@ const Job = ({job}) => {
     getUser()
   },[job.userId])
   useEffect(() => {
-    const timestampStr = job.createdAt;
-
-    const timestamp = new Date(timestampStr);
-    const formattedDate = `${timestamp.getFullYear()}-${String(timestamp.getMonth() + 1).padStart(2, '0')}-${String(timestamp.getDate()).padStart(2, '0')} ${String(timestamp.getHours()).padStart(2, '0')}:${String(timestamp.getMinutes()).padStart(2, '0')}:${String(timestamp.getSeconds()).padStart(2, '0')}`;
-    setFormattedDate(formattedDate);
+    
+    setFormattedDate(moment(job.createdAt).fromNow());
   }, [job.createdAt]);
 
   useEffect(() => {
@@ -87,34 +85,14 @@ const Job = ({job}) => {
         >
           <img src={user.img? user.img:userImage} alt="" />
           <div className="sub-col">
-            <h3>{job?.title}</h3>
             <span>
-              Post by {job.ownerFirstName} {job.ownerLastName}
+              {job.ownerFirstName} {job.ownerLastName}
             </span>
             <span>{job?.city}</span>
+            <span>{formatteDate}</span>
           </div>
         </motion.div>
-        <motion.div
-          className="col date"
-          variants={{
-            start: {
-              opacity: 0,
-              y: -100,
-            },
-            end: {
-              opacity: 1,
-              y: 0,
-            },
-          }}
-          initial="start"
-          animate={animate}
-          transition={{
-            duration: 0.5,
-            delay: 0.6,
-          }}
-        >
-          <span>{formatteDate}</span>
-        </motion.div>
+        
         <motion.div
           className="col like"
           variants={{
@@ -147,6 +125,30 @@ const Job = ({job}) => {
           )}
         </motion.div>
       </div>
+      <motion.div
+          className="col job-title"
+          variants={{
+            start: {
+              opacity: 0,
+              y: -100,
+            },
+            end: {
+              opacity: 1,
+              y: 0,
+            },
+          }}
+          initial="start"
+          animate={animate}
+          transition={{
+            duration: 0.5,
+            delay: 0.4,
+          }}
+        >
+          
+          <h1>{job.title}</h1>
+          <h4>{job.company}</h4>
+
+        </motion.div>
       <motion.div
         className="sub-row job-details"
         variants={{

@@ -40,7 +40,7 @@ export default function TabelRow({ jobApplication,onDelete }) {
   return (
     <tr>
       <td>{jobApplication?._id.slice(6, 9)}</td>
-      <td>{job.title}</td>
+      <td>{job?.title}</td>
       <td>{formattedDate}</td>
       <td className='status'>
       <span className={
