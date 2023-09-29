@@ -144,10 +144,9 @@ const Basics = ({ delay,user}) => {
     try {
       const file = e.target.files[0];
       const image = await resizeFile(file);
-      console.log(image)
+      
       setImg(image)
     } catch (err) {
-      console.log(err);
     }
 
   };

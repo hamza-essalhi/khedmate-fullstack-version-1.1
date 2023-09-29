@@ -7,7 +7,7 @@ import api from "../../toolkit/auth/config";
 import { clearRequestWithDelay, } from "../../toolkit/request/requestActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { BsFillChatLeftFill } from "react-icons/bs";
+import { BsFillChatLeftFill, BsXCircle } from "react-icons/bs";
 
 const Chat = () => {
   const { id } = useParams();
@@ -20,7 +20,6 @@ const Chat = () => {
   
 const showSideBarHandler=()=>{
   setShowSideBar(!showSideBar)
-  console.log(showSideBar)
 }
 
  
@@ -51,14 +50,15 @@ const getMessagesByConversation =(e)=>{
 
   return (
     <div className="chat-container">
-      <div className="show-side-menu" onClick={showSideBarHandler}>
-        <BsFillChatLeftFill></BsFillChatLeftFill>
+      <div className={showSideBar ? 'show-side-menu side-menu-icon-hide':'show-side-menu top'} 
+      onClick={showSideBarHandler}>
+        <BsFillChatLeftFill className={showSideBar ? 'show-side-menu-icon side-menu-icon-hide':'show-side-menu-icon '}></BsFillChatLeftFill>
         </div>
       <div className={showSideBar ? 'left show':'left'}>
       <div className="show-side-menu in-m" onClick={showSideBarHandler}>
-        <BsFillChatLeftFill></BsFillChatLeftFill>
+        <BsXCircle className="show-side-menu-icon in-menu"></BsXCircle>
         </div>
-        <div>
+        <div className="conversation-box">
           {converstion ?converstion.map((conversation, i) => (
             <ConversationList
               key={i}

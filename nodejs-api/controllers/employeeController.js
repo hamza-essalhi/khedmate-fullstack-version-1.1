@@ -6,7 +6,7 @@ export const createEmployee = async (req, res, next) => {
         const employee = await Employee.find({userId:req.id});
 
         if (employee.jobExperience && employee.education && employee.resume) {
-            console.log(employee)
+            
             return res.status(404).json({ error: 'Pleas Update your data' });
         }
         const newEmployee = new Employee({

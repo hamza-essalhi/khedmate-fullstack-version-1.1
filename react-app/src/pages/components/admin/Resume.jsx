@@ -226,7 +226,7 @@ const Resume = ({ delay }) => {
     e.preventDefault();
     setError(false);
     dispatch(clearRequest())
-    console.log(formData)
+    
     try {
       if (validateForm() )
       {
